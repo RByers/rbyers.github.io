@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta name="viewport" content="user-scalable=no, width=device-width" />
+        <title>Test events</title>
+        <style type="text/css">
+            body
+            {
+              height:100%;
+            }
+            #touchTarget
+            {
+              position:absolute;
+              left:0;
+              top:40px;
+              right:0;
+              bottom:0;
+              -webkit-user-drag:element;
+              -ms-touch-action: none;
+            }
+            #log 
+            {
+              position:absolute;
+              overflow-y:scroll;
+              top:20px;
+              bottom:0;
+              right:0;
+              left:0;
+              -webkit-user-drag:element;
+              -ms-touch-action: none;
+            }
+            #purple
+            {
+              background-color: purple;
+              position: absolute;
+              right: 30px;
+              top: 10px;
+              height: 100px;
+              width: 100px;
+              border: 1px solid black;
+            }
+            #blue
+            {
+              background-color: blue;
+              position: absolute;
+              right: 30px;
+              top: 120px;
+              height: 100px;
+              width: 100px;
+              border:1px solid black;
+            }
+            .noevents
+            {
+              opacity: 0.4;
+              pointer-events: none;
+            }
+            #scroll
+            {
+              position: absolute;
+              right: 30px;
+              top: 240px;
+              height: 100px;
+              width 100px;
+              overflow: scroll;
+              border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <input type='checkbox' id='enableMouseEvents' checked/>Mouse
+            <input type='checkbox' id='enableTouchEvents' checked/>Touch
+            <input type='checkbox' id='enableGestureEvents'/>Gesture
+            <input type='checkbox' id='enableDragEvents'/>Drag
+            <input type='checkbox' id='enablePointerEvents'/>Pointer
+            <input type='checkbox' id='preventDefaultTouch' checked/>PD-Touch
+            <input type='checkbox' id='simple' checked/>Simple
+            <input type='checkbox' id='coalesce' checked/>Coalesce
+        </form>
+        <div onclick="void(0)" draggable id='touchTarget'>
+            <pre>Log:<div id='log'/></pre>
+            <div id="purple" class="noevents"></div>
+            <div id="blue"></div>
+            <div id="scroll">
+              foo long line here<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+              foo<br/>
+            </div>
+
+        </div>
+    </body>
+
+    <script src="eventTest.js"></script>
+</html>
