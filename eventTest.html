@@ -23,7 +23,7 @@
             {
               position:absolute;
               overflow-y:scroll;
-              top:20px;
+              top:0;
               bottom:0;
               right:0;
               left:0;
@@ -65,23 +65,39 @@
               overflow: scroll;
               border: 1px solid black;
             }
+            #config
+            {
+              position: absolute;
+              top: 40px;
+              left: 20px;
+              background-color: lightgrey;
+              border: 2px solid darkgrey;
+              padding: 10px;
+              z-index: 100;
+            }
+            .hide
+            {
+              visibility: hidden;
+            }
         </style>
     </head>
     <body>
-        <form>
-            <input type='checkbox' id='enableMouseEvents' checked/>Mouse
-            <input type='checkbox' id='enableTouchEvents' checked/>Touch
-            <input type='checkbox' id='enableGestureEvents'/>Gesture
-            <input type='checkbox' id='enableDragEvents'/>Drag
-            <input type='checkbox' id='enablePointerEvents'/>Pointer
-            <input type='checkbox' id='preventDefaultTouchStart' checked/>PD-TouchStart
-            <input type='checkbox' id='preventDefaultTouchMove' checked/>PD-TouchMove
-            <input type='checkbox' id='preventDefaultTouchEnd' checked/>PD-TouchEnd
-            <input type='checkbox' id='simple' checked/>Simple
-            <input type='checkbox' id='coalesce' checked/>Coalesce
-        </form>
+	<button id='btnConfig'>Config</button>
+        <div id='config' class='hide'>
+            <input type='checkbox' id='enableMouseEvents' checked/>Mouse<br/>
+            <input type='checkbox' id='enableTouchEvents' checked/>Touch<br/>
+            <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
+            <input type='checkbox' id='enableDragEvents'/>Drag<br/>
+            <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
+            <input type='checkbox' id='preventDefaultTouchStart' checked/>PD-TouchStart<br/>
+            <input type='checkbox' id='preventDefaultTouchMove' checked/>PD-TouchMove<br/>
+            <input type='checkbox' id='preventDefaultTouchEnd' checked/>PD-TouchEnd<br/>
+            <input type='checkbox' id='simple' checked/>Simple<br/>
+            <input type='checkbox' id='coalesce' checked/>Coalesce<br/>
+	    <button id='btnOk'>Ok</button>
+        </div>
         <div onclick="void(0)" draggable id='touchTarget'>
-            <pre>Log:<div id='log'/></pre>
+            <pre><div id='log'/></pre>
             <div id="purple" class="noevents"></div>
             <div id="blue"></div>
             <div id="scroll">

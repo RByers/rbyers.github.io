@@ -160,6 +160,13 @@ document.getElementById('enableGestureEvents').addEventListener('click', updateH
 document.getElementById('enablePointerEvents').addEventListener('click', updateHandlers, false);
 updateHandlers();
 
+document.getElementById('btnConfig').addEventListener('click', function() {
+  document.getElementById('config').className = '';
+});
+document.getElementById('btnOk').addEventListener('click', function() {
+  document.getElementById('config').className = 'hide';
+});
+
 var blue = document.getElementById('blue');
 blue.addEventListener('mousedown', function(e) { blue.className='noevents'; });
 blue.addEventListener('touchstart', function(e) { blue.className='noevents'; });
