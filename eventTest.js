@@ -1,5 +1,9 @@
-var targetElem = document.getElementById('touchTarget');
-var logElem = document.getElementById('log');
+function $(str) {
+  return document.getElementById(str);
+}
+
+var targetElem = $('touchTarget');
+var logElem = $('log');
 logElem.innerHTML += '\n';
 
 function updateHandlers()
@@ -20,28 +24,28 @@ function updateHandlers()
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
         'focus', 'mousewheel'], 
         mouseEventHandler,
-        document.getElementById('enableMouseEvents').checked);
+        $('enableMouseEvents').checked);
 
     setHandlerState(
         ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
         touchEventHandler,
-        document.getElementById('enableTouchEvents').checked);
+        $('enableTouchEvents').checked);
     
     setHandlerState(
         ['MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerOver',
         'MSPointerOut', 'MSPointerCancel', 'MSPointerHover'],
         mouseEventHandler,
-        document.getElementById('enablePointerEvents').checked);
+        $('enablePointerEvents').checked);
 
     setHandlerState(
         ['gesturestart', 'gesturechange', 'gestureend'],
         gestureEventHandler,
-        document.getElementById('enableGestureEvents').checked);
+        $('enableGestureEvents').checked);
 
     setHandlerState(
         ['dragstart', 'dragenter', 'dragleave', 'drop', 'dragend'],
         mouseEventHandler,
-        document.getElementById('enableDragEvents').checked);
+        $('enableDragEvents').checked);
 }
 
 var lastLog = log.innerHTML;
@@ -52,7 +56,7 @@ function logEvent(event, msg)
 {
   // prevent too much scrolling - overwrite the last line unless this is a new
   // event type or not a move event
-  if (document.getElementById('coalesce').checked && event.type == lastEvent && 
+  if ($('coalesce').checked && event.type == lastEvent && 
       (event.type=='mousemove' || event.type=='touchmove' || event.type=='MSPointerMove')) {
     dupCount++;
   } else {
@@ -107,7 +111,7 @@ function makeTouchList(touches, verbose)
     if (verbose)
       tgt = '-' + touches[i].target.id;
 
-    if (!verbose || document.getElementById('simple').checked) {
+    if (!verbose || $('simple').checked) {
       var id = touches[i].identifier;
       if (!(id in touchMap)) {
         touchMap[id] = nextId;
@@ -130,9 +134,9 @@ function makeTouchList(touches, verbose)
   return touchStr;
 }
 
-var preventDefaultTouchStart = document.getElementById('preventDefaultTouchStart');
-var preventDefaultTouchMove = document.getElementById('preventDefaultTouchMove');
-var preventDefaultTouchEnd = document.getElementById('preventDefaultTouchEnd');
+var preventDefaultTouchStart = $('preventDefaultTouchStart');
+var preventDefaultTouchMove = $('preventDefaultTouchMove');
+var preventDefaultTouchEnd = $('preventDefaultTouchEnd');
 
 function touchEventHandler(event)
 {
@@ -154,20 +158,52 @@ function gestureEventHandler(event)
     logEvent(event, 'scale=' + event.scale + ', rotation=' + event.rotation);
 }
 
-document.getElementById('enableMouseEvents').addEventListener('click', updateHandlers, false);
-document.getElementById('enableTouchEvents').addEventListener('click', updateHandlers, false);
-document.getElementById('enableGestureEvents').addEventListener('click', updateHandlers, false);
-document.getElementById('enablePointerEvents').addEventListener('click', updateHandlers, false);
+$('enableMouseEvents').addEventListener('click', updateHandlers, false);
+$('enableTouchEvents').addEventListener('click', updateHandlers, false);
+$('enableGestureEvents').addEventListener('click', updateHandlers, false);
+$('enablePointerEvents').addEventListener('click', updateHandlers, false);
 updateHandlers();
 
-document.getElementById('btnConfig').addEventListener('click', function() {
-  document.getElementById('config').className = '';
-});
-document.getElementById('btnOk').addEventListener('click', function() {
-  document.getElementById('config').className = 'hide';
+function updateConfigSummary() {
+  var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
+  var summary = '';
+  for(var i = 0; i < checkboxes.length; i++)
+  {
+    if (checkboxes[i].checked)
+      summary += checkboxes[i].nextSibling.textContent + ' ';
+  }
+  $('config-summary').textContent = summary;
+}
+
+function writeConfigState() {
+  var eventConfig = {};
+  var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
+  for(var i = 0; i < checkboxes.length; i++)
+    eventConfig[checkboxes[i].id] = checkboxes[i].checked;
+  localStorage.eventConfig = JSON.stringify(eventConfig);
+}
+
+function readConfigState() {
+  if (localStorage.eventConfig) {
+    var eventConfig = JSON.parse(localStorage.eventConfig);
+    var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
+    for(var i = 0; i < checkboxes.length; i++)
+      if (checkboxes[i].id in eventConfig)
+        checkboxes[i].checked = eventConfig[checkboxes[i].id];    
+  }
+}
+
+$('btnConfig').addEventListener('click', function() {
+  $('config').className = '';
 });
 
-var blue = document.getElementById('blue');
+$('btnOk').addEventListener('click', function() {
+  $('config').className = 'hide';
+  updateConfigSummary();
+  writeConfigState();
+});
+
+var blue = $('blue');
 blue.addEventListener('mousedown', function(e) { blue.className='noevents'; });
 blue.addEventListener('touchstart', function(e) { blue.className='noevents'; });
 document.addEventListener('mouseup', function(e) { blue.className=''; });
@@ -178,3 +214,5 @@ document.addEventListener('dragstart', function(e) {
   e.preventDefault();
 }, true);
 
+readConfigState();
+updateConfigSummary();
