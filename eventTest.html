@@ -79,6 +79,10 @@
             {
               visibility: hidden;
             }
+            #config-summary
+            {
+              font-size: small;
+            }
         </style>
     </head>
     <body>
@@ -89,9 +93,10 @@
             <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
             <input type='checkbox' id='enableDragEvents'/>Drag<br/>
             <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
-            <input type='checkbox' id='preventDefaultTouchStart' checked/>PD-TouchStart<br/>
-            <input type='checkbox' id='preventDefaultTouchMove' checked/>PD-TouchMove<br/>
-            <input type='checkbox' id='preventDefaultTouchEnd' checked/>PD-TouchEnd<br/>
+            <input type='checkbox' id='preventDefaultTouchStart' checked/>PreventDefault on touchstart<br/>
+            <input type='checkbox' id='preventDefaultTouchMove' checked/>PreventDefault on touchmove<br/>
+            <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every second<br/>
+            <input type='checkbox' id='preventDefaultTouchEnd' checked/>PreventDefault on touchend<br/>
             <input type='checkbox' id='simple' checked/>Simple<br/>
             <input type='checkbox' id='coalesce' checked/>Coalesce<br/>
 	    <button id='btnOk'>Ok</button>

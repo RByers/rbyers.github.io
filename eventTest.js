@@ -4,7 +4,6 @@ function $(str) {
 
 var targetElem = $('touchTarget');
 var logElem = $('log');
-logElem.innerHTML += '\n';
 
 function updateHandlers()
 {
@@ -134,10 +133,6 @@ function makeTouchList(touches, verbose)
   return touchStr;
 }
 
-var preventDefaultTouchStart = $('preventDefaultTouchStart');
-var preventDefaultTouchMove = $('preventDefaultTouchMove');
-var preventDefaultTouchEnd = $('preventDefaultTouchEnd');
-
 function touchEventHandler(event)
 {
     var touchStr =
@@ -147,9 +142,9 @@ function touchEventHandler(event)
 
     logEvent(event, touchStr);
 
-    if ((event.type == 'touchstart' && preventDefaultTouchStart.checked) ||
-        (event.type == 'touchmove' && preventDefaultTouchMove.checked) ||
-        (event.type == 'touchend' && preventDefaultTouchEnd.checked))
+    if ((event.type == 'touchstart' && $('preventDefaultTouchStart').checked) ||
+        (event.type == 'touchmove' && $('preventDefaultTouchMove').checked) ||
+        (event.type == 'touchend' && $('preventDefaultTouchEnd').checked))
         event.preventDefault();
 }
 
@@ -158,19 +153,13 @@ function gestureEventHandler(event)
     logEvent(event, 'scale=' + event.scale + ', rotation=' + event.rotation);
 }
 
-$('enableMouseEvents').addEventListener('click', updateHandlers, false);
-$('enableTouchEvents').addEventListener('click', updateHandlers, false);
-$('enableGestureEvents').addEventListener('click', updateHandlers, false);
-$('enablePointerEvents').addEventListener('click', updateHandlers, false);
-updateHandlers();
-
 function updateConfigSummary() {
   var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
   var summary = '';
   for(var i = 0; i < checkboxes.length; i++)
   {
     if (checkboxes[i].checked)
-      summary += checkboxes[i].nextSibling.textContent + ' ';
+      summary += checkboxes[i].id + ' ';
   }
   $('config-summary').textContent = summary;
 }
@@ -214,5 +203,26 @@ document.addEventListener('dragstart', function(e) {
   e.preventDefault();
 }, true);
 
+$('enableMouseEvents').addEventListener('click', updateHandlers, false);
+$('enableTouchEvents').addEventListener('click', updateHandlers, false);
+$('enableGestureEvents').addEventListener('click', updateHandlers, false);
+$('enablePointerEvents').addEventListener('click', updateHandlers, false);
+
+var alternateTimer;
+function setAlternateTimer() {
+  if ($('alternatePDTouchMove').checked) {
+    alternateTimer = window.setInterval(function() {
+      $('preventDefaultTouchMove').click();
+      updateConfigSummary();
+    }, 1000);
+  } else {
+    window.clearInterval(alternateTimer);
+    alternateTimer = undefined;
+  }
+}
+$('alternatePDTouchMove').addEventListener('click', setAlternateTimer);
+
 readConfigState();
 updateConfigSummary();
+updateHandlers();
+setAlternateTimer();
