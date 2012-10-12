@@ -130,7 +130,9 @@ function makeTouchList(touches, verbose)
   return touchStr;
 }
 
-var preventDefaultTouch = document.getElementById('preventDefaultTouch');
+var preventDefaultTouchStart = document.getElementById('preventDefaultTouchStart');
+var preventDefaultTouchMove = document.getElementById('preventDefaultTouchMove');
+var preventDefaultTouchEnd = document.getElementById('preventDefaultTouchEnd');
 
 function touchEventHandler(event)
 {
@@ -141,10 +143,10 @@ function touchEventHandler(event)
 
     logEvent(event, touchStr);
 
-    if (preventDefaultTouch &&
-        preventDefaultTouch.checked ) {
-      event.preventDefault();
-    }
+    if ((event.type == 'touchstart' && preventDefaultTouchStart.checked) ||
+        (event.type == 'touchmove' && preventDefaultTouchMove.checked) ||
+        (event.type == 'touchend' && preventDefaultTouchEnd.checked))
+        event.preventDefault();
 }
 
 function gestureEventHandler(event)
