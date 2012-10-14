@@ -51,6 +51,12 @@ var lastLog = log.innerHTML;
 var lastEvent;
 var dupCount = 0;
 
+function log(msg)
+{
+  logElem.innerHTML += msg + '\n';
+  logElem.scrollTop = logElem.scrollHeight;
+}
+
 function logEvent(event, msg)
 {
   // prevent too much scrolling - overwrite the last line unless this is a new
@@ -59,14 +65,14 @@ function logEvent(event, msg)
       (event.type=='mousemove' || event.type=='touchmove' || event.type=='MSPointerMove')) {
     dupCount++;
   } else {
-    lastLog = log.innerHTML;
+    lastLog = logElem.innerHTML;
     dupCount = 0;
   }
   lastEvent = event.type;
-  log.innerHTML = lastLog + event.type +
+  logElem.innerHTML = lastLog + event.type +
     (dupCount > 0 ? '[' + dupCount + ']' : '') +
     ': target=' + event.target.id + ' ' + msg + '\n';
-  log.scrollTop = log.scrollHeight;
+  logElem.scrollTop = logElem.scrollHeight;
 }
 
 function mouseEventHandler(event)
@@ -133,6 +139,8 @@ function makeTouchList(touches, verbose)
   return touchStr;
 }
 
+var activeTouchData = {};
+
 function touchEventHandler(event)
 {
     var touchStr =
@@ -146,6 +154,34 @@ function touchEventHandler(event)
         (event.type == 'touchmove' && $('preventDefaultTouchMove').checked) ||
         (event.type == 'touchend' && $('preventDefaultTouchEnd').checked))
         event.preventDefault();
+
+    if ($('touchSummary').checked) {
+      for (var i = 0; i < event.changedTouches.length; i++) {
+        var touch = event.changedTouches[i];
+
+        if (event.type == 'touchstart') {	
+          var touchData = {
+            startTime: event.timeStamp,
+            startX: touch.screenX,
+            startY: touch.screenY,
+            maxMDist: 0
+          };
+          activeTouchData[touch.identifier] = touchData;
+        } else {
+          var touchData = activeTouchData[touch.identifier];
+          var distX = Math.abs(touch.screenX - touchData.startX);
+          var distY = Math.abs(touch.screenY - touchData.startY);
+          touchData.maxMDist = Math.max(touchData.maxMDist, distX + distY);
+          if (event.type == 'touchend') {
+            log('touch ' + touch.identifier + ' summary:' +
+              ' dist=(' + distX + ',' + distY + ')' +
+              ' max-manhattan-dist=' + touchData.maxMDist + 
+              ' dur=' + (event.timeStamp - touchData.startTime)/1000);
+            delete activeTouchData[touch.identifier];
+          }
+        }
+      }
+    }
 }
 
 function gestureEventHandler(event)
