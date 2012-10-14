@@ -214,7 +214,7 @@ function setAlternateTimer() {
     alternateTimer = window.setInterval(function() {
       $('preventDefaultTouchMove').click();
       updateConfigSummary();
-    }, 1000);
+    }, 3000);
   } else {
     window.clearInterval(alternateTimer);
     alternateTimer = undefined;
