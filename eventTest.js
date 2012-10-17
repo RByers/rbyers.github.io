@@ -164,6 +164,7 @@ function touchEventHandler(event)
             startTime: event.timeStamp,
             startX: touch.screenX,
             startY: touch.screenY,
+            maxDist: 0,
             maxMDist: 0
           };
           activeTouchData[touch.identifier] = touchData;
@@ -171,10 +172,13 @@ function touchEventHandler(event)
           var touchData = activeTouchData[touch.identifier];
           var distX = Math.abs(touch.screenX - touchData.startX);
           var distY = Math.abs(touch.screenY - touchData.startY);
+          touchData.maxDist = Math.max(touchData.maxDist,
+            Math.sqrt(distX*distX + distY*distY));
           touchData.maxMDist = Math.max(touchData.maxMDist, distX + distY);
           if (event.type == 'touchend') {
             log('touch ' + touch.identifier + ' summary:' +
               ' dist=(' + distX + ',' + distY + ')' +
+              ' max-dist=' + Math.round(touchData.maxDist) +
               ' max-manhattan-dist=' + touchData.maxMDist + 
               ' dur=' + (event.timeStamp - touchData.startTime)/1000);
             delete activeTouchData[touch.identifier];
