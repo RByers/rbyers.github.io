@@ -9,6 +9,10 @@
             {
               height:100%;
             }
+            .touchActionNone 
+            {
+              -ms-touch-action: none
+            }
             #touchTarget
             {
               position:absolute;
@@ -17,7 +21,6 @@
               right:0;
               bottom:0;
               -webkit-user-drag:element;
-              -ms-touch-action: none;
             }
             #log 
             {
@@ -28,7 +31,11 @@
               right:0;
               left:0;
               -webkit-user-drag:element;
-              -ms-touch-action: none;
+              -ms-touch-action: inherit;
+            }
+            #touchTarget > pre
+            {
+              -ms-touch-action: inherit;
             }
             #purple
             {
@@ -46,6 +53,16 @@
               position: absolute;
               right: 30px;
               top: 120px;
+              height: 100px;
+              width: 100px;
+              border:1px solid black;
+            }
+            #red
+            {
+              background-color: red;
+              position: absolute;
+              right: 30px;
+              top: 360px;
               height: 100px;
               width: 100px;
               border:1px solid black;
@@ -93,6 +110,7 @@
             <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
             <input type='checkbox' id='enableDragEvents'/>Drag<br/>
             <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
+            <input type='checkbox' id='touchActionNone'/>Touch-Action: None<br/>
             <input type='checkbox' id='preventDefaultTouchStart' checked/>PreventDefault on touchstart<br/>
             <input type='checkbox' id='preventDefaultTouchMove' checked/>PreventDefault on touchmove<br/>
             <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every 3 seconds<br/>
@@ -103,7 +121,7 @@
 	    <button id='btnOk'>Ok</button>
         </div>
         <div onclick="void(0)" draggable id='touchTarget'>
-            <pre><div id='log'/></pre>
+            <pre><div id='log'></div></pre>
             <div id="purple" class="noevents"></div>
             <div id="blue"></div>
             <div id="scroll">
@@ -122,9 +140,9 @@
               foo<br/>
               foo<br/>
             </div>
+            <div id="red"></div>
 
         </div>
+        <script src="eventTest.js"></script>
     </body>
-
-    <script src="eventTest.js"></script>
 </html>

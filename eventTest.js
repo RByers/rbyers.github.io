@@ -59,6 +59,11 @@ function log(msg)
 
 function logEvent(event, msg)
 {
+  if (event.shiftKey) msg += ' shift';
+  if (event.altKey) msg += ' alt';
+  if (event.ctrlKey) msg += ' ctrl';
+  if (event.metaKey) msg += ' meta';
+
   // prevent too much scrolling - overwrite the last line unless this is a new
   // event type or not a move event
   if ($('coalesce').checked && event.type == lastEvent && 
@@ -262,7 +267,32 @@ function setAlternateTimer() {
 }
 $('alternatePDTouchMove').addEventListener('click', setAlternateTimer);
 
+function setTouchAction() {
+   $('touchTarget').className = $('touchActionNone').checked ? 'touchActionNone' : '';
+});
+
+$('touchActionNone').addEventListener('click', setTouchAction);
+
+function deleteRed(e) {
+  var n = $('red');
+  log ('red: saw ' + e.type);
+  if (n) {
+    n.parentNode.removeChild(n);
+    log ('red: removed node from dom');
+  }
+}
+//$('red').addEventListener('touchmove', deleteRed);
+//$('red').addEventListener('mousemove', deleteRed);
+document.addEventListener('keyup', function(e) {
+  switch(e.which) {
+    // ESC
+    case 27:
+    deleteRed(e);
+  }
+});
+
 readConfigState();
 updateConfigSummary();
 updateHandlers();
 setAlternateTimer();
+setTouchAction();
