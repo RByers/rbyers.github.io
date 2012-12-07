@@ -6,6 +6,7 @@ var radiusSupported = false;
 var nextCount = 0;
 var touchMap = {};
 var pointMode = false;
+var enableForce = false;
 
 document.addEventListener('keyup', function(e) {
   switch(e.which) {
@@ -18,6 +19,11 @@ document.addEventListener('keyup', function(e) {
     // p
     case 80:
     pointMode = !pointMode;
+    break;
+
+    // f
+    case 70:
+    enableForce = !enableForce;
     break;
   }
 
@@ -62,8 +68,8 @@ function drawTouches(touches, eventType) {
       var opacity = pointMode ? 1 : 0.1;
 
       var hue = (touchMap[touch.identifier] * 30) % 256;
-      var lum = 50;
-      if (touch.webkitForce)
+      var lum = 40;
+      if (enableForce && touch.webkitForce)
         lum = Math.round(touch.webkitForce / 0.4 * 50 + 20);
       context.fillStyle = 'hsla(' + hue + ',100%,' + lum + '%, ' + opacity + ')';
       context.fill();

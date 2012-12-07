@@ -269,7 +269,7 @@ $('alternatePDTouchMove').addEventListener('click', setAlternateTimer);
 
 function setTouchAction() {
    $('touchTarget').className = $('touchActionNone').checked ? 'touchActionNone' : '';
-});
+}
 
 $('touchActionNone').addEventListener('click', setTouchAction);
 
