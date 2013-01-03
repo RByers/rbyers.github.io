@@ -96,7 +96,7 @@ function mouseEventHandler(event)
   }
  
   msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
-      ', detail=' + event.detail + msg;
+      ', button=' + event.button + ', detail=' + event.detail + msg;
   
   logEvent(event, msg);
 }
