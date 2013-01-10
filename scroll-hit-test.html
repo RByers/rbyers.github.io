@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<head>
+<style>
+div {
+  height: 50px;
+  width: 200px;
+  margin: 10px;
+  border: 1px solid blue;
+}
+#move {
+  -ms-touch-action: none;
+}
+</style>
+
+<script>
+  var counter = 0;
+  function blockOnMove()
+  {
+    counter++;
+    if (counter % 20 == 0)
+      block();
+  }
+
+  function block()
+  {
+    console.log('Blocking for 1s');
+    var start = Date.now();
+    var end = 0;
+    while (end < start + 1000)
+      end = Date.now();
+    console.log('Done');
+  }
+
+  setInterval(block, 5000);
+  
+  function logEvent(e)
+  {
+    console.log('Got event: ' + e.type);
+    e.preventDefault();
+  }
+
+  window.addEventListener('load', function() {
+    var s = document.getElementById('start');
+    s.addEventListener('touchstart', logEvent)
+    s.addEventListener('MSPointerDown', logEvent)
+    var m = document.getElementById('move');
+    m.addEventListener('touchmove', logEvent)
+    m.addEventListener('MSPointerMove', logEvent)
+    var w = document.getElementById('wheel');
+    w.addEventListener('mousewheel', logEvent);
+  });
+</script>
+</head>
+<body>
+Some random long document to demonstrate scrolling.<br><br>
+
+An open standard is a standard that is publicly available and has various rights to use associated with it, and may also have various properties of how it was designed (e.g. open process). There is no single definition and interpretations vary with usage.
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+<div id='start'>Has touchstart handler</div>
+<div id='move'>Has touchmove handler</div>
+<div id='wheel'>Has mousewheel handler</div>
+<hr>
+The terms "open" and "standard" have a wide range of meanings associated with their usage. There are a number of definitions of open standards which emphasize different aspects of openness, including of the resulting specification, the openness of the drafting process, and the ownership of rights in the standard. The term "standard" is sometimes restricted to technologies approved by formalized committees that are open to participation by all interested parties and operate on a consensus basis.
+The definitions of the term "open standard" used by academics, the European Union and some of its member governments or parliaments such as Denmark, France, and Spain preclude open standards requiring fees for use, as do the New Zealand, South African and the Venezuelan governments. On the standard organisation side, the World Wide Web Consortium (W3C) ensures that its specifications can be implemented on a royalty-free basis.
+Many definitions of the term "standard" permit patent holders to impose "reasonable and non-discriminatory licensing" royalty fees and other licensing terms on implementers and/or users of the standard. For example, the rules for standards published by the major internationally recognized standards bodies such as the IETF, ISO, IEC, and ITU-T permit their standards to contain specifications whose implementation will require payment of patent licensing fees. Among these organizations, only the IETF and ITU-T explicitly refer to their standards as "open standards," while the others refer only to producing "standards." The IETF and ITU-T use definitions of "open standard" that allow "reasonable and non-discriminatory" patent licensing fee requirements.
+The term "open standard" is sometimes coupled with "open source" with the idea that a standard is not truly open if it does not have a complete free/open source reference implementation available. [1]
+Open standards which specify formats are sometimes referred to as open formats.
+Many specifications that are sometimes referred to as standards are proprietary and only available under restrictive contract terms (if they can be obtained at all) from the organization that owns the copyright on the specification. As such these specifications are not considered to be fully Open.
+
+Specific definitions of an open standard
+
+[edit]ITU-T definition
+The ITU-T is a standards development organization (SDO) that is one of the three sectors of the International Telecommunications Union (a specialized agency of the United Nations). The ITU-T has a Telecommunication Standardization Bureau director's Ad Hoc group on IPR that produced the following definition in March 2005, which the ITU-T as a whole has endorsed for its purposes since November 2005 [2]:
+The ITU-T has a long history of open standards development. However, recently some different external sources have attempted to define the term "Open Standard" in a variety of different ways. In order to avoid confusion, the ITU-T uses for its purpose the term "Open Standards" per the following definition:
+"Open Standards" are standards made available to the general public and are developed (or approved) and maintained via a collaborative and consensus driven process. "Open Standards" facilitate interoperability and data exchange among different products or services and are intended for widespread adoption.
+Other elements of "Open Standards" include, but are not limited to:
+Collaborative process – voluntary and market driven development (or approval) following a transparent consensus driven process that is reasonably open to all interested parties.
+Reasonably balanced – ensures that the process is not dominated by any one interest group.
+Due process - includes consideration of and response to comments by interested parties.
+The European Union adopted the following definition in its European Interoperability Framework:[10]
+To reach interoperability in the context of pan-European eGovernment services, guidance needs to focus on open standards.
+The word "open" is here meant in the sense of fulfilling the following requirements:
+The standard is adopted and will be maintained by a not-for-profit organization, and its ongoing development occurs on the basis of an open decision-making procedure available to all interested parties (consensus or majority decision etc.).
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+The standard has been published and the standard specification document is available either freely or at a nominal charge. It must be permissible to all to copy, distribute and use it for no fee or at a nominal fee.
+The intellectual property - i.e. patents possibly present - of (parts of) the standard is made irrevocably available on a royalty-free basis.
+There are no constraints on the re-use of the standard[11]
+[edit]Danish government definition
+The Danish government has attempted to make a definition of open standards,[12] which also is used in pan-European software development projects. It states:
+An open standard is accessible to everyone free of charge (i.e. there is no discrimination between users, and no payment or other considerations are required as a condition of use of the standard)
+Some random long document to demonstrate scrolling.<br><br>
+
+An open standard is a standard that is publicly available and has various rights to use associated with it, and may also have various properties of how it was designed (e.g. open process). There is no single definition and interpretations vary with usage.
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+The terms "open" and "standard" have a wide range of meanings associated with their usage. There are a number of definitions of open standards which emphasize different aspects of openness, including of the resulting specification, the openness of the drafting process, and the ownership of rights in the standard. The term "standard" is sometimes restricted to technologies approved by formalized committees that are open to participation by all interested parties and operate on a consensus basis.
+The definitions of the term "open standard" used by academics, the European Union and some of its member governments or parliaments such as Denmark, France, and Spain preclude open standards requiring fees for use, as do the New Zealand, South African and the Venezuelan governments. On the standard organisation side, the World Wide Web Consortium (W3C) ensures that its specifications can be implemented on a royalty-free basis.
+Many definitions of the term "standard" permit patent holders to impose "reasonable and non-discriminatory licensing" royalty fees and other licensing terms on implementers and/or users of the standard. For example, the rules for standards published by the major internationally recognized standards bodies such as the IETF, ISO, IEC, and ITU-T permit their standards to contain specifications whose implementation will require payment of patent licensing fees. Among these organizations, only the IETF and ITU-T explicitly refer to their standards as "open standards," while the others refer only to producing "standards." The IETF and ITU-T use definitions of "open standard" that allow "reasonable and non-discriminatory" patent licensing fee requirements.
+The term "open standard" is sometimes coupled with "open source" with the idea that a standard is not truly open if it does not have a complete free/open source reference implementation available. [1]
+Open standards which specify formats are sometimes referred to as open formats.
+Many specifications that are sometimes referred to as standards are proprietary and only available under restrictive contract terms (if they can be obtained at all) from the organization that owns the copyright on the specification. As such these specifications are not considered to be fully Open.
+
+Specific definitions of an open standard
+
+[edit]ITU-T definition
+The ITU-T is a standards development organization (SDO) that is one of the three sectors of the International Telecommunications Union (a specialized agency of the United Nations). The ITU-T has a Telecommunication Standardization Bureau director's Ad Hoc group on IPR that produced the following definition in March 2005, which the ITU-T as a whole has endorsed for its purposes since November 2005 [2]:
+The ITU-T has a long history of open standards development. However, recently some different external sources have attempted to define the term "Open Standard" in a variety of different ways. In order to avoid confusion, the ITU-T uses for its purpose the term "Open Standards" per the following definition:
+"Open Standards" are standards made available to the general public and are developed (or approved) and maintained via a collaborative and consensus driven process. "Open Standards" facilitate interoperability and data exchange among different products or services and are intended for widespread adoption.
+Other elements of "Open Standards" include, but are not limited to:
+Collaborative process – voluntary and market driven development (or approval) following a transparent consensus driven process that is reasonably open to all interested parties.
+Reasonably balanced – ensures that the process is not dominated by any one interest group.
+Due process - includes consideration of and response to comments by interested parties.
+The European Union adopted the following definition in its European Interoperability Framework:[10]
+To reach interoperability in the context of pan-European eGovernment services, guidance needs to focus on open standards.
+The word "open" is here meant in the sense of fulfilling the following requirements:
+The standard is adopted and will be maintained by a not-for-profit organization, and its ongoing development occurs on the basis of an open decision-making procedure available to all interested parties (consensus or majority decision etc.).
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+The standard has been published and the standard specification document is available either freely or at a nominal charge. It must be permissible to all to copy, distribute and use it for no fee or at a nominal fee.
+The intellectual property - i.e. patents possibly present - of (parts of) the standard is made irrevocably available on a royalty-free basis.
+There are no constraints on the re-use of the standard[11]
+[edit]Danish government definition
+The Danish government has attempted to make a definition of open standards,[12] which also is used in pan-European software development projects. It states:
+An open standard is accessible to everyone free of charge (i.e. there is no discrimination between users, and no payment or other considerations are required as a condition of use of the standard)
+</body>
+</html>
