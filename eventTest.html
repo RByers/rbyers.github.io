@@ -47,6 +47,26 @@
               width: 100px;
               border: 1px solid black;
             }
+            #purple:hover
+            {
+              background-color: #D000D0;
+            }
+            #purple:active
+            {
+              border: 3px solid red;
+            }
+            #purple:hover::after
+            {
+              content: ":hover";
+            }
+            #purple:active::after
+            {
+              content: ":active";
+            }
+            #purple:hover:active::after
+            {
+              content: ":hover:active";
+            }
             #blue
             {
               background-color: blue;
@@ -122,7 +142,7 @@
         </div>
         <div onclick="void(0)" draggable id='touchTarget'>
             <pre><div id='log'></div></pre>
-            <div id="purple" class="noevents"></div>
+            <div id="purple"></div>
             <div id="blue"></div>
             <div id="scroll">
               foo long line here<br/>
