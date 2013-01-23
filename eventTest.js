@@ -21,7 +21,7 @@ function updateHandlers()
     setHandlerState(
         ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
-        'focus', 'mousewheel'], 
+        'focus', 'mousewheel', 'scroll'], 
         mouseEventHandler,
         $('enableMouseEvents').checked);
 
@@ -93,6 +93,9 @@ function mouseEventHandler(event)
   if (event.type.toLowerCase().indexOf("mspointer")==0) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
       event.pointerId;
+    if ($('preventDefaultPointer').checked)
+      event.preventDefault();
+    }
   }
  
   msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
@@ -100,6 +103,11 @@ function mouseEventHandler(event)
   
   logEvent(event, msg);
 }
+
+// Scroll event doesn't bubble, listen for it directly
+$('scroll').addEventListener('scroll', function(event) {
+  logEvent(event, '');
+});
 
 // True if a gesture is occuring that should cause clicks to be swallowed
 var gestureActive = false;

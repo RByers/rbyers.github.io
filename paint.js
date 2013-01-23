@@ -90,6 +90,26 @@ function TouchHandler(event) {
   event.preventDefault();
 }
 
+var mousePressed = false;
+
+function MouseHandler(event) {
+  if (event.type == "mousedown" && event.button == 0) mousePressed = true;
+  if (mousePressed && event.button == 0)
+  {
+    var fakeTouch = {
+      identifier: 10,
+      pageX : event.pageX,
+      pageY : event.pageY
+    };
+    var eventType = event.type == "mousedown" ? "touchstart" :
+      event.type == "mouseup" ? "touchend" : "touchmove";
+    drawTouches([fakeTouch], eventType);
+    event.preventDefault();
+    
+    if (event.type == "mouseup") mousePressed = false;
+  }
+}
+
 var scale = 1;
 
 function InitializeCanvas() {

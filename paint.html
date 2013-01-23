@@ -13,9 +13,12 @@
   </head>
   <body onload="InitializeCanvas();">
     <canvas id="canvas"
-       ontouchstart="TouchHandler(event);"
-       ontouchmove="TouchHandler(event);"
-       ontouchend="TouchHandler(event);">
+       ontouchstart="TouchHandler(event)"
+       ontouchmove="TouchHandler(event)"
+       ontouchend="TouchHandler(event)"
+       onmousedown="MouseHandler(event)"
+       onmousemove="MouseHandler(event)"
+       onmouseup="MouseHandler(event)">
     </canvas><br/>
   </body>
 </html>
