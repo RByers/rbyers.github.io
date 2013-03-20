@@ -21,7 +21,7 @@ function updateHandlers()
     setHandlerState(
         ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
-        'focus', 'mousewheel', 'scroll'], 
+        'focus', 'mousewheel', 'wheel', 'scroll'], 
         mouseEventHandler,
         $('enableMouseEvents').checked);
 
@@ -90,10 +90,14 @@ function mouseEventHandler(event)
   if (event.type == 'mousewheel' ) {
     msg += ', wheelDelta=' + event.wheelDelta;
   }
+  if (event.type == 'wheel' ) {
+    msg += ', deltaX=' + event.deltaX + ', deltaY=' + event.deltaY + 
+      ', deltaZ=' + event.deltaZ + ', deltaMode=' + event.deltaMode;
+  }
   if (event.type.toLowerCase().indexOf("mspointer")==0) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
       event.pointerId;
-    if ($('preventDefaultPointer').checked)
+    if ($('preventDefaultPointer').checked) {
       event.preventDefault();
     }
   }
