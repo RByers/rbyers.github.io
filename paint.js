@@ -115,9 +115,6 @@ var scale = 1;
 function InitializeCanvas() {
   window.onscroll = null;
   var elem = document.getElementById('canvas');
-  // For now we scale the canbas by the scale factor.  It should probably
-  // be doing this itself (and maintaining it's own scale factor) like
-  // happens on Safari.
   if (window.devicePixelRatio)
     scale = window.devicePixelRatio;
 

@@ -7,13 +7,13 @@ var logElem = $('log');
 
 function updateHandlers()
 {
-    var setHandlerState = function(events, handler, state) {
+    var setHandlerState = function(events, target, handler, state) {
         for (var i = 0; i < events.length; i++) {
             if (state) {
-                targetElem.addEventListener(events[i], handler, false);
+                target.addEventListener(events[i], handler, false);
             }
             else {
-                targetElem.removeEventListener(events[i], handler);
+                target.removeEventListener(events[i], handler);
             }
         }
     }
@@ -22,29 +22,35 @@ function updateHandlers()
         ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
         'focus', 'mousewheel', 'wheel', 'scroll'], 
-        mouseEventHandler,
+        targetElem, mouseEventHandler,
         $('enableMouseEvents').checked);
 
     setHandlerState(
         ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
-        touchEventHandler,
+        targetElem, touchEventHandler,
         $('enableTouchEvents').checked);
     
     setHandlerState(
         ['MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerOver',
         'MSPointerOut', 'MSPointerCancel', 'MSPointerHover'],
-        mouseEventHandler,
+        targetElem, mouseEventHandler,
         $('enablePointerEvents').checked);
 
     setHandlerState(
         ['gesturestart', 'gesturechange', 'gestureend'],
-        gestureEventHandler,
+        targetElem, gestureEventHandler,
         $('enableGestureEvents').checked);
 
     setHandlerState(
         ['dragstart', 'dragenter', 'dragleave', 'drop', 'dragend'],
-        mouseEventHandler,
+        targetElem, mouseEventHandler,
         $('enableDragEvents').checked);
+
+    setHandlerState(
+        ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
+        $('red'), touchEventHandler,
+        $('redHandlers').checked);
+
 }
 
 var lastLog = log.innerHTML;
@@ -264,6 +270,8 @@ $('enableMouseEvents').addEventListener('click', updateHandlers, false);
 $('enableTouchEvents').addEventListener('click', updateHandlers, false);
 $('enableGestureEvents').addEventListener('click', updateHandlers, false);
 $('enablePointerEvents').addEventListener('click', updateHandlers, false);
+$('enableDragEvents').addEventListener('click', updateHandlers, false);
+$('redHandlers').addEventListener('click', updateHandlers, false);
 
 var alternateTimer;
 function setAlternateTimer() {
@@ -284,6 +292,12 @@ function setTouchAction() {
 }
 
 $('touchActionNone').addEventListener('click', setTouchAction);
+
+function setOverflowScrollTouch() {
+  $('scroll').className = $('overflowScrollTouch').checked ? 'overflowScrollTouch' : '';
+}
+
+$('overflowScrollTouch').addEventListener('click', setOverflowScrollTouch);
 
 function deleteRed(e) {
   var n = $('red');
@@ -308,3 +322,4 @@ updateConfigSummary();
 updateHandlers();
 setAlternateTimer();
 setTouchAction();
+setOverflowScrollTouch();

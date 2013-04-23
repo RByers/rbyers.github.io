@@ -72,7 +72,7 @@
               background-color: blue;
               position: absolute;
               right: 30px;
-              top: 120px;
+              top: 360px;
               height: 100px;
               width: 100px;
               border:1px solid black;
@@ -82,7 +82,7 @@
               background-color: red;
               position: absolute;
               right: 30px;
-              top: 360px;
+              top: 120px;
               height: 100px;
               width: 100px;
               border:1px solid black;
@@ -101,6 +101,10 @@
               width 100px;
               overflow: scroll;
               border: 1px solid black;
+            }
+            .overflowScrollTouch
+            {
+              -webkit-overflow-scrolling: touch;
             }
             #config
             {
@@ -136,32 +140,39 @@
             <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every 3 seconds<br/>
             <input type='checkbox' id='preventDefaultTouchEnd' checked/>PreventDefault on touchend<br/>
             <input type='checkbox' id='preventDefaultPointer' checked/>PreventDefault on pointer events<br/>
+            <input type='checkbox' id='overflowScrollTouch' />Use -webkit-overflow-scrolling: touch on 'scroll'<br/>
+            <input type='checkbox' id='redHandlers' />Add touch handlers directly to 'red'<br/>
             <input type='checkbox' id='simple' checked/>Simple<br/>
             <input type='checkbox' id='coalesce' checked/>Coalesce<br/>
             <input type='checkbox' id='touchSummary' checked/>Touch summary<br/>
 	    <button id='btnOk'>Ok</button>
         </div>
-        <div onclick="void(0)" draggable id='touchTarget'>
+        <div draggable id='touchTarget'>
             <pre><div id='log'></div></pre>
             <div id="purple"></div>
-            <div id="blue"></div>
+            <div id="red">Hit escape to delete me</div>
             <div id="scroll">
-              foo long line here<br/>
+              a scrollable div<br/>
               foo<br/>
+              hello<br/>
+              another line<br/>
               foo<br/>
+              hello<br/>
+              another line<br/>
               foo<br/>
+              hello<br/>
+              another line<br/>
               foo<br/>
+              hello<br/>
+              another line<br/>
               foo<br/>
+              hello<br/>
+              another line<br/>
               foo<br/>
-              foo<br/>
-              foo<br/>
-              foo<br/>
-              foo<br/>
-              foo<br/>
-              foo<br/>
-              foo<br/>
+              hello<br/>
+              another line<br/>
             </div>
-            <div id="red"></div>
+            <div id="blue"></div>
 
         </div>
         <script src="eventTest.js"></script>

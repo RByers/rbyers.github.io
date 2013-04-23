@@ -1,29 +1,20 @@
 <!DOCTYPE html>
 <head>
+<title>Compositor thread hit-testing demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-div {
+.box {
   height: 50px;
   width: 200px;
   margin: 10px;
   border: 1px solid blue;
 }
-#move {
-  -ms-touch-action: none;
-}
 </style>
 
 <script>
-  var counter = 0;
-  function blockOnMove()
-  {
-    counter++;
-    if (counter % 20 == 0)
-      block();
-  }
-
   function block()
   {
-    console.log('Blocking for 1s');
+    console.log('Blocking for 1000ms');
     var start = Date.now();
     var end = 0;
     while (end < start + 1000)
@@ -31,36 +22,36 @@ div {
     console.log('Done');
   }
 
-  setInterval(block, 5000);
+  setInterval(block, 1200);
   
   function logEvent(e)
   {
-    console.log('Got event: ' + e.type);
-    e.preventDefault();
   }
 
   window.addEventListener('load', function() {
     var s = document.getElementById('start');
     s.addEventListener('touchstart', logEvent)
-    s.addEventListener('MSPointerDown', logEvent)
     var m = document.getElementById('move');
     m.addEventListener('touchmove', logEvent)
-    m.addEventListener('MSPointerMove', logEvent)
     var w = document.getElementById('wheel');
     w.addEventListener('mousewheel', logEvent);
   });
 </script>
 </head>
 <body>
-Some random long document to demonstrate scrolling.<br><br>
-
+If your browser has compositor thread hit-testing, then scrolling the document should be consistently smooth.  If you start scrolling on
+an element with a touch handler, then it will be janky unless the browser stops sending touch events during scrolling (eg. chrome android).  If your browser doesn't support compositor thread hit testing, then
+scrolling will be janky (or at least be slow to start) in all cases.  
+If your browser doesn't support touch events (eg. IE10), then touch scrolling should be smooth.
+<hr>
+This is a random long chunk of text to demonstrate scrolling<br>
 An open standard is a standard that is publicly available and has various rights to use associated with it, and may also have various properties of how it was designed (e.g. open process). There is no single definition and interpretations vary with usage.
 <hr>
 <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
 <hr>
-<div id='start'>Has touchstart handler</div>
-<div id='move'>Has touchmove handler</div>
-<div id='wheel'>Has mousewheel handler</div>
+<div class='box' id='start'>Has touchstart handler</div>
+<div class='box' id='move'>Has touchmove handler</div>
+<div class='box' id='wheel'>Has mousewheel handler</div>
 <hr>
 The terms "open" and "standard" have a wide range of meanings associated with their usage. There are a number of definitions of open standards which emphasize different aspects of openness, including of the resulting specification, the openness of the drafting process, and the ownership of rights in the standard. The term "standard" is sometimes restricted to technologies approved by formalized committees that are open to participation by all interested parties and operate on a consensus basis.
 The definitions of the term "open standard" used by academics, the European Union and some of its member governments or parliaments such as Denmark, France, and Spain preclude open standards requiring fees for use, as do the New Zealand, South African and the Venezuelan governments. On the standard organisation side, the World Wide Web Consortium (W3C) ensures that its specifications can be implemented on a royalty-free basis.
