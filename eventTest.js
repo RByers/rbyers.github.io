@@ -142,16 +142,20 @@ function makeTouchList(touches, verbose)
     var tgt = '';
     if (verbose)
       tgt = '-' + touches[i].target.id;
-
-    if (!verbose || $('simple').checked) {
-      var id = touches[i].identifier;
+      
+    var id = touches[i].identifier;
+    if (id >= 100 && $('simple').checked) {
       if (!(id in touchMap)) {
         touchMap[id] = nextId;
         nextId++;
       }
-      touchStr += touchMap[id] + tgt + ' ';
+      id = touchMap[id];
+    }
+
+    if (!verbose || $('simple').checked) {
+      touchStr += id + tgt + ' ';
     } else {
-      touchStr += touches[i].identifier + tgt + '(' + touches[i].clientX + ',' + touches[i].clientY;
+      touchStr += id + tgt + '(' + touches[i].clientX + ',' + touches[i].clientY;
       if ('webkitForce' in touches[i]) {
         touchStr += ',f' + Math.round(touches[i].webkitForce*100);
       }
