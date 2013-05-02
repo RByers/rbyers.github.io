@@ -32,7 +32,8 @@ function updateHandlers()
     
     setHandlerState(
         ['MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerOver',
-        'MSPointerOut', 'MSPointerCancel', 'MSPointerHover'],
+        'MSPointerOut', 'MSPointerCancel', 'MSPointerHover', 
+        'MSGotPointerCapture', 'MSLostPointerCapture'],
         targetElem, mouseEventHandler,
         $('enablePointerEvents').checked);
 
@@ -88,7 +89,6 @@ function logEvent(event, msg)
 
 function mouseEventHandler(event)
 {
-  // Click buster stuff
   var msg = '';
   if (gestureActive) {
     msg += 'gesture-active ';
@@ -112,6 +112,10 @@ function mouseEventHandler(event)
       ', button=' + event.button + ', detail=' + event.detail + msg;
   
   logEvent(event, msg);
+
+  if (event.type=='MSPointerDown' && $('pointercapture').checked) {
+    event.target.msSetPointerCapture(event.pointerId);
+  }	
 }
 
 // Scroll event doesn't bubble, listen for it directly
