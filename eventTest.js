@@ -33,7 +33,10 @@ function updateHandlers()
     setHandlerState(
         ['MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerOver',
         'MSPointerOut', 'MSPointerCancel', 'MSPointerHover', 
-        'MSGotPointerCapture', 'MSLostPointerCapture'],
+        'MSGotPointerCapture', 'MSLostPointerCapture',
+        'pointerdown', 'pointermove', 'pointerup', 'pointerover', 'pointerout',
+        'pointerenter', 'pointerleave', 'pointercancel',
+        'gotpointercapture', 'lostpointercapture'],
         targetElem, mouseEventHandler,
         $('enablePointerEvents').checked);
 
