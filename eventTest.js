@@ -97,11 +97,22 @@ function mouseEventHandler(event)
     msg += 'gesture-active ';
   }
   if (event.type == 'mousewheel' ) {
-    msg += ', wheelDelta=' + event.wheelDelta;
+    msg += ', wheelDelta=' + event.wheelDelta + 
+      ' (' + event.wheelDeltaX + ',' + event.wheelDeltaY + ')';
   }
   if (event.type == 'wheel' ) {
     msg += ', deltaX=' + event.deltaX + ', deltaY=' + event.deltaY + 
       ', deltaZ=' + event.deltaZ + ', deltaMode=' + event.deltaMode;
+  }
+  if (event.type == 'mousewheel' || event.type == 'wheel') {
+    msg += ', deltaMode=' + (
+      event.deltaMode == 0 ? "PIXEL" :
+      event.deltaMode == 1 ? "LINE" :
+      event.deltaMode == 2 ? "PAGE" : 
+      event.deltaMode); 
+    if ($('preventDefaultWheel').checked) {
+      event.preventDefault();
+    }
   }
   if (event.type.toLowerCase().indexOf("mspointer")==0) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
