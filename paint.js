@@ -29,6 +29,10 @@ document.addEventListener('keyup', function(e) {
 
 });
 
+window.addEventListener('resize', function(e) {
+    InitializeCanvas();
+});
+
 function drawTouches(touches, eventType) {
   var context = GetContext();
   for (var i = 0; i < touches.length; ++i) {
@@ -113,16 +117,21 @@ function MouseHandler(event) {
 var scale = 1;
 
 function InitializeCanvas() {
-  window.onscroll = null;
   var elem = document.getElementById('canvas');
-  if (window.devicePixelRatio)
-    scale = window.devicePixelRatio;
+  
+  var newscale = window.devicePixelRatio ? window.devicePixelRatio : 1;
+  var newwidth = window.screen.width * newscale;
+  var newheight = window.screen.height * newscale;
 
-  elem.width = window.screen.width * scale;
-  elem.height = window.screen.height * scale;
-  elem.style.width = window.screen.width + 'px';
-  elem.style.height = window.screen.height + 'px';
+  if (elem.width != newwidth || elem.height != newheight || scale != newscale) {
+    // resizing a canvas clears it, so do it only when it's dimensions have changed.
+    scale = newscale;
+    elem.width = newwidth;
+    elem.height = newheight;
+    elem.style.width = window.screen.width + 'px';
+    elem.style.height = window.screen.height + 'px';
+  }
 
   var context = GetContext();
-  context.fillStyle = "#ff0000";
+  //context.fillStyle = "#ff0000";
 }
