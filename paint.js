@@ -25,6 +25,15 @@ document.addEventListener('keyup', function(e) {
     case 70:
     enableForce = !enableForce;
     break;
+
+    // enter
+    case 13:
+    if (document.documentElement.webkitRequestFullscreen) {
+      if (document.webkitFullscreenElement)
+        document.webkitCancelFullScreen();
+      else
+        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
   }
 
 });
