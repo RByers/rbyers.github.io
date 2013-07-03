@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<head>
+<title>Janky scrolling demonstration</title>
+<style>
+#scroll {
+  overflow: scroll;
+  height: 400px;
+  border: 2px solid blue;
+}
+</style>
+<script>
+  var counter = 0;
+  function doSomethingDumb()
+  {
+    // This is a particularly dumb example of adding jank to a web page, but in reality
+    // it can be much more subtle.  Other complex javascript, expensive layout and loading/decoding images
+    // might take more than 16ms, resulting in at least one dropped frame when scrolling.
+    counter++;
+    console.log('Doing something dumb #' + counter);
+    var start = Date.now();
+    var end = 0;
+    while (end < start + 400)
+      end = Date.now();
+    console.log('Done');
+  }
+
+  function touchHandler()
+  {
+    // We don't even have to do anything here to show the problem
+  }
+
+  var timer;
+  function updateHandlers()
+  {
+    if (document.getElementById('dowork').checked) {
+      timer = window.setInterval(doSomethingDumb, 600);
+    } else {
+      if (timer)
+        window.clearInterval(timer);
+    }
+    if (document.getElementById('tmhandler').checked) {
+      document.addEventListener('touchmove', touchHandler);
+      document.addEventListener('MSPointerMove', touchHandler);
+    } else {
+      document.removeEventListener('touchmove', touchHandler);
+      document.removeEventListener('MSPointerMove', touchHandler);
+    }
+    if (document.getElementById('mwhandler').checked) {
+      document.addEventListener('mousewheel', touchHandler);
+    } else {
+      document.removeEventListener('mousewheel', touchHandler);
+    }
+  }
+
+  window.onload = function() {
+    var cb = document.getElementById('handlers');
+    document.getElementById('tmhandler').addEventListener('click', updateHandlers);
+    document.getElementById('mwhandler').addEventListener('click', updateHandlers);
+    document.getElementById('dowork').addEventListener('click', updateHandlers);
+    updateHandlers();
+  }
+</script>
+</head>
+<body>
+<p>This page is doing a bunch of work in the background (an extreme artificial example, consuming 400ms out of every 600ms).
+Try scrolling on a touchscreen with and without the empty touch handler enabled - scrolling is janky only when the handler is active (even though the handler itself does nothing).  Note that we don't see this problem on IE10, as it uses the pointer event model that is designed to avoid this problem.
+We see the problem when scrolling with a mouse/trackpad by having an empty mousewheel event handler, but your hand being more disconnected from the page means that the psychological impact is reduced.
+<hr>
+<input type='checkbox' id='dowork' checked>Do lots of work on the main thread<br>
+<input type='checkbox' id='tmhandler' checked>Enable empty touchmove handler<br>
+<input type='checkbox' id='mwhandler' checked>Enable empty mousewheel handler<br><br>
+<hr>
+Publicly available – easily available for implementation and use, at a reasonable price. Publication of the text of a standard by others is permitted only with the prior approval of the SDO.
+On-going support – maintained and supported over a long period of time.
+The ITU-T, ITU-R, ISO, and IEC have harmonized on a common patent policy [3] under the banner of the WSC. However, the ITU-T definition should not necessarily be considered also applicable in ITU-R, ISO and IEC contexts, since the Common Patent Policy [4] does not make any reference to "open standards" but rather only to "standards."
+[edit]IETF definition
+In section 7 of its RFC 2026, the IETF classifies specifications that have been developed in a manner similar to that of the IETF itself as being "open standards," and lists the standards produced by ANSI, ISO, IEEE, and ITU-T as examples. As the IETF standardization processes and IPR policies have the characteristics listed above by ITU-T, the IETF standards fulfill the ITU-T definition of "open standards."
+However, the IETF has not adopted a specific definition of "open standard"; both RFC 2026 and the IETF's mission statement (RFC 3935) talks about "open process," but RFC 2026 does not define "open standard" except for the purpose of defining what documents IETF standards can link to.
+RFC 2026 belongs to a set of RFCs collectively known as BCP 9 (Best Common Practice, an IETF policy).[5] RFC 2026 was later updated by BCP 78 and 79 (among others). As of 2011 BCP 78 is RFC 5378 (Rights Contributors Provide to the IETF Trust),[6] and BCP 79 consists of RFC 3979 (Intellectual Property Rights in IETF Technology) and a clarification in RFC 4879.[7] The changes are intended to be compatible with the "Simplified BSD License" as stated in the IETF Trust Legal Provisions and Copyright FAQ based on RFC 5377.[8]
+In August 2012, the IETF combined with the W3C and IEEE to launch Open-Stand [9] and to publish The Modern Paradigm for Standards. This captures "the effective and efficient standardization processes that have made the Internet and Web the premiere platforms for innovation and borderless commerce".
+[edit]European Union definition
+The European Union adopted the following definition in its European Interoperability Framework:[10]
+To reach interoperability in the context of pan-European eGovernment services, guidance needs to focus on open standards.
+The word "open" is here meant in the sense of fulfilling the following requirements:
+The standard is adopted and will be maintained by a not-for-profit organization, and its ongoing development occurs on the basis of an open decision-making procedure available to all interested parties (consensus or majority decision etc.).
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+The standard has been published and the standard specification document is available either freely or at a nominal charge. It must be permissible to all to copy, distribute and use it for no fee or at a nominal fee.
+The intellectual property - i.e. patents possibly present - of (parts of) the standard is made irrevocably available on a royalty-free basis.
+There are no constraints on the re-use of the standard[11]
+[edit]Danish government definition
+The Danish government has attempted to make a definition of open standards,[12] which also is used in pan-European software development projects. It states:
+An open standard is accessible to everyone free of charge (i.e. there is no discrimination between users, and no payment or other considerations are required as a condition of use of the standard)
+An open standard of necessity remains accessible and free of charge (i.e. owners renounce their options, if indeed such exist, to limit access to the standard at a later date, for example, by committing themselves to openness during the remainder of a possible patent's life)
+An open standard is accessible free of charge and documented in all its details (i.e. all aspects of the standard are transparent and documented, and both access to and use of the documentation is free)
+[edit]French law definition
+The French Parliament approved a definition of "open standard" in its "Law for Confidence in the Digital Economy."[13] The definition is:[14]
+By open standard is understood any communication, interconnection or interchange protocol, and any interoperable data format whose specifications are public and without any restriction in their access or implementation.
+[edit]Spanish law definition
+A Law passed by the Spanish Parliament [15] requires that all electronic services provided by the Spanish public administration must be based on open standards. It defines an open standard as royalty free, according to the following definition:[14]
+An open standard fulfills the following conditions:
+it is public, and its use is available on a free [gratis] basis, or at a cost that does not imply a difficulty for the user.
+its use is not subject to the payment of any intellectual [copyright] or industrial [patents and trademarks] property right.
+[edit]Venezuelan law definition
+The Venezuelan Government approved a "free software and open standards law."[16] The decree includes the requirement that the Venezuelan public sector must use free software based on open standards, and includes a definition of open standard:[14]
+Article 2: for the purposes of this Decree, it shall be understood as
+k) Open standards: technical specifications, published and controlled by an organization in charge of their development, that have been accepted by the industry, available to everybody for their implementation in free software or other [type of software], promoting competitivity, interoperability and flexibility.
+[edit]South African Government definition
+The South African Government approved a definition in the "Minimum Interoperability Operating Standards Handbook" (MIOS).[17]
+For the purposes of the MIOS, a standard shall be considered open if it meets all of these criteria. There are standards which we are obliged to adopt for pragmatic reasons which do not necessarily fully conform to being open in all respects. In such cases, where an open standard does not yet exist, the degree of openness will be taken into account when selecting an appropriate standard:
+it should be maintained by a non-commercial organization
+participation in the ongoing development work is based on decision making processes that are open to all interested parties.
+open access: all may access committee documents, drafts and completed standards free of cost or for a negligible fee.
+It must be possible for everyone to copy, distribute and use the standard free of cost.
+The intellectual rights required to implement the standard (e.g.essential patent claims) are irrevocably available, without any royalties attached.
+There are no reservations regarding reuse of the standard.
+There are multiple implementations of the standard.
+[edit]New Zealand official interoperability framework definition
+The E-Government Interoperability Framework (e-GIF) [18] defines open standard as royalty free according to the following text:
+While a universally agreed definition of "open standards" is unlikely to be resolved in the near future, the e-GIF accepts that a definition of “open standards” needs to recognise a continuum that ranges from closed to open, and encompasses varying degrees of "openness." To guide readers in this respect, the e-GIF endorses "open standards" that exhibit the following properties:
+Be accessible to everyone free of charge: no discrimination between users, and no payment or other considerations should be required as a condition to use the standard.
+Remain accessible to everyone free of charge: owners should renounce their options, if any, to limit access to the standard at a later date.
+Be documented in all its details: all aspects of the standard should be transparent and documented, and both access to and use of the documentation should be free.
+The e-GIF performs the same function in e-government as the Road Code does on the highways. Driving would be excessively costly, inefficient, and ineffective if road rules had to be agreed each time one vehicle encountered another.
+[edit]Bruce Perens' definition
+One of the most popular definitions of the term "open standard," as measured by Google ranking, is the one developed by Bruce Perens.[19] His definition lists a set of principles that he believes must be met by an open standard:
+Availability: Open Standards are available for all to read and implement.
+Maximize End-User Choice: Open Standards create a fair, competitive market for implementations of the standard. They do not lock the customer in to a particular vendor or group.
+No Royalty: Open Standards are free for all to implement, with no royalty or fee. Certification of compliance by the standards organization may involve a fee.
+No Discrimination: Open Standards and the organizations that administer them do not favor one implementor over another for any reason other than the technical standards compliance of a vendor’s implementation. Certification organizations must provide a path for low and zero-cost implementations to be validated, but may also provide enhanced certification services.
+Extension or Subset: Implementations of Open Standards may be extended, or offered in subset form. However, certification organizations may decline to certify subset implementations, and may place requirements upon extensions (see Predatory Practices).
+Predatory Practices: Open Standards may employ license terms that protect against subversion of the standard by embrace-and-extend tactics. The licenses attached to the standard may require the publication of reference information for extensions, and a license for all others to create, distribute, and sell software that is compatible with the extensions. An Open Standard may not otherwise prohibit extensions.
+[edit]Microsoft's definition
+Vijay Kapoor, national technology officer, Microsoft, defines what open standards are as follows:[20]
+Let's look at what an open standard means: 'open' refers to it being royalty-free, while 'standard' means a technology approved by formalised committees that are open to participation by all interested parties and operate on a consensus basis. An open standard is publicly available, and developed, approved and maintained via a collaborative and consensus driven process.
+Overall, Microsoft's relationship to open standards is, at best, mixed. While Microsoft participates in the most significant standard-setting organizations that establish open standards, it is often seen as oppositional to their adoption.[21] The model started to shift, however, in 2006 and since the XML standard Microsoft has been earning a better reputation within the open-source and open-standards community.[21]
+[edit]Open Source Initiative's definition
+The Open Source Initiative defines the requirements and criteria for open standards as follows:[22]
+The Requirement
+An "open standard" must not prohibit conforming implementations in open source software.
+The Criteria
+To comply with the Open Standards Requirement, an "open standard" must satisfy the following criteria. If an "open standard" does not meet these criteria, it will be discriminating against open source developers.
+No Intentional Secrets: The standard MUST NOT withhold any detail necessary for interoperable implementation. As flaws are inevitable, the standard MUST define a process for fixing flaws identified during implementation and interoperability testing and to incorporate said changes into a revised version or superseding version of the standard to be released under terms that do not violate the OSR.
+Availability: The standard MUST be freely and publicly available (e.g., from a stable web site) under royalty-free terms at reasonable and non-discriminatory cost.
+Patents: All patents essential to implementation of the standard MUST:
+be licensed under royalty-free terms for unrestricted use, or
+be covered by a promise of non-assertion when practiced by open source software
+No Agreements: There MUST NOT be any requirement for execution of a license agreement, NDA, grant, click-through, or any other form of paperwork to deploy conforming implementations of the standard.
+No OSR-Incompatible Dependencies: Implementation of the standard MUST NOT require any other technology that fails to meet the criteria of this Requirement.
+[edit]Ken Krechmer's definition
+Ken Krechmer[23] identifies ten "rights":
+<div id='scroll'>
+What follows is just random long text to demonstrate scrolling.<br><br>
+
+An open standard is a standard that is publicly available and has various rights to use associated with it, and may also have various properties of how it was designed (e.g. open process). There is no single definition and interpretations vary with usage.
+The terms "open" and "standard" have a wide range of meanings associated with their usage. There are a number of definitions of open standards which emphasize different aspects of openness, including of the resulting specification, the openness of the drafting process, and the ownership of rights in the standard. The term "standard" is sometimes restricted to technologies approved by formalized committees that are open to participation by all interested parties and operate on a consensus basis.
+The definitions of the term "open standard" used by academics, the European Union and some of its member governments or parliaments such as Denmark, France, and Spain preclude open standards requiring fees for use, as do the New Zealand, South African and the Venezuelan governments. On the standard organisation side, the World Wide Web Consortium (W3C) ensures that its specifications can be implemented on a royalty-free basis.
+Many definitions of the term "standard" permit patent holders to impose "reasonable and non-discriminatory licensing" royalty fees and other licensing terms on implementers and/or users of the standard. For example, the rules for standards published by the major internationally recognized standards bodies such as the IETF, ISO, IEC, and ITU-T permit their standards to contain specifications whose implementation will require payment of patent licensing fees. Among these organizations, only the IETF and ITU-T explicitly refer to their standards as "open standards," while the others refer only to producing "standards." The IETF and ITU-T use definitions of "open standard" that allow "reasonable and non-discriminatory" patent licensing fee requirements.
+<hr>
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/AfricanWildCat.jpg/220px-AfricanWildCat.jpg" width="220" height="165">
+<hr>
+The term "open standard" is sometimes coupled with "open source" with the idea that a standard is not truly open if it does not have a complete free/open source reference implementation available. [1]
+Open standards which specify formats are sometimes referred to as open formats.
+Many specifications that are sometimes referred to as standards are proprietary and only available under restrictive contract terms (if they can be obtained at all) from the organization that owns the copyright on the specification. As such these specifications are not considered to be fully Open.
+
+Specific definitions of an open standard
+
+[edit]ITU-T definition
+The ITU-T is a standards development organization (SDO) that is one of the three sectors of the International Telecommunications Union (a specialized agency of the United Nations). The ITU-T has a Telecommunication Standardization Bureau director's Ad Hoc group on IPR that produced the following definition in March 2005, which the ITU-T as a whole has endorsed for its purposes since November 2005 [2]:
+The ITU-T has a long history of open standards development. However, recently some different external sources have attempted to define the term "Open Standard" in a variety of different ways. In order to avoid confusion, the ITU-T uses for its purpose the term "Open Standards" per the following definition:
+"Open Standards" are standards made available to the general public and are developed (or approved) and maintained via a collaborative and consensus driven process. "Open Standards" facilitate interoperability and data exchange among different products or services and are intended for widespread adoption.
+Other elements of "Open Standards" include, but are not limited to:
+Collaborative process – voluntary and market driven development (or approval) following a transparent consensus driven process that is reasonably open to all interested parties.
+Reasonably balanced – ensures that the process is not dominated by any one interest group.
+Due process - includes consideration of and response to comments by interested parties.
+Intellectual property rights (IPRs) – IPRs essential to implement the standard to be licensed to all applicants on a worldwide, non-discriminatory basis, either (1) for free and under other reasonable terms and conditions or (2) on reasonable terms and conditions (which may include monetary compensation). Negotiations are left to the parties concerned and are performed outside the SDO.
+Quality and level of detail – sufficient to permit the development of a variety of competing implementations of interoperable products or services. Standardized interfaces are not hidden, or controlled other than by the SDO promulgating the standard.
+</div>
+Open Meeting
+Consensus
+Due Process
+Open IPR
+One World
+Open Change
+Open Documents
+Open Interface
+Open Use
+On-going Support
+[edit]World Wide Web Consortium's definition
+As an important provider of Web technology ICT Standards, notably XML, http, HTML, CSS and WAI, the World Wide Web Consortium (W3C) follows a process that promotes the development of high-quality standards.[24]
+Looking at the end result, the spec alone, up for adoption, is not enough. The participative/inclusive process leading to a particular design, and the supporting resources available with it should be accounted when we talk about Open Standards:
+transparency (due process is public, and all technical discussions, meeting minutes, are archived and referencable in decision making)
+relevance (new standardization is started upon due analysis of the market needs, including requirements phase, e.g. accessibility, multi-linguism)
+openness (anybody can participate, and everybody does: industry, individual, public, government bodies, academia, on a worldwide scale)
+impartiality and consensus (guaranteed fairness by the process and the neutral hosting of the W3C organization, with equal weight for each participant)
+availability (free access to the standard text, both during development, at final stage, and for translations, and assurance that core Web and Internet technologies can be implemented Royalty-Free)
+maintenance (ongoing process for testing, errata, revision, permanent access, validation, etc.)
+In August 2012, the W3C combined with the IETF and IEEE to launch Open-Stand [9] and to publish The Modern Paradigm for Standards. This captures "the effective and efficient standardization processes that have made the Internet and Web the premiere platforms for innovation and borderless commerce".
+[edit]Digital Standards Organization definition
+The Digital Standards Organization (DIGISTAN) states that "an open standard must be aimed at creating unrestricted competition between vendors and unrestricted choice for users."[25] Its brief definition of "open standard" (or "free and open standard") is "a published specification that is immune to vendor capture at all stages in its life-cycle." Its more complete definition as follows:
+"The standard is adopted and will be maintained by a not-for-profit organization, and its ongoing development occurs on the basis of an open decision-making procedure available to all interested parties.
+The standard has been published and the standard specification document is available freely. It must be permissible to all to copy, distribute, and use it freely.
+The patents possibly present on (parts of) the standard are made irrevocably available on a royalty-free basis.
+There are no constraints on the re-use of the standard.
+A key defining property is that an open standard is immune to vendor capture at all stages in its life-cycle. Immunity from vendor capture makes it possible to improve upon, trust, and extend an open standard over time."[26]
+This definition is based on the EU's EIF v1 definition of "open standard," but with changes to address what it terms as "vendor capture." They believe that "Many groups and individuals have provided definitions for 'open standard' that reflect their economic interests in the standards process. We see that the fundamental conflict is between vendors who seek to capture markets and raise costs, and the market at large, which seeks freedom and lower costs... Vendors work hard to turn open standards into franchise standards. They work to change the statutory language so they can cloak franchise standards in the sheep's clothing of 'open standard.' A robust definition of "free and open standard" must thus take into account the direct economic conflict between vendors and the market at large."[25]
+[edit]Free Software Foundation Europe's definition
+The Free Software Foundation Europe (FSFE) uses a definition which is based on the European Interoperability Framework v.1, and was extended after consultation with industry and community stakeholders. FSFE's standard has been adopted by groups such as the SELF EU Project, the 2008 Geneva Declaration on Standards and the Future of the Internet, and international Document Freedom Day teams.
+According to this definition an Open Standard is a format or protocol that is:
+Subject to full public assessment and use without constraints in a manner equally available to all parties;
+Without any components or extensions that have dependencies on formats or protocols that do not meet the definition of an Open Standard themselves;
+Free from legal or technical clauses that limit its utilisation by any party or in any business model;
+Managed and further developed independently of any single vendor in a process open to the equal participation of competitors and third parties;
+Available in multiple complete implementations by competing vendors, or as a complete implementation equally available to all parties.
+[edit]FFII's definition
+The Foundation for a Free Information Infrastructure's definition is said to coincide with the definition issued in the European Interoperability Framework released on 2004.
+A specification that is public, the standard is inclusive and it has been developed and is maintained in an open standardization process, everybody can implement it without any restriction, neither payment, to license the IPR (granted to everybody for free and without any condition). This is the minimum license terms asked by standardization bodies as W3C. Of course, all the other bodies accept open standards. But specification itself could cost a fair amount of money (ie. 100-400Eur per copy as in ISO because copyright and publication of the document itself).
+[edit]Examples of open standards
+
+Note that because the various definitions of "open standard" differ in their requirements, the standards listed below may not be open by every definition.
+[edit]System
+World Wide Web architecture specified by W3C[27]
+[edit]Hardware
+See also: Open-source hardware
+Industry Standard Architecture (ISA) (a specification by IBM for plug-in boards to IBM-architecture PCs, later standardized by the IEEE)
+Peripheral Component Interconnect (PCI) (a specification by Intel Corporation for plug-in boards to IBM-architecture PCs)
+Accelerated Graphics Port (AGP) (a specification by Intel Corporation for plug-in boards to IBM-architecture PCs)
+PCI Industrial Computer Manufacturers Group (PICMG) (an industry consortium developing Open Standards specifications for computer architectures )
+[edit]File formats
+See also: Open format
+Computer Graphics Metafile (CGM) (file format for 2D vector graphics, raster graphics, and text defined by ISO/IEC 8632[28])
+Hypertext Markup Language (HTML), Extensible HTML (XHTML) and HTML5 (specifications of the W3C for structured hyperlinked document formatting)
+Office Open XML (a specification by Microsoft for document, spreadsheet and presentation formats, approved by ISO as ISO/IEC 29500)
+Ogg (a container for Vorbis, FLAC, Speex (audio formats) &amp; Theora (a video format), by the Xiph.Org Foundation)
+OpenDocument Format (ODF) (a specification by OASIS for office document formats, approved by ISO as ISO/IEC 26300)
+Portable Document Format (PDF/X) (a specification by Adobe Systems Incorporated for formatted documents, later approved by ISO as ISO 15930-1:2001 [29])
+Portable Network Graphics (PNG) (a bitmapped image format that employs lossless data compression, approved by ISO as ISO/IEC 15948:2004)
+Scalable Vector Graphics (SVG) (a specification for two-dimensional vector graphics developed by the World Wide Web Consortium (W3C).
+[edit]Protocols
+Internet Protocol (IP) (a specification of the IETF for transmitting packets of data on a network - specifically, IETF RFC 791)
+Transmission Control Protocol (TCP) (a specification of the IETF for implementing streams of data on top of IP - specifically, IETF RFC 793)
+OMA Data Synchronization and Device Management (a platform-independent data synchronization protocol, specified by The SyncML Initiative/Open Mobile Alliance)
+XMPP - an open protocol for near-real-time instant messaging (IM) and presence information (a.k.a. buddy lists)
+[edit]Programming languages
+ANSI C (a general-purpose programming language, approved by ISO as ISO/IEC 9899)
+Ada (a multi-paradigm programming language, defined by joint ISO/ANSI standard (ISO-8652:1995), combined with major Amendment ISO/IEC 8652:1995/Amd 1:2007)
+MUMPS (a dynamically typed programming language, originally designed for database-driven applications in the healthcare industry approved by ISO as ISO/IEC 11756:1992 and ISO/IEC 11756:1999)
+C# (a general-purpose programming language, approved by ISO as ISO/IEC 23270 and ECMA as ECMA-334)
+[edit]Other
+Attention Profiling Markup Language (APML)
+Apdex (Application Performance Index) (specifies a uniform way to analyze and report on the degree to which the measured performance of software applications meets user expectations
+Application Response Measurement (ARM) (defines an API for C and Java programming language to measure application transaction response times, adopted by The Open Group)
+CD-ROM (Yellow Book) (a specification for data interchange on read-only 120 mm optical data disks, approved by ISO as ISO/IEC 10149 and ECMA as ECMA-130)
+Common Information Model (CIM) (a specification by DMTF for defining how managed elements in an IT environment are represented as a common set of objects and relationships between them)
+Universal Data Element Framework (UDEF) an open standard by The Open Group that provides the foundation for building an enterprise-wide Controlled vocabulary enabling Interoperability.
+Pipeline Open Data Standard (PODS)
+Universal Metering Interface (UMI) originally created by Cambridge Consultants for use in Smart Metering devices and systems, this set of 3 standards was made open in order to promote the development of the smart metering market.
+
+[edit]Patents
+
+In 2002 and 2003 the controversy about using reasonable and non-discriminatory (RAND) licensing for the use of patented technology in web standards increased. Bruce Perens, important associations as FSF or FFII and others have argued that the use of patents restricts who can implement a standard to those able or willing to pay for the use of the patented technology. The requirement to pay some small amount per user, is often an insurmountable problem for free/open source software implementations which can be redistributed by anyone. Royalty free (RF) licensing is generally the only possible license for free/open source software implementations. Version 3 of the GNU General Public License includes a section that enjoins anyone who distributes a program released under the GPL from enforcing patents on subsequent users of the software or derivative works.
+One result of this controversy was that many governments (including the Danish, French and Spanish governments singly and the EU collectively) specifically affirmed that "open standards" required royalty-free licenses. Some standards organizations, such as the W3C, modified their processes to essentially only permit royalty-free licensing. Oasis-Open allows committees to operate either on a RAND basis or a royalty-free basis, but OASIS does say to grant "open standards" when they are not royalty-free.
+Patents for software, formulas and algorithms are currently enforceable in the US but not in the EU. The European Patent Convention Article 52 paragraph (2)(c) expressly prohibits algorithms, business methods and software from being covered by patents. The US has only allowed them since 1989 and there has been growing controversy in recent years as to either the benefit or feasibility.
+A standards body and its associated processes cannot force a patent holder to give up its right to charge license fees, especially if the company concerned is not a member of the standards body and unconstrained by any rules that were set during the standards development process. In fact, this element discourages some standards bodies from adopting an "open" approach, fearing that they will lose out if their members are more constrained than non-members. Few bodies will carry out (or require their members to carry out) a full patent search. Ultimately, the only sanctions a standards body can apply on a non-member when patent licensing is demanded is to cancel the standard, try to rework around it, or work to invalidate the patent. Standards bodies such as W3C and OASIS require[citation needed] that the use of required patents be granted under a royalty-free license as a condition for joining the body or a particular working group, and this is generally considered enforceable.[citation needed]
+Examples of patent claims brought against standards previously thought to be open include JPEG and the Rambus case over DDR SDRAM. The H.264 video codec is an example of a standards organization producing a standard that has known, non-royalty-free required patents.
+[edit]Quotes
+
+EU Commissioner Erkki Liikanen: "Open standards are important to help create interoperable and affordable solutions for everybody. They also promote competition by setting up a technical playing field that is level to all market players. This means lower costs for enterprises and, ultimately, the consumer." (World Standards Day, 14 October 2003) [30]
+Jorma Ollila, Chairman of Nokia's Board of Directors: "... Open standards and platforms create a foundation for success. They enable interoperability of technologies and encourage innovativeness and healthy competition, which in turn increases consumer choice and opens entirely new markets,"[31]
+W3C Director Tim Berners-Lee: "The decision to make the Web an open system was necessary for it to be universal. You can't propose that something be a universal space and at the same time keep control of it." [32]
+In the opening address of the The Southern African Telecommunications Networks and Applications Conference (SATNAC) 2005, then Minister of Science and Technology, Mosibudi Mangena stressed need for open standards in ICT:[33]
+[...] The tsunami that devastated South Eastern Asian countries and the north-eastern parts of Africa, is perhaps the most graphic, albeit unfortunate, demonstration of the need for global collaboration, and open ICT standards. The incalculable loss of life and damage to property was exacerbated by the fact that responding agencies and non-governmental groups were unable to share information vital to the rescue effort. Each was using different data and document formats. Relief was slowed, and coordination complicated. [...]
+
+— Mosibudi Mangena, Opening address of SATNAC 2005
+
+[edit]See also
+
+Open system (computing)
+Open specifications
+Conformity assessment
+Specification (technical standard)
+Vendor lock-in
+Network effect
+Free software
+Free standard
+[edit]References
+
+^ Tim Simcoe: 'Chapter 8: Open Standards and Intellectual Property Rights', To appear in Open Innovation: Researching a New Paradigm
+^ ITU-T on Open Standards
+^ ITU-T on IPR
+^ ISO TC on Common Patent Policy
+^ BCP 9: The Internet Standards Process
+^ BCP 78: Rights Contributors Provide to the IETF Trust
+^ BCP 79: Intellectual Property Rights in IETF Technology
+^ IETF Trust Legal Provisions (page offers a FAQ for non-lawyers)
+^ a b Open-Stand: Open-Stand: Principles for The Modern Standard Paradigm
+^ European Interoperability Framework for pan-European eGovernment Services, Version 1.0 (2004) ISBN 92-894-8389-X page 9
+^ European Communities (2004) (PDF), European Interoperability Framework for pan-European eGovernment Services, retrieved 2009-11-21
+^ "Definitions of Open Standards", 2004
+^ "Loi nº 2004-575" for the Confidence in the Digital Economy," June, 21nd 2004
+^ a b c "Estándares Abiertos"
+^ "Ley 11/2007" of Public Electronic Access of the Citizens to the Public Services, June, 22nd 2007
+^ "Decreto 3390" of Free Software and Open Standards, December, 23rd 2004
+^ "Government of South Africa, MIOS Version 4.1 2007"
+^ "New Zealand E-Government Interoperability Framework (e-GIF)" version 3.0, June, 22nd 2007
+^ Is OpenDocument an Open Standard? Yes!
+^ http://www.efytimes.com/efytimes/fcreative.asp?edid=27036
+^ a b Casson, Tony; Ryan, Patrick S. (May 1, 2006). "Open Standards, Open Source Adoption in the Public Sector, and Their Relationship to Microsoft’s Market Dominance". In Sherrie Bolin. Standards Edge: Unifier or Divider?. Sheridan Books. p. 87. SSRN 1656616.
+^ Open Standards Requirement for Software
+^ Ken Krechmer, The Meaning of Open Standards
+^ Definition of Open Standards World Wide Web Consortium
+^ a b Defining "Open Standard"
+^ What is an Open Standard?
+^ WWW architecture
+^ ISO/IEC 8632
+^ Portable Document File (PDF) format specification
+^ EU Commissioner Erkki Liikanen on Open Standards
+^ Nokia Foundation Award to Mårten Mickos
+^ Tim Berners-Lee's FAQ
+^ http://www.dst.gov.za/media-room/speeches/archived/speech.2007-05-23.2477659151
+[edit]Further reading
+
+Opening Standards: The Global Politics of Interoperability, Laura DeNardis, editor, MIT Press, 2011. Experts from industry, academia, and public policy examine what is at stake economically and politically in debates about open standards.
+[edit]External links
+
+Berkman Center for Internet &amp; Society at Harvard Law School, Open ePolicy Group, Roadmap for Open ICT Ecosystems
+Open U.S. Standards Development for Telecommunications
+Bruce Perens: Open Standards: Principles and Practice
+Ken Krechmer: The Principles of Open Standards
+Bob Sutor: Open Standards vs. Open Source: How to think about software, standards, and Service Oriented Architecture at the beginning of the 21st century
+European Commission: Valoris report on Open Document Formats
+The New York Times: Steve Lohr: 'Plan by 13 Nations Urges Open Technology Standards'
+UNDP-APDIP International Open Source Network: Free/Open Source Software: Open Standards Primer
+OpenStandards.net: An Open Standards Portal
+Is OpenDocument an Open Standard? Yes! develops a unified definition of "open standard" from multiple sources, then applies it to a particular standard
+Open Source Initiative: Open Standard Requirement for Software
+Open Standards: Definitions of "Open Standards" from the Cover Pages
+Foundation for a Free Information Infrastructure FFII Workgroup on Open Standards. "Standard Categories and Definitions": Categories and definitions of the different types of standards
+American National Standards Institute Critical Issue Paper: Current Attempts to Change Established Definition of “Open” Standards
+ITSSD Comments Concerning SCP/13/2 – Standards and Patents, Institute for Trade, Standards and Sustainable Development, (March 2009)
+Supplement to ITSSD Comments Concerning the WIPO Report on Standards and Patents (SCP/13/2) Paragraph 44, Institute for Trade, Standards and Sustainable Development, (January 2010)
+Open Data Standards Association, RY
+</body>
+</html>
