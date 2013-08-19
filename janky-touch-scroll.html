@@ -36,7 +36,8 @@
   function updateHandlers()
   {
     if (document.getElementById('dowork').checked) {
-      timer = window.setInterval(doSomethingDumb, 600);
+      var delay = document.getElementById('delay').value;
+      timer = window.setInterval(doSomethingDumb, delay + 200);
     } else {
       if (timer)
         window.clearInterval(timer);
