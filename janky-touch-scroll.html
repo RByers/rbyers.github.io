@@ -10,6 +10,11 @@
 }
 </style>
 <script>
+  function getDelay()
+  {
+    return parseInt(document.getElementById('delay').value);
+  }
+
   var counter = 0;
   function doSomethingDumb()
   {
@@ -20,7 +25,7 @@
     console.log('Doing something dumb #' + counter);
     var start = Date.now();
     var end = 0;
-    var delay = document.getElementById('delay').value;
+    var delay = getDelay();
     while (end < start + delay)
       end = Date.now();
     console.log('Done');
@@ -36,8 +41,7 @@
   function updateHandlers()
   {
     if (document.getElementById('dowork').checked) {
-      var delay = document.getElementById('delay').value;
-      timer = window.setInterval(doSomethingDumb, delay + 200);
+      timer = window.setInterval(doSomethingDumb, getDelay() + 200);
     } else {
       if (timer)
         window.clearInterval(timer);
