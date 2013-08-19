@@ -49,6 +49,7 @@
     if (document.getElementById('tmhandler').checked) {
       document.addEventListener('touchmove', touchHandler);
       document.addEventListener('touchcancel', touchHandler);
+      document.addEventListener('touchend', touchHandler);
       document.addEventListener('MSPointerMove', touchHandler);
     } else {
       document.removeEventListener('touchmove', touchHandler);
