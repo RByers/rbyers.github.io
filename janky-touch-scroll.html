@@ -69,7 +69,7 @@
 Try scrolling on a touchscreen with and without the empty touch handler enabled - scrolling is janky only when the handler is active (even though the handler itself does nothing).  Note that we don't see this problem on IE10, as it uses the pointer event model that is designed to avoid this problem.
 We see the problem when scrolling with a mouse/trackpad by having an empty mousewheel event handler, but your hand being more disconnected from the page means that the psychological impact is reduced.
 <hr>
-<input type='checkbox' id='dowork' checked>Do lots of work on the main thread<br>
+<input type='checkbox' id='dowork'>Do lots of work on the main thread<br>
 <input type='number' id='delay' value='400'>Delay in ms<br>
 <input type='checkbox' id='tmhandler' checked>Enable empty touchmove handler<br>
 <input type='checkbox' id='mwhandler' checked>Enable empty mousewheel handler<br><br>

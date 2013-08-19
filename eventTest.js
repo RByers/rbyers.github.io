@@ -123,7 +123,8 @@ function mouseEventHandler(event)
   }
  
   msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
-      ', button=' + event.button + ', detail=' + event.detail + msg;
+      ', button=' + event.button + ', buttons=' + event.buttons +
+      ', detail=' + event.detail + ', cancelable=' + event.cancelable + msg;
   
   logEvent(event, msg);
 
@@ -191,7 +192,8 @@ function touchEventHandler(event)
     var touchStr =
       'touches=' + makeTouchList(event.touches, true) +
       'changedTouches=' + makeTouchList(event.changedTouches) +
-      'targetTouches=' + makeTouchList(event.targetTouches);
+      'targetTouches=' + makeTouchList(event.targetTouches) +
+      'cancelable=' + event.cancelable;
 
     logEvent(event, touchStr);
 
