@@ -77,7 +77,7 @@ function logEvent(event, msg)
   // prevent too much scrolling - overwrite the last line unless this is a new
   // event type or not a move event
   if ($('coalesce').checked && event.type == lastEvent && 
-      (event.type=='mousemove' || event.type=='touchmove' || event.type=='MSPointerMove')) {
+      (event.type=='mousemove' || event.type=='touchmove' || event.type=='MSPointerMove' || event.type=='scroll')) {
     dupCount++;
   } else {
     lastLog = logElem.innerHTML;
