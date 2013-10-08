@@ -29,7 +29,7 @@
               overflow-y:scroll;
               top:0;
               bottom:0;
-              right:0;
+              right: 100px;
               left:0;
               -webkit-user-drag:element;
               -ms-touch-action: inherit;
@@ -38,15 +38,23 @@
             {
               -ms-touch-action: inherit;
             }
+            #boxes {
+              position: absolute;
+              right: 0;
+              width: 100px;
+              top: 0;
+              bottom: 0;
+            }
+            .box {
+              margin: 4px;
+              height: 90px;
+              width: 90px;
+              border: 1px solid black;
+            }
             #purple
             {
               background-color: purple;
-              position: absolute;
-              right: 30px;
               top: 10px;
-              height: 100px;
-              width: 100px;
-              border: 1px solid black;
             }
             #purple:hover
             {
@@ -54,7 +62,7 @@
             }
             #purple:active
             {
-              border: 3px solid red;
+              border: 1px solid red;
             }
             #purple:hover::after
             {
@@ -68,25 +76,9 @@
             {
               content: ":hover:active";
             }
-            #blue
-            {
-              background-color: blue;
-              position: absolute;
-              right: 30px;
-              top: 360px;
-              height: 100px;
-              width: 100px;
-              border:1px solid black;
-            }
             #red
             {
               background-color: red;
-              position: absolute;
-              right: 30px;
-              top: 120px;
-              height: 100px;
-              width: 100px;
-              border:1px solid black;
             }
             .noevents
             {
@@ -95,13 +87,7 @@
             }
             #scroll
             {
-              position: absolute;
-              right: 30px;
-              top: 240px;
-              height: 100px;
-              width: 100px;
               overflow: scroll;
-              border: 1px solid black;
             }
             .overflowScrollTouch
             {
@@ -152,9 +138,10 @@
         </div>
         <div draggable id='touchTarget'>
             <pre><div id='log'></div></pre>
-            <div id="purple"></div>
-            <div id="red">Hit escape to delete me</div>
-            <div id="scroll">
+            <div id="boxes">
+              <div id="purple" class='box'></div>
+              <div id="red" class='box'>Hit escape to delete me</div>
+              <div id="scroll" class='box'>
               a scrollable div<br/>
               foo<br/>
               hello<br/>
@@ -174,9 +161,8 @@
               foo<br/>
               hello<br/>
               another line<br/>
+              </div>
             </div>
-            <div id="blue"></div>
-
         </div>
         <script src="eventTest.js"></script>
     </body>

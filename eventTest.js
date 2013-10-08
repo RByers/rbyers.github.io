@@ -102,7 +102,7 @@ function mouseEventHandler(event)
   }
   if (event.type == 'wheel' ) {
     msg += ', deltaX=' + event.deltaX + ', deltaY=' + event.deltaY + 
-      ', deltaZ=' + event.deltaZ + ', deltaMode=' + event.deltaMode;
+      ', deltaZ=' + event.deltaZ;
   }
   if (event.type == 'mousewheel' || event.type == 'wheel') {
     msg += ', deltaMode=' + (
@@ -114,9 +114,10 @@ function mouseEventHandler(event)
       event.preventDefault();
     }
   }
-  if (event.type.toLowerCase().indexOf("mspointer")==0) {
+  if (event.type.toLowerCase().indexOf("pointer") != -1) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
-      event.pointerId;
+      event.pointerId + ', width=' + event.width + ', height=' + event.height + 
+      ', pressure=' + event.pressure + ', tiltX=' + event.tiltX + ', tiltY=' + event.tiltY;
     if ($('preventDefaultPointer').checked) {
       event.preventDefault();
     }
@@ -279,12 +280,6 @@ $('btnOk').addEventListener('click', function() {
   writeConfigState();
 });
 
-var blue = $('blue');
-blue.addEventListener('mousedown', function(e) { blue.className='noevents'; });
-blue.addEventListener('touchstart', function(e) { blue.className='noevents'; });
-document.addEventListener('mouseup', function(e) { blue.className=''; });
-document.addEventListener('touchend', function(e) { blue.className=''; });
-
 // Disable drag and drop on the document so it doesn't interfere with events
 document.addEventListener('dragstart', function(e) {
   e.preventDefault();
@@ -318,7 +313,7 @@ function setTouchAction() {
 $('touchActionNone').addEventListener('click', setTouchAction);
 
 function setOverflowScrollTouch() {
-  $('scroll').className = $('overflowScrollTouch').checked ? 'overflowScrollTouch' : '';
+  $('scroll').className = $('overflowScrollTouch').checked ? 'box overflowScrollTouch' : 'box';
 }
 
 $('overflowScrollTouch').addEventListener('click', setOverflowScrollTouch);
