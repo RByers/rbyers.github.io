@@ -9,6 +9,11 @@
             {
               height:100%;
             }
+            #header
+            {
+              height: 40px;
+              overflow: hidden;
+            }
             .touchActionNone 
             {
               -ms-touch-action: none;
@@ -109,12 +114,14 @@
             }
             #config-summary
             {
-              font-size: small;
+              font-size: x-small;
             }
         </style>
     </head>
     <body>
-	<button id='btnConfig'>Config</button><span id='config-summary'></span>
+        <div id='header'>
+	    <button id='btnConfig'>Config</button><span id='config-summary'></span>
+        </div>
         <div id='config' class='hide'>
             <input type='checkbox' id='enableMouseEvents' checked/>Mouse<br/>
             <input type='checkbox' id='enableTouchEvents' checked/>Touch<br/>
@@ -122,18 +129,26 @@
             <input type='checkbox' id='enableDragEvents'/>Drag<br/>
             <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
             <input type='checkbox' id='touchActionNone'/>Touch-Action: None<br/>
-            <input type='checkbox' id='preventDefaultTouchStart' checked/>PreventDefault on touchstart<br/>
-            <input type='checkbox' id='preventDefaultTouchMove' checked/>PreventDefault on touchmove<br/>
-            <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every 3 seconds<br/>
-            <input type='checkbox' id='preventDefaultTouchEnd' checked/>PreventDefault on touchend<br/>
-            <input type='checkbox' id='preventDefaultPointer' checked/>PreventDefault on pointer events<br/>
-            <input type='checkbox' id='preventDefaultWheel' checked/>PreventDefault on mousewheel events<br/>
             <input type='checkbox' id='overflowScrollTouch' />Use -webkit-overflow-scrolling: touch on 'scroll'<br/>
             <input type='checkbox' id='redHandlers' />Add touch handlers directly to 'red'<br/>
             <input type='checkbox' id='simple' checked/>Simple<br/>
             <input type='checkbox' id='coalesce' checked/>Coalesce<br/>
             <input type='checkbox' id='touchSummary' checked/>Touch summary<br/>
             <input type='checkbox' id='pointercapture' checked/>Capture pointers on MSPointerDown<br/>
+            <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every 3 seconds<br/>
+            <b>Call preventDefault for:<br/></b>
+            <input type='checkbox' id='pd-touchstart' checked/>touchstart<br/>
+            <input type='checkbox' id='pd-toucmove' checked/>touchmove<br/>
+            <input type='checkbox' id='pd-touchend' checked/>touchend<br/>
+            <input type='checkbox' id='pd-mousedown' checked/>mousedown<br/>
+            <input type='checkbox' id='pd-mousemove' checked/>mousemove<br/>
+            <input type='checkbox' id='pd-mouseup' checked/>mouseup<br/>
+            <input type='checkbox' id='pd-contextmenu' checked/>contextmenu<br/>
+            <input type='checkbox' id='pd-mousewheel' checked/>mousewheel<br/>
+            <input type='checkbox' id='pd-wheel' checked/>wheel<br/>
+            <input type='checkbox' id='pd-pointerdown' checked/>pointerdown<br/>
+            <input type='checkbox' id='pd-pointermove' checked/>pointermove<br/>
+            <input type='checkbox' id='pd-pointerup' checked/>pointerup<br/>
 	    <button id='btnOk'>Ok</button>
         </div>
         <div draggable id='touchTarget'>

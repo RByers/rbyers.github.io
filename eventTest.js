@@ -90,6 +90,16 @@ function logEvent(event, msg)
   logElem.scrollTop = logElem.scrollHeight;
 }
 
+function callPreventDefault(event)
+{
+  var evtName = event.type;
+  if (evtName.indexOf("MS") == 0)
+      evtName = evtName.substr(2).toLowerCase();
+  var pdConfig = $('pd-' + evtName);
+  if (pdConfig && pdConfig.checked)
+      event.preventDefault();
+}
+
 function mouseEventHandler(event)
 {
   var msg = '';
@@ -110,17 +120,11 @@ function mouseEventHandler(event)
       event.deltaMode == 1 ? "LINE" :
       event.deltaMode == 2 ? "PAGE" : 
       event.deltaMode); 
-    if ($('preventDefaultWheel').checked) {
-      event.preventDefault();
-    }
   }
   if (event.type.toLowerCase().indexOf("pointer") != -1) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
       event.pointerId + ', width=' + event.width + ', height=' + event.height + 
       ', pressure=' + event.pressure + ', tiltX=' + event.tiltX + ', tiltY=' + event.tiltY;
-    if ($('preventDefaultPointer').checked) {
-      event.preventDefault();
-    }
   }
  
   msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
@@ -128,6 +132,8 @@ function mouseEventHandler(event)
       ', detail=' + event.detail + ', cancelable=' + event.cancelable + msg;
   
   logEvent(event, msg);
+
+  callPreventDefault(event);
 
   if (event.type=='MSPointerDown' && $('pointercapture').checked) {
     event.target.msSetPointerCapture(event.pointerId);
@@ -198,11 +204,6 @@ function touchEventHandler(event)
 
     logEvent(event, touchStr);
 
-    if ((event.type == 'touchstart' && $('preventDefaultTouchStart').checked) ||
-        (event.type == 'touchmove' && $('preventDefaultTouchMove').checked) ||
-        (event.type == 'touchend' && $('preventDefaultTouchEnd').checked))
-        event.preventDefault();
-
     if ($('touchSummary').checked) {
       for (var i = 0; i < event.changedTouches.length; i++) {
         var touch = event.changedTouches[i];
@@ -234,6 +235,7 @@ function touchEventHandler(event)
         }
       }
     }
+    callPreventDefault(event);
 }
 
 function gestureEventHandler(event)
@@ -296,7 +298,7 @@ var alternateTimer;
 function setAlternateTimer() {
   if ($('alternatePDTouchMove').checked) {
     alternateTimer = window.setInterval(function() {
-      $('preventDefaultTouchMove').click();
+      $('pd-touchmove').click();
       updateConfigSummary();
     }, 3000);
   } else {
