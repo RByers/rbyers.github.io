@@ -273,11 +273,11 @@ function readConfigState() {
 }
 
 $('btnConfig').addEventListener('click', function() {
-  $('config').className = '';
+  $('overlay').className = '';
 });
 
 $('btnOk').addEventListener('click', function() {
-  $('config').className = 'hide';
+  $('overlay').className = 'hide';
   updateConfigSummary();
   writeConfigState();
 });

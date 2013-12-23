@@ -21,6 +21,7 @@ body
   right:0;
   bottom:0;
   -webkit-user-drag:element;
+  font-size: small;
 }
 #log 
 {
@@ -94,15 +95,21 @@ body
 {
   -webkit-overflow-scrolling: touch;
 }
-#config
+#overlay
 {
   position: absolute;
   top: 40px;
+  bottom: 20px;
   left: 20px;
+  z-index: 100;
+}
+#config
+{
   background-color: lightgrey;
   border: 2px solid darkgrey;
   padding: 10px;
-  z-index: 100;
+  overflow: auto;
+  max-height: 95%;
 }
 .hide
 {

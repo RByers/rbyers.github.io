@@ -10,7 +10,8 @@
         <div id='header'>
 	    <button id='btnConfig'>Config</button><span id='config-summary'></span>
         </div>
-        <div id='config' class='hide'>
+        <div id='overlay' class='hide'>
+          <div id='config'>
             <input type='checkbox' id='enableMouseEvents' checked/>Mouse<br/>
             <input type='checkbox' id='enableTouchEvents' checked/>Touch<br/>
             <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
@@ -38,6 +39,7 @@
             <input type='checkbox' id='pd-pointermove' checked/>pointermove<br/>
             <input type='checkbox' id='pd-pointerup' checked/>pointerup<br/>
 	    <button id='btnOk'>Ok</button>
+          </div>
         </div>
         <div draggable id='touchTarget'>
             <pre><div id='log'></div></pre>
