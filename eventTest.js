@@ -10,7 +10,7 @@ function updateHandlers()
     var setHandlerState = function(events, target, handler, state) {
         for (var i = 0; i < events.length; i++) {
             if (state) {
-                target.addEventListener(events[i], handler, true);
+                target.addEventListener(events[i], handler);
             }
             else {
                 target.removeEventListener(events[i], handler);
