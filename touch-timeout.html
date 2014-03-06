@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name=viewport content=''/>
+  <title>Touch event timeout test</title>
+  <style>
+  html,body {
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+  }
+  #targets {
+    display: flex;
+  }
+  #targets > div {
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+  }
+  #tgt-normal {
+    background-color: lightblue;  
+  }
+  #tgt-scroll {
+    overflow: scroll;
+    background-color: lightgreen;
+  }
+  .spacer {
+    height: 400px;
+  }
+  #tgt-tanone {
+    touch-action: none;
+    background-color: pink;
+  }
+  #log {
+    border: 1px solid black;
+    margin: 5px;
+    overflow: auto;
+    min-height: 50px;
+    flex: 1 1;
+  }
+
+@media screen and (min-width: 800px) {
+  #targets > div {
+    width: 200px;
+    height: 200px;
+  }
+  html {
+    font-size: 30px; 
+  }
+  #config input[type=checkbox] {
+    height: 30px;
+    width: 30px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id=targets>
+    <div id=tgt-normal>
+      Normal div
+    </div>
+    <div id=tgt-scroll>
+      scrollable content
+      <div class=spacer></div>
+      end
+    </div>
+    <div id=tgt-tanone>
+      touch-action: none
+    </div>
+  </div>
+  <div id=log>
+    Log<br>
+  </div>
+  <div id=config>
+  <div><input type=checkbox id=mobile-viewport>Use mobile viewport</div>
+  <div><input type=checkbox id=consume-touchstart>Consume touchstart</div>
+  <div><input type=checkbox id=consume-touchmove checked>Consume touchmove</div>
+  <div><input type=checkbox id=delay-touchstart checked>Delay touchstart</div>
+  <div><input type=checkbox id=delay-first-move>Delay first touchmove</div>
+  <div><input type=checkbox id=delay-second-move>Delay second touchmove</div>
+  <div><input type=number id=delay value=300>Delay in ms</div>
+  </div>
+  <script>
+var log = document.getElementById('log');
+
+function writeLog(str) {
+  // Don't allow layout to contribute to event handling time
+  window.setTimeout(function() {
+    log.innerHTML += str + '<br>';
+    log.scrollTop = log.scrollHeight;
+  }, 0);
+}
+var moveCount = 0;
+function touchHandler(e) {
+  var doDelay = false;
+  var logStr = e.type;
+  var consume = false;
+  if (e.type == 'touchstart') {
+    moveCount = 0;
+    doDelay = document.getElementById('delay-touchstart').checked;
+    if (document.getElementById('consume-touchstart').checked)
+      consume = true;
+
+  } else if (e.type == 'touchmove') {
+    moveCount++;
+    logStr += ' [' + moveCount + ']';
+    if (moveCount == 1)
+      doDelay = document.getElementById('delay-first-move').checked;
+    if (moveCount == 2)
+      doDelay = document.getElementById('delay-second-move').checked;
+    if (document.getElementById('consume-touchmove').checked)
+      consume = true;
+  }
+
+  if (consume) {
+    e.preventDefault();
+    logStr += ' (consumed)';
+  }
+
+  if (doDelay) {
+    var delay = parseInt(document.getElementById('delay').value);
+    logStr += ' (delayed ' + delay + 'ms)';
+    var start = Date.now();
+    var end = 0;
+    while (end < start + delay)
+      end = Date.now();
+  }
+  writeLog(logStr);
+}
+
+var targets = document.getElementById('targets');
+targets.addEventListener('touchstart', touchHandler);
+targets.addEventListener('touchmove', touchHandler);
+targets.addEventListener('touchend', touchHandler);
+targets.addEventListener('touchcancel', touchHandler);
+
+var taNone = document.getElementById('tgt-tanone');
+if (!getComputedStyle(taNone).touchAction)
+  taNone.style.display = 'none';
+
+document.getElementById('mobile-viewport').addEventListener('change', function(e) {
+  var viewport = document.querySelector("meta[name=viewport]");
+  var value = '';
+  if (e.target.checked) {
+    value = 'width=device-width';
+  }
+  viewport.setAttribute('content', value);
+});
+  </script>
+</body>
+</html>

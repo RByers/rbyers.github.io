@@ -186,6 +186,9 @@ function makeTouchList(touches, verbose)
         touchStr += ',' + touches[i].webkitRadiusX + 'x' +
             touches[i].webkitRadiusY;
       }
+      if ('webkitRotationAngle' in touches[i]) {
+        touchStr += ',' + touches[i].webkitRotationAngle + '&deg;'
+      }
       touchStr += ') ';
     }
   }
