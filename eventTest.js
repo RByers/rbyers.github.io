@@ -67,12 +67,19 @@ function log(msg)
   logElem.scrollTop = logElem.scrollHeight;
 }
 
+var lastTime = undefined;
+
 function logEvent(event, msg)
 {
   if (event.shiftKey) msg += ' shift';
   if (event.altKey) msg += ' alt';
   if (event.ctrlKey) msg += ' ctrl';
   if (event.metaKey) msg += ' meta';
+
+  if (lastTime) {
+    msg += ' ' + (event.timeStamp - lastTime) + 'ms';
+  }
+  lastTime = event.timeStamp;
 
   // prevent too much scrolling - overwrite the last line unless this is a new
   // event type or not a move event
@@ -129,7 +136,7 @@ function mouseEventHandler(event)
  
   msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
       ', button=' + event.button + ', buttons=' + event.buttons +
-      ', detail=' + event.detail + ', cancelable=' + event.cancelable + msg;
+      ', detail=' + event.detail + msg;
   
   logEvent(event, msg);
 
@@ -202,8 +209,7 @@ function touchEventHandler(event)
     var touchStr =
       'touches=' + makeTouchList(event.touches, true) +
       'changedTouches=' + makeTouchList(event.changedTouches) +
-      'targetTouches=' + makeTouchList(event.targetTouches) +
-      'cancelable=' + event.cancelable;
+      'targetTouches=' + makeTouchList(event.targetTouches)
 
     logEvent(event, touchStr);
 
