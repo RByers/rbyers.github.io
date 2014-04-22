@@ -212,7 +212,7 @@ function touchEventHandler(event)
       'targetTouches=' + makeTouchList(event.targetTouches)
 
     if (!$('simple').checked) {
-      touchStr += ' cancelable=' + event.cancelable;
+      touchStr += 'cancelable=' + event.cancelable + ' ';
     }
 
     logEvent(event, touchStr);
