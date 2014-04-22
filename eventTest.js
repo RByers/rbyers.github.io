@@ -182,7 +182,7 @@ function makeTouchList(touches, verbose)
     }
 
     if (!verbose || $('simple').checked) {
-      touchStr += id + tgt + ' ';
+      touchStr += id + tgt;
     } else {
       touchStr += id + tgt + '(' + touches[i].clientX + ',' + touches[i].clientY;
       if ('webkitForce' in touches[i]) {
@@ -196,7 +196,7 @@ function makeTouchList(touches, verbose)
       if ('webkitRotationAngle' in touches[i]) {
         touchStr += ',' + touches[i].webkitRotationAngle + '&deg;'
       }
-      touchStr += ') ';
+      touchStr += ')';
     }
   }
   return touchStr;
@@ -207,12 +207,12 @@ var activeTouchData = {};
 function touchEventHandler(event)
 {
     var touchStr =
-      'touches=' + makeTouchList(event.touches, true) +
-      'changedTouches=' + makeTouchList(event.changedTouches) +
-      'targetTouches=' + makeTouchList(event.targetTouches)
+      ' touches=' + makeTouchList(event.touches, true) +
+      ' changedTouches=' + makeTouchList(event.changedTouches) +
+      ' targetTouches=' + makeTouchList(event.targetTouches)
 
     if (!$('simple').checked) {
-      touchStr += 'cancelable=' + event.cancelable + ' ';
+      touchStr += ' cancelable=' + event.cancelable;
     }
 
     logEvent(event, touchStr);
