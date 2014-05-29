@@ -5,7 +5,7 @@ function GetContext() {
 var radiusSupported = false;
 var nextCount = 0;
 var touchMap = {};
-var pointMode = false;
+var pointMode = (window.location.hash == "#points");
 var enableForce = false;
 
 document.addEventListener('keyup', function(e) {
@@ -19,6 +19,7 @@ document.addEventListener('keyup', function(e) {
     // p
     case 80:
     pointMode = !pointMode;
+    window.location.hash = pointMode ? "#points" : "";
     break;
 
     // f
@@ -54,15 +55,21 @@ function drawTouches(touches, eventType) {
       nextCount++;
     }
 
+    // Polyfill non-standard properties
+    if (!'radiusX' in touch && 'webkitRadiusX' in touch)
+      touch.radiusX = touch.webkitRadiusX;
+    if (!'force' in touch && 'webkitForce' in touch)
+      touch.force = touch.webkitForce;
+
     context.beginPath();
 
     // Spec says to use 1 for unknown radius, can't differentiate between that
     // and real 1 pixel radius.
-    if (touch.webkitRadiusX > 1)
+    if (touch.radiusX > 1)
       radiusSupported = true;
-    var radius = radiusSupported ? touch.webkitRadiusX : 15;
+    var radius = radiusSupported ? touch.radiusX : 15;
     if (radius > 100) {
-      console.error('Got large webkitRadiusX: ' + touch.webkitRadiusX);
+      console.error('Got large radiusX: ' + touch.radiusX);
       radius=100;
     }
     if (pointMode)
@@ -82,8 +89,8 @@ function drawTouches(touches, eventType) {
 
       var hue = (touchMap[touch.identifier] * 30) % 256;
       var lum = 40;
-      if (enableForce && touch.webkitForce)
-        lum = Math.round(touch.webkitForce / 0.4 * 50 + 20);
+      if (enableForce && touch.force)
+        lum = Math.round(touch.force / 0.4 * 50 + 20);
       context.fillStyle = 'hsla(' + hue + ',100%,' + lum + '%, ' + opacity + ')';
       context.fill();
     }
