@@ -56,9 +56,9 @@ function drawTouches(touches, eventType) {
     }
 
     // Polyfill non-standard properties
-    if (!'radiusX' in touch && 'webkitRadiusX' in touch)
+    if (!('radiusX' in touch) && 'webkitRadiusX' in touch)
       touch.radiusX = touch.webkitRadiusX;
-    if (!'force' in touch && 'webkitForce' in touch)
+    if (!('force' in touch) && 'webkitForce' in touch)
       touch.force = touch.webkitForce;
 
     context.beginPath();
