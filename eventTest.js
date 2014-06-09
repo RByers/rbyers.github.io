@@ -21,9 +21,20 @@ function updateHandlers()
     setHandlerState(
         ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
-        'focus', 'mousewheel', 'wheel', 'scroll'], 
+        'focus', 'mousewheel', 'wheel'], 
         targetElem, mouseEventHandler,
         $('enableMouseEvents').checked);
+
+    setHandlerState(
+        ['scroll'],
+        targetElem, logEvent,
+        $('enableScrollEvents').checked);
+
+    // Scroll event doesn't bubble, listen for it directly
+    setHandlerState(
+        ['scroll'],
+        $('scroll'), logEvent,
+        $('enableScrollEvents').checked);
 
     setHandlerState(
         ['touchstart', 'touchmove', 'touchend', 'touchcancel'],
@@ -147,11 +158,6 @@ function mouseEventHandler(event)
   }	
 }
 
-// Scroll event doesn't bubble, listen for it directly
-$('scroll').addEventListener('scroll', function(event) {
-  logEvent(event, '');
-});
-
 // True if a gesture is occuring that should cause clicks to be swallowed
 var gestureActive = false;
 
@@ -173,12 +179,12 @@ function makeTouchList(touches, verbose)
       tgt = '-' + touches[i].target.id;
       
     var id = touches[i].identifier;
-    if (id >= 100 && $('simple').checked) {
+    if (id >= 100) {
       if (!(id in touchMap)) {
         touchMap[id] = nextId;
         nextId++;
       }
-      id = touchMap[id];
+      id = '#' + touchMap[id];
     }
 
     if (!verbose || $('simple').checked) {
@@ -208,8 +214,8 @@ function touchEventHandler(event)
 {
     var touchStr =
       ' touches=' + makeTouchList(event.touches, true) +
-      ' changedTouches=' + makeTouchList(event.changedTouches) +
-      ' targetTouches=' + makeTouchList(event.targetTouches)
+      ' changed=' + makeTouchList(event.changedTouches) +
+      ' target=' + makeTouchList(event.targetTouches)
 
     if (!$('simple').checked) {
       touchStr += ' cancelable=' + event.cancelable;
@@ -301,6 +307,7 @@ document.addEventListener('dragstart', function(e) {
 }, true);
 
 $('enableMouseEvents').addEventListener('click', updateHandlers, false);
+$('enableScrollEvents').addEventListener('click', updateHandlers, false);
 $('enableTouchEvents').addEventListener('click', updateHandlers, false);
 $('enableGestureEvents').addEventListener('click', updateHandlers, false);
 $('enablePointerEvents').addEventListener('click', updateHandlers, false);
