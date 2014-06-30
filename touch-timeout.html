@@ -81,19 +81,21 @@
   <div><input type=checkbox id=mobile-viewport>Use mobile viewport</div>
   <div><input type=checkbox id=consume-touchstart>Consume touchstart</div>
   <div><input type=checkbox id=consume-touchmove checked>Consume touchmove</div>
-  <div><input type=checkbox id=delay-touchstart checked>Delay touchstart</div>
-  <div><input type=checkbox id=delay-first-move>Delay first touchmove</div>
+  <div><input type=checkbox id=delay-touchstart>Delay touchstart</div>
+  <div><input type=checkbox id=delay-first-move checked>Delay first touchmove</div>
   <div><input type=checkbox id=delay-second-move>Delay second touchmove</div>
   <div><input type=number id=delay value=300>Delay in ms</div>
   </div>
   <script>
 var log = document.getElementById('log');
 
+var logString = '';
+
 function writeLog(str) {
+  logString += str + '<br>\n';
   // Don't allow layout to contribute to event handling time
   window.setTimeout(function() {
-    log.innerHTML += str + '<br>';
-    log.scrollTop = log.scrollHeight;
+    log.innerHTML = logString;
   }, 0);
 }
 var moveCount = 0;
@@ -102,6 +104,7 @@ function touchHandler(e) {
   var logStr = e.type;
   var consume = false;
   if (e.type == 'touchstart') {
+    logString = '';
     moveCount = 0;
     doDelay = document.getElementById('delay-touchstart').checked;
     if (document.getElementById('consume-touchstart').checked)

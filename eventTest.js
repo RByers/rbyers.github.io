@@ -145,9 +145,10 @@ function mouseEventHandler(event)
       ', pressure=' + event.pressure + ', tiltX=' + event.tiltX + ', tiltY=' + event.tiltY;
   }
  
-  msg = 'clientX=' + event.clientX + ', clientY=' + event.clientY + 
-      ', button=' + event.button + ', buttons=' + event.buttons +
-      ', detail=' + event.detail + ', cancelable=' + event.cancelable + msg;
+  msg = 'client=' + event.clientX + ',' + event.clientY + 
+      ' screen=' + event.screenX + ',' + event.screenY +
+      ' button=' + event.button + ' buttons=' + event.buttons +
+      ' detail=' + event.detail + ' cancelable=' + event.cancelable + msg;
   
   logEvent(event, msg);
 
@@ -175,6 +176,9 @@ function makeTouchList(touches, verbose)
   var touchStr = '';
   for(var i = 0; i < touches.length; i++) {
     var tgt = '';
+    if (i > 0)
+      touchStr += ' ';
+
     if (verbose)
       tgt = '-' + touches[i].target.id;
       
@@ -190,17 +194,18 @@ function makeTouchList(touches, verbose)
     if (!verbose || $('simple').checked) {
       touchStr += id + tgt;
     } else {
-      touchStr += id + tgt + '(' + touches[i].clientX + ',' + touches[i].clientY;
+      touchStr += id + tgt + '(c=' + touches[i].clientX + ',' + touches[i].clientY +
+        ' s=' + touches[i].screenX + ',' + touches[i].screenY;
       if ('webkitForce' in touches[i]) {
-        touchStr += ',f' + Math.round(touches[i].webkitForce*100);
+        touchStr += ' f' + Math.round(touches[i].webkitForce*100);
       }
 
       if (touches[i].webkitRadiusX || touches[i].webkitRadiusY) {
-        touchStr += ',' + touches[i].webkitRadiusX + 'x' +
+        touchStr += ' ' + touches[i].webkitRadiusX + 'x' +
             touches[i].webkitRadiusY;
       }
       if ('webkitRotationAngle' in touches[i]) {
-        touchStr += ',' + touches[i].webkitRotationAngle + '&deg;'
+        touchStr += ' ' + touches[i].webkitRotationAngle + '&deg;'
       }
       touchStr += ')';
     }
@@ -336,6 +341,7 @@ $('touchActionNone').addEventListener('click', setTouchAction);
 
 function setOverflowScrollTouch() {
   $('scroll').className = $('overflowScrollTouch').checked ? 'box overflowScrollTouch' : 'box';
+  $('log').className = $('overflowScrollTouch').checked ? 'overflowScrollTouch' : '';
 }
 
 $('overflowScrollTouch').addEventListener('click', setOverflowScrollTouch);
