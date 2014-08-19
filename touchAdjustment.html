@@ -32,6 +32,13 @@
     color: red;
   }
 
+  #frame
+  {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+  }
+
 </style>
 <body id="body" onLoad = "setup()">
 <h1>Touch adjustment</h1>
@@ -90,26 +97,26 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-	var radiusX = touch.webkitRadiusX;
-	var radiusY = touch.webkitRadiusY;
-	var drawTouchBorder = radiusX > 1 || radiusY > 1;
-	if (radiusX > 1 && radiusY == 1)
-	  radiusY = radiusX;   // only one radius supported
+        var radiusX = touch.webkitRadiusX;
+        var radiusY = touch.webkitRadiusY;
+        var drawTouchBorder = radiusX > 1 || radiusY > 1;
+        if (radiusX > 1 && radiusY == 1)
+          radiusY = radiusX;   // only one radius supported
 
-	var pt = getPosition(canvas);
-	var offsetX = touch.pageX - pt.x;
-	var offsetY = touch.pageY - pt.y;
-	if (drawTouchBorder) {
-	  ctx.beginPath();
-	  ctx.strokeStyle = '#00FF00';
+        var pt = getPosition(canvas);
+        var offsetX = touch.pageX - pt.x;
+        var offsetY = touch.pageY - pt.y;
+        if (drawTouchBorder) {
+          ctx.beginPath();
+          ctx.strokeStyle = '#00FF00';
           ctx.lineWidth = 3;
           top = Math.min(top, offsetY - radiusY);
           left = Math.min(left, offsetX - radiusX);
           bottom = Math.max(bottom, offsetY + radiusY);
           right = Math.max(right, offsetX + radiusX);
           ctx.rect(left, top, right - left, bottom - top); 
-	  ctx.stroke();
-	}
+          ctx.stroke();
+        }
 
         if (e.type == 'touchend') {
           ctx.fillStyle = '#FF0000';
