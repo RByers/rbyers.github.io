@@ -53,6 +53,7 @@
      And here is a superscript<sup><a href='#' id='superscript'>[1]</a></sup><br>
      <span id='hover'>This text</span> has a hover effect<br>
      Here's some text <span id='tabindex' tabindex=0>with a tabindex</span><br>
+     <iframe id="frame"></iframe>This is an iframe<br>
      <span id='mousehandler'>This line has a mousedown event handler</span><br>
     </div>
   </div>
@@ -160,18 +161,18 @@
         ctx.rect(left - pt.x, top - pt.y, right - left, bottom - top); 
         ctx.stroke();
 
+        var msg = e.type + ': ' + Math.round(touch.pageX) + ', ' + Math.round(touch.pageY) + 
+          ' (' + nodeName(document.elementFromPoint(touch.pageX, touch.pageY)) +') radius=' + 
+          Math.round(touch.webkitRadiusX) + 'x' + Math.round(touch.webkitRadiusY) + '\n';
+        $('log').textContent += msg;
+
         if (e.type == 'touchend') {
           ctx.fillStyle = '#FF0000';
           ctx.beginPath();
           ctx.arc(touch.pageX - pt.x, touch.pageY - pt.y, dotRadius, 0, 2*Math.PI, true);
           ctx.fill();
           logNodes(left, top, right, bottom);
-        }
-
-        var msg = e.type + ': ' + Math.round(touch.pageX) + ', ' + Math.round(touch.pageY) + 
-          ' (' + nodeName(document.elementFromPoint(touch.pageX, touch.pageY)) +') radius=' + 
-          Math.round(touch.webkitRadiusX) + 'x' + Math.round(touch.webkitRadiusY) + '\n';
-        $('log').textContent += msg;
+        } 
       }
 
       function onClick(e) {
