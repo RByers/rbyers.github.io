@@ -4,6 +4,10 @@
 <title>Touch adjustment demo</title>
 <style>
 
+  .candidate {
+    background-color: rgba(255,0,0,0.1);
+  }
+
   #container {
     display: inline-block;
     position: relative;
@@ -72,6 +76,35 @@
       }
     }
 
+    function nodeName(node) {
+      return node.id || node.nodeName;     
+    }
+
+    function logNodes(left, top, right, bottom) {
+      // Additional logging when running content_shell with --expose-internals-for-testing
+      if (!window.internals)
+        return;
+
+      var nodes = internals.nodesFromRect(document, 
+        (left + right) / 2, 
+        (top + bottom) / 2, 
+        (right - left) / 2,
+        (bottom - top) / 2,
+        (right - left) / 2,
+        (bottom - top) / 2,
+        true /* ignoreClipping */,
+        true /* allow child-frame content */);
+
+      var nodeStr = '';
+      for (var i = 0; nodes && i < nodes.length; i++) {
+        var node = nodes[i];
+        if (node.nodeType == Node.ELEMENT_NODE)
+          node.classList.add('candidate');
+        nodeStr += nodeName(node) + ' ';
+      }
+      $('log').textContent += 'nodesFromRect: ' + nodeStr + '\n';
+    }
+
     function createHandlers(opt_params) {
 
       var target = $('container');
@@ -91,42 +124,52 @@
           bottom = -Infinity;
           right = -Infinity;
           $('log').textContent = '';
+          var cnodes = document.querySelectorAll('.candidate');
+          for (var i = 0; i < cnodes.length; i++)
+            cnodes[i].classList.remove('candidate');
         }
 
         if (e.type != 'touchend') {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
 
-        var radiusX = touch.webkitRadiusX;
-        var radiusY = touch.webkitRadiusY;
-        var drawTouchBorder = radiusX > 1 || radiusY > 1;
+        var radiusX = touch.radiusX || touch.webkitRadiusX;
+        var radiusY = touch.radiusY || touch.webkitRadiusY;
+        var knownRadius = true;
+
+        // Apply default radius similar to what Chrome will use for the
+        // tap area when no radius is provided by the hardware.
+        if (!radiusX || radiusX == 1) {
+          knownRadius = false;
+          radiusX = 25;
+        }
+
         if (radiusX > 1 && radiusY == 1)
           radiusY = radiusX;   // only one radius supported
 
+        top = Math.min(top, touch.pageY - radiusY);
+        left = Math.min(left, touch.pageX - radiusX);
+        bottom = Math.max(bottom, touch.pageY + radiusY);
+        right = Math.max(right, touch.pageX + radiusX);
+
+        // draw touch border
         var pt = getPosition(canvas);
-        var offsetX = touch.pageX - pt.x;
-        var offsetY = touch.pageY - pt.y;
-        if (drawTouchBorder) {
-          ctx.beginPath();
-          ctx.strokeStyle = '#00FF00';
-          ctx.lineWidth = 3;
-          top = Math.min(top, offsetY - radiusY);
-          left = Math.min(left, offsetX - radiusX);
-          bottom = Math.max(bottom, offsetY + radiusY);
-          right = Math.max(right, offsetX + radiusX);
-          ctx.rect(left, top, right - left, bottom - top); 
-          ctx.stroke();
-        }
+        ctx.beginPath();
+        ctx.strokeStyle = knownRadius ? '#00FF00' : '#007700';
+        ctx.lineWidth = knownRadius ? 3 : 1;
+        ctx.rect(left - pt.x, top - pt.y, right - left, bottom - top); 
+        ctx.stroke();
 
         if (e.type == 'touchend') {
           ctx.fillStyle = '#FF0000';
           ctx.beginPath();
-          ctx.arc(offsetX, offsetY, dotRadius, 0, 2*Math.PI, true);
+          ctx.arc(touch.pageX - pt.x, touch.pageY - pt.y, dotRadius, 0, 2*Math.PI, true);
           ctx.fill();
+          logNodes(left, top, right, bottom);
         }
 
         var msg = e.type + ': ' + Math.round(touch.pageX) + ', ' + Math.round(touch.pageY) + 
-          ' (' + document.elementFromPoint(touch.pageX, touch.pageY).id +') radius=' + 
+          ' (' + nodeName(document.elementFromPoint(touch.pageX, touch.pageY)) +') radius=' + 
           Math.round(touch.webkitRadiusX) + 'x' + Math.round(touch.webkitRadiusY) + '\n';
         $('log').textContent += msg;
       }
