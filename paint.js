@@ -76,7 +76,7 @@ function drawTouches(touches, eventType) {
     var radiusX = getAdjustedRadius(touch.radiusX);
     var radiusY = getAdjustedRadius(touch.radiusY);
     var rotationAngle = getAdjustedRotationAngle(touch.rotationAngle);
-    foundRotationAngle = foundRotationAngle || (Math.abs(rotationAngle) > 0.01);
+    foundRotationAngle = foundRotationAngle || rotationAngle;
 
     // Try to avoid start/end ellipses overlapping exactly
     if (eventType == "touchend") {
