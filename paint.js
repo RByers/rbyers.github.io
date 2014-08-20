@@ -7,7 +7,8 @@ var nextCount = 0;
 var touchMap = {};
 var pointMode = (window.location.hash == "#points");
 var enableForce = false;
-var drawTouchAxes = true;
+var drawTouchMajor = true;
+var foundRotationAngle = false;
 var scale = 1;
 
 document.addEventListener("keyup", function(e) {
@@ -31,7 +32,7 @@ document.addEventListener("keyup", function(e) {
 
     // a
     case 65:
-    drawTouchAxes = !drawTouchAxes;
+    drawTouchMajor = !drawTouchMajor;
     break;
 
     // enter
@@ -75,6 +76,7 @@ function drawTouches(touches, eventType) {
     var radiusX = getAdjustedRadius(touch.radiusX);
     var radiusY = getAdjustedRadius(touch.radiusY);
     var rotationAngle = getAdjustedRotationAngle(touch.rotationAngle);
+    foundRotationAngle = foundRotationAngle || (Math.abs(rotationAngle) > 0.01);
 
     // Try to avoid start/end ellipses overlapping exactly
     if (eventType == "touchend") {
@@ -109,18 +111,18 @@ function drawTouches(touches, eventType) {
       context.stroke();
     }
 
-    if (drawTouchAxes && Math.abs(rotationAngle) > 0.01) {
-      context.strokeStyle = "grey";
+    if (drawTouchMajor && foundRotationAngle) {
+      context.strokeStyle = "#fff";
       context.lineWidth = 1;
-
       context.beginPath();
-      context.moveTo(-radiusX, 0);
-      context.lineTo(radiusX, 0);
-      context.stroke();
-
-      context.beginPath();
-      context.moveTo(0, -radiusX);
-      context.lineTo(0, radiusX);
+      if (radiusX >= radiusY) {
+        context.moveTo(0, -radiusX);
+        context.lineTo(0, radiusX);
+      } else {
+        // Note that this is also radiusX, because of the scaling above
+        context.moveTo(-radiusX, 0);
+        context.lineTo(radiusX, 0);
+      }
       context.stroke();
     }
 
