@@ -73,8 +73,8 @@ function drawTouches(touches, eventType) {
     if (!("force" in touch) && "webkitForce" in touch)
       touch.force = touch.webkitForce;
 
-    var radiusX = getAdjustedRadius(touch.radiusX);
-    var radiusY = getAdjustedRadius(touch.radiusY);
+    var radiusX = getAdjustedRadius(touch.radiusX, touch.radiusY);
+    var radiusY = getAdjustedRadius(touch.radiusY, touch.radiusX);
     var rotationAngle = getAdjustedRotationAngle(touch.rotationAngle);
     foundRotationAngle = foundRotationAngle || rotationAngle;
 
@@ -130,15 +130,20 @@ function drawTouches(touches, eventType) {
   }
 }
 
-function getAdjustedRadius(radius) {
+function getAdjustedRadius(radius, otherRadius) {
   if (pointMode)
     return 1;
 
   // Spec says to use 1 for unknown radius, can't differentiate between that
   // and real 1 pixel radius.
-  if (!radius || radius <= 1) {
-    radius = 15;
-  } else if (radius > 100) {
+  var radiusUndefined = !radius || radius <= 1;
+  var otherRadiusUndefined = !otherRadius || otherRadius <= 1;
+  
+  if (radiusUndefined) {
+    radius = otherRadiusUndefined? 15 : otherRadius;
+  }
+    
+  if (radius > 100) {
     console.error("Got large radius: " + radius);
     radius = 100;
   }
