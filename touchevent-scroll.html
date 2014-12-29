@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name=viewport content="width=device-width">
+  <title>Touch events while scrolling demo page</title>
+  <style>
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+#spacer {
+  height: 300px;
+}
+#scroller {
+  position: absolute;
+  overflow: scroll;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 200px;
+}
+#log {
+  position: absolute;
+  border: 1px solid black;
+  overflow: scroll;
+  font-size: small;
+  top: 210px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+}
+</style>
+</head>
+<body>
+  <div id=scroller>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+   Scroll me <div id=spacer></div>
+  </div>
+  <div id=log>
+  </div>
+<script>
+function log(msg) {
+  document.getElementById('log').innerHTML += msg + '<br/>';
+}
+var lastTime = undefined;
+function handler(event) {
+  if ((event.type == 'touchstart' && event.touches.length == event.changedTouches.length) ||
+    (event.type == 'pointerdown' && event.isPrimary)) {
+    document.getElementById('log').innerHTML = '';
+    lastTime = undefined;
+  }
+  var msg = event.type + ' cancelable=' + event.cancelable + 
+    ' scrollTop=' + document.getElementById('scroller').scrollTop;
+  if (lastTime)
+    msg += ' ' + (event.timeStamp - lastTime) + 'ms';
+  log(msg);
+  lastTime = event.timeStamp;
+}
+var events = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 
+  'pointerdown', 'pointermove', 'pointerup', 'pointerenter', 'pointerleave', 'pointercancel',
+  'click' ];
+events.forEach(function(name) {
+  document.getElementById('scroller').addEventListener(name, handler); 
+});
+</script>
+</body>
+</html>

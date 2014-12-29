@@ -1,0 +1,58 @@
+html {
+    font-family:DejaVu Sans, Bitstream Vera Sans, Arial, Sans;
+}
+
+section#summary {
+    margin-bottom:1em;
+}
+
+table#results {
+    border-collapse:collapse;
+}
+
+table#results th {
+    padding:0;
+    padding-bottom:0.5em;
+    border-bottom:medium solid black;
+}
+
+table#results td {
+    padding:1em;
+    padding-bottom:0.5em;
+    border-bottom:thin solid black;
+}
+
+td.pass {
+    color:green;
+}
+
+td.fail {
+    color:red;
+}
+
+td.timeout {
+    color:red;
+}
+
+td.notrun {
+    color:blue;
+}
+
+.pass .fail .timeout .notrun {
+    font-variant:small-caps;
+}
+
+table#results span {
+    display:block;
+}
+
+table#results span.expected {
+    font-family:DejaVu Sans Mono, Bitstream Vera Sans Mono, Monospace;
+    white-space:pre;
+}
+
+table#results span.actual {
+    font-family:DejaVu Sans Mono, Bitstream Vera Sans Mono, Monospace;
+    white-space:pre;
+}
+

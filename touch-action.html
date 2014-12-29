@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Touch-action demo page</title>
+  <style>
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+#spacer {
+  width: 2000px;
+  height: 2000px;
+}
+#targets {
+  font-size: 30px;
+  padding-top: 100px;
+  padding-left: 50px;
+  overflow: scroll;
+  width: 90%;
+  height: 45%;
+}
+.block {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 10px;
+  width: 250px;
+  height: 250px;
+  background-color: lightblue;
+  border: 1px solid black;
+  text-align: center;
+  padding-top: 40px;
+}
+#log {
+  margin: 5px;
+  border: 1px solid black;
+  overflow: scroll;
+  height: 40%;
+}
+.block.nosupport {
+  background-color: red;
+  }
+.block.nosupport::after {
+  content: "\aNOT SUPPORTED";
+  white-space: pre;
+}
+</style>
+</head>
+<body>
+  <div id=targets>
+    <div class='block nosupport' action='auto'>auto</div>
+    <div class='block nosupport' action='none'>none</div>
+    <div class='block nosupport' action='pan-x'>pan-x</div>
+    <div class='block nosupport' action='pan-y'>pan-y</div>
+    <div class='block nosupport' action='pan-x pan-y'>pan-x pan-y</div>
+    <div class='block nosupport' action='manipulation'>manipulation</div>
+    <div id=spacer>
+    </div>
+  </div>
+  <div id=log>
+  </div>
+<script>
+function log(msg) {
+  document.getElementById('log').innerHTML += msg + '<br/>';
+}
+var lastTime = undefined;
+function handler(event) {
+  if ((event.type == 'touchstart' && event.touches.length == event.changedTouches.length) ||
+    (event.type == 'pointerdown' && event.isPrimary)) {
+    document.getElementById('log').innerHTML = '';
+  }
+  var msg = event.type;
+  if (lastTime)
+    msg += ' ' + (event.timeStamp - lastTime) + 'ms';
+  log(msg);
+  lastTime = event.timeStamp;
+}
+var events = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 
+  'pointerdown', 'pointermove', 'pointerup', 'pointerenter', 'pointerleave', 'pointercancel',
+  'click' ];
+events.forEach(function(name) {
+  document.getElementById('targets').addEventListener(name, handler); 
+});
+var blocks = document.querySelectorAll('.block');
+for (var i = 0; i < blocks.length; i++) {
+  var elem = blocks[i];
+  var action = elem.getAttribute('action');
+  if ('touchAction' in elem.style) {
+    elem.style.touchAction = action;
+    if (elem.style.touchAction == action)
+      elem.classList.remove('nosupport');
+  }
+}
+</script>
+</body>
+</html>

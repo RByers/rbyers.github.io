@@ -1,0 +1,95 @@
+<html>
+<head>
+<script>
+  function log(s) {
+    var l = document.getElementById('log');
+    l.innerHTML += s + '\n';
+  }
+
+  function makeLogFn(i) {
+    return function(s) {
+      log('  item[' + i + ']  string: ' + s);
+    }
+  }
+
+  function logDrag(e) {
+    var dt = e.dataTransfer;
+    
+    log(e.type + '  items.length: ' +
+       dt.items.length);
+    for (var i = 0; i < dt.types.length; i++)
+      log('  getData(\'' + dt.types[i] + '\'): ' + dt.getData(dt.types[i]));
+    for (var i = 0; i < dt.items.length; i++) {
+      var item = dt.items[i];
+      log('  item[' + i + ']  kind: ' + item.kind + ' type: ' + item.type);
+      item.getAsString(makeLogFn(i));
+    }
+    for (var i = 0; i < dt.files.length; i++) {
+      var file = dt.files[i];
+      log('  file[' + i + ']' + ' name: ' + file.name + ' size: ' + file.size);
+    }
+
+     e.preventDefault();
+  }
+
+  var testFile;
+
+  function dragStart(e) {
+    e.dataTransfer.effectAllowed='copy';
+    if (testFile)
+      e.dataTransfer.items.add(testFile);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    function errorHandler() {
+      log('unexpected error writing file');
+    }
+
+    window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+      fs.root.getFile('testfile2.txt', {create: true},
+      function(fileEntry) {
+        fileEntry.createWriter(function(fileWriter) {
+          fileWriter.onwriteend = function(e) {
+            fileEntry.file(function(f) {
+              testFile = f;
+              log('wrote file: ' + testFile.name + ' size: ' + testFile.size);
+            }, function(e) {
+              log('FileEntry.file error');
+            });
+          };
+          fileWriter.onerror = function(e) {
+            log('error writing file');
+          }
+
+          var bb = new WebKitBlobBuilder();
+          bb.append('some text written to temporary html5 storage');
+          fileWriter.write(bb.getBlob('text/plan'));
+        }, function(e) {
+          log('createWriter error');
+        });
+      }, function(e) {
+        log('getFile error');
+      });
+    });
+
+    document.addEventListener('dragenter', logDrag, false);
+    document.body.addEventListener('dragover', function(e) {
+      e.dataTransfer.dropEffect = 'copy';
+      e.preventDefault();
+    }, false); 
+    document.addEventListener('dragleave', logDrag, false);
+    document.addEventListener('drop', logDrag, false);
+
+    var dragme = document.getElementById('dragme');
+    dragme.addEventListener('dragstart', dragStart, false);
+  });
+</script>
+</head>
+
+<body>
+  <div draggable='true' id='dragme'>
+  Drag me
+  </div>
+  <pre id='log'></pre>
+</body>
+</html>

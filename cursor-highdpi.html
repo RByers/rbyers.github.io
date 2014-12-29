@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+High-DPI custom mouse cursor test page
+</title>
+<style>
+
+#normal {
+  cursor: url('zoomIn.png') 16 16, crosshair;
+}
+
+#imageset {
+  cursor: url('zoomIn.png') 16 16, crosshair;
+  cursor: -webkit-image-set(url('zoomIn.png') 1x, url('zoomIn_2x.png') 2x) 16 16, crosshair;
+}
+</style>
+</head>
+
+<body>
+<p id='normal'>Normal cusom cursor.  If your browser supports custom PNG mouse cursors, then you will see a zoom-in cursor here.  This will look pixelated on high-dpi displays.</p>
+<p id='imageset'>Cursor with image-set and fallback.  If you have a high-dpi display and your browser supports -webkit-image-set in cursor declarations, then you will see a crisp version of the above cursor here.  Otherwise you will get the same cursor as above.</p>
+</body>
+</html>

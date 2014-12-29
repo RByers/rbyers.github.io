@@ -1,0 +1,47 @@
+<html>
+<head>
+<script>
+  function logDrag(e) {
+     e.preventDefault();
+  }
+
+  function dragStart(e) {
+    e.dataTransfer.effectAllowed='all';
+    e.dataTransfer.setData("text/plain", "some text");
+  }
+
+  function addEnterHandler(effect) {
+    document.getElementById(effect).addEventListener('dragover', function(e) {
+      e.dataTransfer.dropEffect = effect;
+      e.preventDefault();
+    });
+    document.getElementById(effect).addEventListener('dragenter', function(e) {
+      e.dataTransfer.dropEffect = effect;
+      e.preventDefault();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('dragenter', logDrag, false);
+    var effects=['copy', 'move', 'link', 'none'];
+    for(var i=0; i<effects.length; i++) {
+      addEnterHandler(effects[i]);
+    }
+
+    
+    var dragme = document.getElementById('dragme');
+    dragme.addEventListener('dragstart', dragStart, false);
+  });
+</script>
+</head>
+
+<body>
+  <div draggable='true' id='dragme'>
+  Drag me
+  </div>
+  <div id='copy'>Copy</div>
+  <div id='move'>Move</div>
+  <div id='link'>Link</div>
+  <div id='none'>None</div>
+</body>
+</html>

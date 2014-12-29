@@ -1,0 +1,42 @@
+.card {
+  background-color: blue;
+  border: 1px solid black;
+  width: 100px;
+  height: 50px;
+  display: inline-block;
+  margin: 10px;
+  cursor: hand;
+  touch-action: none;
+}
+
+.card.moving {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.icon {
+  background-color: green;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.circle {
+  background-color: yellow;  
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  display: inline-block;
+  margin: 20px;
+  border-radius: 25px;
+}
+
+.circle.open {
+  background-color: orange;
+  width: 70px;
+  height: 70px;
+  margin: 10px;
+  border-radius: 35px;
+}
