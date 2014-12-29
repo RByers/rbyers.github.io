@@ -1,0 +1,21 @@
+<html>
+    <body>
+        <div id='template'>
+        </div>
+        <script type='text/javascript'>
+          var template = document.getElementById('template');
+
+          var newNode = (template.cloneNode(false));
+          newNode.style.width = '50px';  // essential
+          document.body.appendChild(newNode);  // essential
+        
+          for(var i = 0; i < 500000; i++) {
+            var newNode = (template.cloneNode(false));
+            newNode.style.width = '50px';      // essential
+            document.body.appendChild(newNode);
+            newNode.style.width = '';
+            document.body.removeChild(newNode);
+          }
+        </script>
+    </body>
+</html>

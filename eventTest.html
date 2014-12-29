@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" type="text/css" href="eventTest.css">
+        <title>Test events</title>
+    </head>
+    <body>
+        <div id='header'>
+	    <button id='btnConfig'>Config</button><span id='config-summary'></span>
+        </div>
+        <div id='overlay' class='hide'>
+          <div id='config'>
+            <input type='checkbox' id='enableMouseEvents' checked/>Mouse<br/>
+            <input type='checkbox' id='enableTouchEvents' checked/>Touch<br/>
+            <input type='checkbox' id='enableScrollEvents' checked/>Scroll<br/>
+            <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
+            <input type='checkbox' id='enableDragEvents'/>Drag<br/>
+            <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
+            <input type='checkbox' id='touchActionNone'/>Touch-Action: None<br/>
+            <input type='checkbox' id='overflowScrollTouch' />Use -webkit-overflow-scrolling: touch<br/>
+            <input type='checkbox' id='redHandlers' />Add touch handlers directly to 'red'<br/>
+            <input type='checkbox' id='simple' checked/>Simple<br/>
+            <input type='checkbox' id='coalesce' checked/>Coalesce<br/>
+            <input type='checkbox' id='touchSummary' checked/>Touch summary<br/>
+            <input type='checkbox' id='pointercapture' checked/>Capture pointers on MSPointerDown<br/>
+            <input type='checkbox' id='alternatePDTouchMove'/>Alternate PreventDefault on touchmove every 3 seconds<br/>
+            <b>Call preventDefault for:<br/></b>
+            <input type='checkbox' id='pd-touchstart'/>touchstart<br/>
+            <input type='checkbox' id='pd-touchmove'/>touchmove<br/>
+            <input type='checkbox' id='pd-touchend'/>touchend<br/>
+            <input type='checkbox' id='pd-mousedown'/>mousedown<br/>
+            <input type='checkbox' id='pd-mousemove'/>mousemove<br/>
+            <input type='checkbox' id='pd-mouseup'/>mouseup<br/>
+            <input type='checkbox' id='pd-contextmenu'/>contextmenu<br/>
+            <input type='checkbox' id='pd-mousewheel'/>mousewheel<br/>
+            <input type='checkbox' id='pd-wheel'/>wheel<br/>
+            <input type='checkbox' id='pd-pointerdown'/>pointerdown<br/>
+            <input type='checkbox' id='pd-pointermove'/>pointermove<br/>
+            <input type='checkbox' id='pd-pointerup'/>pointerup<br/>
+	    <button id='btnOk'>Ok</button>
+          </div>
+        </div>
+        <div draggable id='touchTarget'>
+            <pre><div id='log'></div></pre>
+            <div id="boxes">
+              <div id="purple" class='box'></div>
+              <div id="red" class='box'>Hit escape to delete me</div>
+              <div id="scroll" class='box'>
+              a scrollable div<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              foo<br/>
+              hello<br/>
+              another line<br/>
+              </div>
+            </div>
+        </div>
+        <script src="eventTest.js"></script>
+    </body>
+</html>

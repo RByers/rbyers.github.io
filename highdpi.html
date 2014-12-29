@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script>
+function test() {
+  document.getElementById('ratio').textContent = window.devicePixelRatio;
+}
+
+window.matchMedia('screen and (-webkit-min-device-pixel-ratio: 1.5)').
+    addListener(function(mql) {
+      document.getElementById('log').innerHTML += 
+        '(-webkit-min-device-pixel-ratio: 1.5) now ' + mql.matches +
+        '.  window.devicePixelRatio=' + window.devicePixelRatio + '\n';
+    });
+</script>
+<style type="text/css">
+.img-f {
+  background-image: url('f1.jpg');
+  background-size: 250px 300px;
+  display: inline-block;
+  height: 300px;
+  width: 250px;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .img-f {
+    background-image: url('f2.jpg');
+  }
+}
+
+.img-i {
+  content: -webkit-image-set(url('f1.jpg') 1x, url('f2.jpg') 2x);
+  display: inline-block;
+}
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <button id="ratio" onclick="test();">Get device pixel ratio</button>
+  <p>Regular &lt;img&gt;</p>
+  <img src="f1.jpg" />
+  <p>2x img scaled down</p>
+  <img src="f2.jpg" width="250" height="300"/>
+  <p>Media query div:</p>
+  <div class="img-f"></div>
+  <p>Image-set div:</p>
+  <div class="img-i"></div>
+  <p>Img srcset:</p>
+  <img srcset="f1.jpg 1x, f2.jpg 2x"/>
+  <p>Invalid image:</p>
+  <img src="invalid.png">
+  <p>Log of JS events:</p>
+  <pre id='log'></pre>
+</body>
+</html>

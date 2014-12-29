@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+#dummy {
+  /* removing the below line avoids the problem */
+  -webkit-transform: translate3d(0px, 0px, 0px);
+}
+#footer {
+  position: absolute;
+  top: 0;
+}
+#dot-list
+{
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  bottom: 0;
+  list-style-type: none;
+  /* removing the below line avoids the problem */
+  margin-top: 20px;
+}
+.dot {
+  display: inline-block;
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  border: 1px solid black;
+  -webkit-transition-property: -webkit-transform;
+  -webkit-transition-duration: 500ms;
+  /* Uncommenting this avoids the problem */
+ /* -webkit-transform: translate3d(0, 0, 0); */
+}
+.dot:hover {
+  -webkit-transform: translate3d(10px, 0, 0);
+}
+
+  </style>
+</head>
+<body>
+  <div id="dummy">
+  </div>
+  <div id="footer">
+    <ul id="dot-list">
+        <li class="dot"></li>
+        <li class="dot"></li>
+        <li class="dot"></li>
+    </ul>
+  </div>
+</body></html>

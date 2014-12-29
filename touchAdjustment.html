@@ -1,0 +1,54 @@
+<!DOCTYPE=HTML>
+<html>
+<meta name=viewport content='width=device-width,minimum-scale=1'>
+<title>Touch adjustment demo</title>
+<style>
+
+  .adjustmentCandidate {
+    background-color: rgba(255,0,0,0.1);
+  }
+
+  #container {
+    display: inline-block;
+    position: relative;
+  }
+
+  #touchAdjustmentLog {
+    white-space: pre;
+  }
+
+  #content
+  {
+    padding: 10px;
+  }
+
+  #hover:hover
+  {
+    color: red;
+  }
+
+  #frame
+  {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+  }
+
+</style>
+<body id="body">
+<h1>Touch adjustment</h1>
+  <div id="container">
+    <div id="content">
+     Here is some text <a href='#' id='link'>with a link</a><br>
+     And here is a superscript<sup><a href='#' id='superscript'>[1]</a></sup><br>
+     <span id='hover'>This text</span> has a hover effect<br>
+     Here's some text <span id='tabindex' tabindex=0>with a tabindex</span><br>
+     <iframe id="frame"></iframe>This is an iframe<br>
+     <span id='mousehandler' onmousedown='console.log("mousedown")'>This line has a mousedown event handler</span><br>
+    </div>
+  </div>
+  <div id="touchAdjustmentLog"></div>
+<script src="touchAdjustmentOverlay.js"></script>
+</body>
+</html>
+

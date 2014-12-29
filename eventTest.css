@@ -1,0 +1,129 @@
+body
+{
+  height:100%;
+}
+#header
+{
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+}
+.touchActionNone 
+{
+  -ms-touch-action: none;
+  touch-action: none;
+}
+#touchTarget
+{
+  position:absolute;
+  left:0;
+  top:50px;
+  right:0;
+  bottom:0;
+  -webkit-user-drag:element;
+  font-size: small;
+}
+#log 
+{
+  position:absolute;
+  overflow:scroll;
+  top:0;
+  bottom:0;
+  right: 100px;
+  left:0;
+  -webkit-user-drag:element;
+  -ms-touch-action: inherit;
+  touch-action: inherit;
+}
+#touchTarget > pre
+{
+  -ms-touch-action: inherit;
+  touch-action: inherit;
+}
+#boxes {
+  position: absolute;
+  right: 0;
+  width: 100px;
+  top: 0;
+  bottom: 0;
+}
+.box {
+  margin: 4px;
+  height: 90px;
+  width: 90px;
+  border: 1px solid black;
+}
+#purple
+{
+  background-color: purple;
+  top: 10px;
+}
+#purple:hover
+{
+  background-color: #D000D0;
+}
+#purple:active
+{
+  border: 1px solid red;
+}
+#purple:hover::after
+{
+  content: ":hover";
+}
+#purple:active::after
+{
+  content: ":active";
+}
+#purple:hover:active::after
+{
+  content: ":hover:active";
+}
+#red
+{
+  background-color: red;
+}
+.noevents
+{
+  opacity: 0.4;
+  pointer-events: none;
+}
+#scroll
+{
+  overflow: scroll;
+}
+.overflowScrollTouch
+{
+  -webkit-overflow-scrolling: touch;
+}
+#overlay
+{
+  position: absolute;
+  top: 40px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+}
+#config
+{
+  background-color: lightgrey;
+  border: 2px solid darkgrey;
+  padding: 10px;
+  overflow: auto;
+  max-height: 95%;
+}
+.hide
+{
+  visibility: hidden;
+}
+#header button
+{
+  width: 64px;
+}
+#config-summary
+{
+  top: 0;
+  left: 64px;
+  padding: 2px;
+  position: absolute;
+  font-size: x-small;
+}
