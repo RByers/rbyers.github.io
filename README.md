@@ -1,4 +1,4 @@
 rbyers.github.io
 ================
 
-Web samples
+Web samples, served from www.rbyers.net
