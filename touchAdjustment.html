@@ -4,7 +4,7 @@
 <title>Touch adjustment demo</title>
 <style>
 
-  .candidate {
+  .adjustmentCandidate {
     background-color: rgba(255,0,0,0.1);
   }
 
@@ -13,17 +13,8 @@
     position: relative;
   }
 
-  #log {
+  #touchAdjustmentLog {
     white-space: pre;
-  }
-
-  #canvas
-  {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid #000;
-    pointer-events: none;
   }
 
   #content
@@ -44,166 +35,20 @@
   }
 
 </style>
-<body id="body" onLoad = "setup()">
+<body id="body">
 <h1>Touch adjustment</h1>
   <div id="container">
-    <canvas id="canvas"></canvas>
     <div id="content">
      Here is some text <a href='#' id='link'>with a link</a><br>
      And here is a superscript<sup><a href='#' id='superscript'>[1]</a></sup><br>
      <span id='hover'>This text</span> has a hover effect<br>
      Here's some text <span id='tabindex' tabindex=0>with a tabindex</span><br>
      <iframe id="frame"></iframe>This is an iframe<br>
-     <span id='mousehandler'>This line has a mousedown event handler</span><br>
+     <span id='mousehandler' onmousedown='console.log("mousedown")'>This line has a mousedown event handler</span><br>
     </div>
   </div>
-  <div id="log"></div>
-
-<script>
-  var dotRadius = 3;
-
-  function setup() {
-
-    function $(name) {
-      return document.getElementById(name);
-    }
-
-
-    function getPosition(node) {
-      var r = node.getBoundingClientRect();
-      return {
-        x: r.left + document.body.scrollLeft,
-        y: r.top + document.body.scrollTop
-      }
-    }
-
-    function nodeName(node) {
-      return node.id || node.nodeName;     
-    }
-
-    function logNodes(left, top, right, bottom) {
-      // Additional logging when running content_shell with --expose-internals-for-testing
-      if (!window.internals)
-        return;
-
-      var nodes = internals.nodesFromRect(document, 
-        (left + right) / 2, 
-        (top + bottom) / 2, 
-        (right - left) / 2,
-        (bottom - top) / 2,
-        (right - left) / 2,
-        (bottom - top) / 2,
-        true /* ignoreClipping */,
-        true /* allow child-frame content */);
-
-      var nodeStr = '';
-      for (var i = 0; nodes && i < nodes.length; i++) {
-        var node = nodes[i];
-        if (node.nodeType == Node.ELEMENT_NODE)
-          node.classList.add('candidate');
-        nodeStr += nodeName(node) + ' ';
-      }
-      $('log').textContent += 'nodesFromRect: ' + nodeStr + '\n';
-    }
-
-    function createHandlers(opt_params) {
-
-      var target = $('container');
-      var top, left, bottom, right;
-
-      function onTouchEvent(e) {
-        if (e.touches.length > 1 || (e.type=='touchend' && e.touches.length > 0))
-          return; // ignore multi-touch
-        var id = e.target.id;
-        var canvas = $('canvas');
-        var touch = e.changedTouches[0];
-        var ctx = canvas.getContext('2d');
-
-        if (e.type == 'touchstart') {
-          top = Infinity;
-          left = Infinity;
-          bottom = -Infinity;
-          right = -Infinity;
-          $('log').textContent = '';
-          var cnodes = document.querySelectorAll('.candidate');
-          for (var i = 0; i < cnodes.length; i++)
-            cnodes[i].classList.remove('candidate');
-        }
-
-        if (e.type != 'touchend') {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
-        var radiusX = touch.radiusX || touch.webkitRadiusX;
-        var radiusY = touch.radiusY || touch.webkitRadiusY;
-        var knownRadius = true;
-
-        // Apply default radius similar to what Chrome will use for the
-        // tap area when no radius is provided by the hardware.
-        if (!radiusX || radiusX == 1) {
-          knownRadius = false;
-          radiusX = 25;
-        }
-
-        if (radiusX > 1 && radiusY == 1)
-          radiusY = radiusX;   // only one radius supported
-
-        top = Math.min(top, touch.pageY - radiusY);
-        left = Math.min(left, touch.pageX - radiusX);
-        bottom = Math.max(bottom, touch.pageY + radiusY);
-        right = Math.max(right, touch.pageX + radiusX);
-
-        // draw touch border
-        var pt = getPosition(canvas);
-        ctx.beginPath();
-        ctx.strokeStyle = knownRadius ? '#00FF00' : '#007700';
-        ctx.lineWidth = knownRadius ? 3 : 1;
-        ctx.rect(left - pt.x, top - pt.y, right - left, bottom - top); 
-        ctx.stroke();
-
-        var msg = e.type + ': ' + Math.round(touch.pageX) + ', ' + Math.round(touch.pageY) + 
-          ' (' + nodeName(document.elementFromPoint(touch.pageX, touch.pageY)) +') radius=' + 
-          Math.round(touch.webkitRadiusX) + 'x' + Math.round(touch.webkitRadiusY) + '\n';
-        $('log').textContent += msg;
-
-        if (e.type == 'touchend') {
-          ctx.fillStyle = '#FF0000';
-          ctx.beginPath();
-          ctx.arc(touch.pageX - pt.x, touch.pageY - pt.y, dotRadius, 0, 2*Math.PI, true);
-          ctx.fill();
-          logNodes(left, top, right, bottom);
-        } 
-      }
-
-      function onClick(e) {
-        var id = e.target.id;
-        var canvas = $('canvas');
-        var ctx = canvas.getContext('2d');
-
-        $('log').textContent += 'click: ' + e.pageX + ', ' + e.pageY + ' (' + id + ')\n';
-        var pt = getPosition(canvas);
-        var offsetX = e.pageX - pt.x;
-        var offsetY = e.pageY - pt.y;
-        ctx.fillStyle = '#0000FF';
-        ctx.beginPath();
-        ctx.arc(offsetX, offsetY, dotRadius, 0, 2*Math.PI, true);
-        ctx.fill();
-      }
-
-      target.addEventListener('touchstart', onTouchEvent);
-      target.addEventListener('touchend', onTouchEvent);
-      target.addEventListener('touchmove', onTouchEvent);
-      target.addEventListener('click', onClick);
-
-      $('mousehandler').addEventListener('mousedown', function() {});
-
-      $('canvas').width = $('content').clientWidth;
-      $('canvas').height = $('content').clientHeight;
-    }
-
-    createHandlers();
-  }
-</script>
+  <div id="touchAdjustmentLog"></div>
+<script src="touchAdjustmentOverlay.js"></script>
 </body>
 </html>
 
