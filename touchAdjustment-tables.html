@@ -1,0 +1,186 @@
+<!DOCTYPE=HTML>
+<html>
+<meta name=viewport content='width=device-width,minimum-scale=1'>
+<title>Touch adjustment demo</title>
+<style>
+
+  #container {
+    display: inline-block;
+    position: relative;
+  }
+
+  #log {
+    white-space: pre;
+  }
+
+  #canvas
+  {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #000;
+    pointer-events: none;
+  }
+
+  #content
+  {
+    padding: 10px;
+  }
+
+  #hover:hover
+  {
+    color: red;
+  }
+table, th, td
+{
+border-collapse:collapse;
+border:1px solid black;
+}
+th, td
+{
+padding:5px;
+}
+
+</style>
+<body id="body" onLoad = "setup()">
+<h1>Touch adjustment</h1>
+  <div id="container">
+    <canvas id="canvas"></canvas>
+    <div id="content">
+     Here is some text <a href='#' id='link'>with a link</a><br>
+     And here is a superscript<sup><a href='#' id='superscript'>[1]</a></sup><br>
+     <span id='hover'>This text</span> has a hover effect<br>
+     Here's some text <span id='tabindex' tabindex=0>with a tabindex</span><br>
+     <span id='mousehandler'>This line has a mousedown event handler</span><br>
+
+<table>
+  <caption>Monthly savings</caption>
+  <tr>
+    <th>Month</th>
+    <th>Savings</th>
+  </tr>
+  <tr>
+    <td>January</td>
+    <td>$100</td>
+  </tr>
+  <tr>
+    <td>February</td>
+    <td>$50</td>
+  </tr>
+</table>
+
+        </div>
+  </div>
+  <div id="log"></div>
+
+<script>
+  var dotRadius = 3;
+
+  function setup() {
+
+    function $(name) {
+      return document.getElementById(name);
+    }
+
+
+    function getPosition(node) {
+      var r = node.getBoundingClientRect();
+      return {
+        x: r.left + document.body.scrollLeft,
+        y: r.top + document.body.scrollTop
+      }
+    }
+
+    function createHandlers(opt_params) {
+
+      var target = $('container');
+      var top, left, bottom, right;
+
+      function onTouchEvent(e) {
+        if (e.touches.length > 1 || (e.type=='touchend' && e.touches.length > 0))
+          return; // ignore multi-touch
+        var id = e.target.id;
+        var canvas = $('canvas');
+        var touch = e.changedTouches[0];
+        var ctx = canvas.getContext('2d');
+
+        if (e.type == 'touchstart') {
+          top = Infinity;
+          left = Infinity;
+          bottom = -Infinity;
+          right = -Infinity;
+          $('log').textContent = '';
+        }
+
+        if (e.type != 'touchend') {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+	var radiusX = touch.webkitRadiusX;
+	var radiusY = touch.webkitRadiusY;
+	var drawTouchBorder = radiusX > 1 || radiusY > 1;
+	if (radiusX > 1 && radiusY == 1)
+	  radiusY = radiusX;   // only one radius supported
+
+	var pt = getPosition(canvas);
+	var offsetX = touch.pageX - pt.x;
+	var offsetY = touch.pageY - pt.y;
+	if (drawTouchBorder) {
+	  ctx.beginPath();
+	  ctx.strokeStyle = '#00FF00';
+          ctx.lineWidth = 3;
+          top = Math.min(top, offsetY - radiusY);
+          left = Math.min(left, offsetX - radiusX);
+          bottom = Math.max(bottom, offsetY + radiusY);
+          right = Math.max(right, offsetX + radiusX);
+          ctx.rect(left, top, right - left, bottom - top); 
+	  ctx.stroke();
+	}
+
+        if (e.type == 'touchend') {
+          ctx.fillStyle = '#FF0000';
+          ctx.beginPath();
+          ctx.arc(offsetX, offsetY, dotRadius, 0, 2*Math.PI, true);
+          ctx.fill();
+        }
+
+        var msg = e.type + ': ' + Math.round(touch.pageX) + ', ' + Math.round(touch.pageY) + 
+          ' (' + document.elementFromPoint(touch.pageX, touch.pageY).id +') radius=' + 
+          Math.round(touch.webkitRadiusX) + 'x' + Math.round(touch.webkitRadiusY) + '\n';
+        $('log').textContent += msg;
+      }
+
+      function onClick(e) {
+        var id = e.target.nodeName;
+        if (e.target.id) 
+          id += '#' + e.target.id;
+        var canvas = $('canvas');
+        var ctx = canvas.getContext('2d');
+
+        $('log').textContent += 'click: ' + e.pageX + ', ' + e.pageY + ' (' + id + ')\n';
+        var pt = getPosition(canvas);
+        var offsetX = e.pageX - pt.x;
+        var offsetY = e.pageY - pt.y;
+        ctx.fillStyle = '#0000FF';
+        ctx.beginPath();
+        ctx.arc(offsetX, offsetY, dotRadius, 0, 2*Math.PI, true);
+        ctx.fill();
+      }
+
+      target.addEventListener('touchstart', onTouchEvent);
+      target.addEventListener('touchend', onTouchEvent);
+      target.addEventListener('touchmove', onTouchEvent);
+      target.addEventListener('click', onClick);
+
+      $('mousehandler').addEventListener('mousedown', function() {});
+
+      $('canvas').width = $('content').clientWidth;
+      $('canvas').height = $('content').clientHeight;
+    }
+
+    createHandlers();
+  }
+</script>
+</body>
+</html>
+
