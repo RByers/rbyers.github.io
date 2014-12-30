@@ -200,8 +200,10 @@ html, body {
   }
 
   window.onload = function() {
-    if ('scrollBlocksOn' in document.documentElement.style)
+    if ('scrollBlocksOn' in document.documentElement.style) {
         document.getElementById('warning').style.display = 'none';
+        document.getElementById('initial').innerHTML = getComputedStyle(document.documentElement).scrollBlocksOn;
+    }
     var cbs = document.querySelectorAll('input[type=checkbox]');
     for (var i=0; i < cbs.length; i++) {
         cbs[i].addEventListener('change', checkboxUpdated);
@@ -228,6 +230,8 @@ html, body {
 Delay in ms: <input id='delay' value='400'><br>
 <input type='checkbox' id='showlog'>Show event log<br>
 <b id=warning>WARNING: scroll-blocks-on is not supported by your browser.  Use Chrome 41+ with the enable-experimental-web-platform-features flag set.<br></b>
+Initial document scroll-blocks-on: <span id=initial></span><br>
+<br>
 <b>Scroll-blocks-on:</b><br> 
  <input type='checkbox' id='main-touch' checked>start-touch<br>
  <input type='checkbox' id='main-wheel' checked>wheel-event<br>
