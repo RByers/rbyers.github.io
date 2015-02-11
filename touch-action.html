@@ -70,6 +70,8 @@ function handler(event) {
     document.getElementById('log').innerHTML = '';
   }
   var msg = event.type;
+  if (event.cancelable)
+    msg += ' cancelable';
   if (lastTime)
     msg += ' ' + (event.timeStamp - lastTime) + 'ms';
   log(msg);
