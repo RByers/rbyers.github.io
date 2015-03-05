@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="Chrome event timing demo" />
+  <meta name="viewport" content="initial-scale=1"/>
+  <meta charset="utf-8">
+  <title>Chrome event timing demo</title>
+<style id="jsbin-css">
+#target {
+  background-color: lightblue;
+  padding: 20px;
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+  <div id=target>Start touch/mouse drag here</div>
+  <div>Results will show the time between each requestAnimationFrame, and the time between each event and the following requestAnimationFrame.</div>
+  <div id=log></div>
+<script id="jsbin-javascript">
+var frames;
+var recording = false;
+
+function onstart(e) {
+  if (recording)
+    return;
+  e.preventDefault();
+  frames = [{eventtimes:[performance.now()]}];
+  recording = true;
+  requestAnimationFrame(onframe);
+}
+
+function onmove(e) {
+  if (!recording || !frames.length)
+    return;
+  e.preventDefault();
+  frames[frames.length - 1].eventtimes.push(performance.now());  
+}
+
+function round(x) {
+  return Math.round(x*10)/10;  
+}
+
+function onend(e) {
+  if (!recording)
+    return;
+  e.preventDefault();
+  recording = false;
+  requestAnimationFrame(showOutput);  
+}
+
+function showOutput() {
+  var str = "";
+  for (var i = 0; i < frames.length; i++) {
+    str += "frame[" + i + "]";
+    if (i > 0)
+      str += " " + round(frames[i].time - frames[i-1].time) + "ms";
+    str += ": events";
+    var et = frames[i].eventtimes;
+    for (var j = 0; j < et.length; j++) {
+      var t = frames[i].time - et[j];
+      str += " " + round(t) + "ms";
+    }
+    str += "<br/>";
+  }
+  log.innerHTML = str;
+}
+
+function onframe(timestamp) {
+  frames[frames.length - 1].time = performance.now();
+  if (!recording)
+    return;
+  frames.push({eventtimes: []});
+  requestAnimationFrame(onframe);
+}
+
+target.addEventListener('mousedown', onstart);
+window.addEventListener('mousemove', onmove);
+document.addEventListener('mouseup', onend);
+
+target.addEventListener('touchstart', onstart);
+target.addEventListener('touchmove', onmove);
+target.addEventListener('touchend', onend);
+</script>
+</body>
+</html>
