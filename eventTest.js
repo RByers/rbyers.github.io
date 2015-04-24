@@ -80,6 +80,12 @@ function log(msg)
 
 var lastTime = undefined;
 
+// Round to 2 decimal places
+function round(val)
+{
+    return Math.round(val * 100) / 100;
+}
+
 function logEvent(event, msg)
 {
   if (event.shiftKey) msg += ' shift';
@@ -125,12 +131,12 @@ function mouseEventHandler(event)
     msg += 'gesture-active ';
   }
   if (event.type == 'mousewheel' ) {
-    msg += ', wheelDelta=' + event.wheelDelta + 
-      ' (' + event.wheelDeltaX + ',' + event.wheelDeltaY + ')';
+    msg += ', wheelDelta=' + round(event.wheelDelta) + 
+      ' (' + round(event.wheelDeltaX) + ',' + round(event.wheelDeltaY) + ')';
   }
   if (event.type == 'wheel' ) {
-    msg += ', deltaX=' + event.deltaX + ', deltaY=' + event.deltaY + 
-      ', deltaZ=' + event.deltaZ;
+    msg += ', deltaX=' + round(event.deltaX) + ', deltaY=' + round(event.deltaY) + 
+      ', deltaZ=' + round(event.deltaZ);
   }
   if (event.type == 'mousewheel' || event.type == 'wheel') {
     msg += ', deltaMode=' + (
@@ -141,12 +147,12 @@ function mouseEventHandler(event)
   }
   if (event.type.toLowerCase().indexOf("pointer") != -1) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
-      event.pointerId + ', width=' + event.width + ', height=' + event.height + 
-      ', pressure=' + event.pressure + ', tiltX=' + event.tiltX + ', tiltY=' + event.tiltY;
+      event.pointerId + ', width=' + round(event.width) + ', height=' + round(event.height) + 
+      ', pressure=' + round(event.pressure) + ', tiltX=' + round(event.tiltX) + ', tiltY=' + round(event.tiltY);
   }
  
-  msg = 'client=' + event.clientX + ',' + event.clientY + 
-      ' screen=' + event.screenX + ',' + event.screenY +
+  msg = 'client=' + round(event.clientX) + ',' + round(event.clientY) + 
+      ' screen=' + round(event.screenX) + ',' + round(event.screenY) +
       ' button=' + event.button + ' buttons=' + event.buttons +
       ' detail=' + event.detail + ' cancelable=' + event.cancelable + msg;
   
@@ -194,18 +200,18 @@ function makeTouchList(touches, verbose)
     if (!verbose || $('simple').checked) {
       touchStr += id + tgt;
     } else {
-      touchStr += id + tgt + '(c=' + touches[i].clientX + ',' + touches[i].clientY +
-        ' s=' + touches[i].screenX + ',' + touches[i].screenY;
+      touchStr += id + tgt + '(c=' + round(touches[i].clientX) + ',' + round(touches[i].clientY) +
+        ' s=' + round(touches[i].screenX) + ',' + round(touches[i].screenY);
       if ('webkitForce' in touches[i]) {
-        touchStr += ' f' + Math.round(touches[i].webkitForce*100);
+        touchStr += ' f' + round(touches[i].webkitForce);
       }
 
       if (touches[i].webkitRadiusX || touches[i].webkitRadiusY) {
-        touchStr += ' ' + touches[i].webkitRadiusX + 'x' +
-            touches[i].webkitRadiusY;
+        touchStr += ' ' + round(touches[i].webkitRadiusX) + 'x' +
+            round(touches[i].webkitRadiusY);
       }
       if ('webkitRotationAngle' in touches[i]) {
-        touchStr += ' ' + touches[i].webkitRotationAngle + '&deg;'
+        touchStr += ' ' + round(touches[i].webkitRotationAngle) + '&deg;'
       }
       touchStr += ')';
     }
