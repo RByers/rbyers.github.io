@@ -10,24 +10,27 @@
     margin: 0;
   }
   body {
-    display: flex;
-    flex-direction: column;
     padding: 5px;
   }
   #targets {
-    display: flex;
+    border: 1px solid blue;
+    height: 120px;
+    position: relative;
   }
   #targets > div {
-    margin: 10px;
+    position: absolute;
+    top: 10px;
     width: 100px;
     height: 100px;
   }
   #tgt-normal {
-    background-color: lightblue;  
+    left: 10px;
+    background-color: lightblue;
   }
   #tgt-scroll {
     overflow: scroll;
     background-color: lightgreen;
+    left: 120px;
   }
   .spacer {
     height: 400px;
@@ -35,6 +38,7 @@
   #tgt-tanone {
     touch-action: none;
     background-color: pink;
+    left: 230px;
   }
   #log {
     border: 1px solid black;
@@ -45,9 +49,18 @@
   }
 
 @media screen and (min-width: 800px) {
+  #targets {
+    height: 220px;
+  }
   #targets > div {
     width: 200px;
     height: 200px;
+  }
+  #tgt-scroll {
+    left: 220px;
+  }
+  #tgt-tanone {
+    left: 430px;
   }
   html {
     font-size: 30px; 
@@ -78,6 +91,7 @@
     Log<br>
   </div>
   <div id=config>
+  <div><input type=checkbox id=show-log checked>Show log</div>
   <div><input type=checkbox id=mobile-viewport>Use mobile viewport</div>
   <div><input type=checkbox id=consume-touchstart>Consume touchstart</div>
   <div><input type=checkbox id=consume-touchmove checked>Consume touchmove</div>
@@ -155,6 +169,11 @@ document.getElementById('mobile-viewport').addEventListener('change', function(e
   }
   viewport.setAttribute('content', value);
 });
+
+document.getElementById('show-log').addEventListener('change', function(e) {
+ log.style.display = e.target.checked ? "" : "none"; 
+});
+
   </script>
 </body>
 </html>
