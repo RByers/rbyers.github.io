@@ -15,6 +15,7 @@
             <input type='checkbox' id='enableMouseEvents' checked/>Mouse<br/>
             <input type='checkbox' id='enableTouchEvents' checked/>Touch<br/>
             <input type='checkbox' id='enableScrollEvents' checked/>Scroll<br/>
+            <input type='checkbox' id='enableKeyEvents' checked/>Keyboard<br/>
             <input type='checkbox' id='enableGestureEvents'/>Gesture<br/>
             <input type='checkbox' id='enableDragEvents'/>Drag<br/>
             <input type='checkbox' id='enablePointerEvents'/>Pointer<br/>
@@ -42,7 +43,7 @@
 	    <button id='btnOk'>Ok</button>
           </div>
         </div>
-        <div draggable id='touchTarget'>
+        <div id='touchTarget' tabindex=0>
             <pre><div id='log'></div></pre>
             <div id="boxes">
               <div id="purple" class='box'><a href="#">A Link</a><br></div>

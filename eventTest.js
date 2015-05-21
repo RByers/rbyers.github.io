@@ -21,7 +21,7 @@ function updateHandlers()
     setHandlerState(
         ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
-        'focus', 'mousewheel', 'wheel'], 
+        'mousewheel', 'wheel'], 
         targetElem, mouseEventHandler,
         $('enableMouseEvents').checked);
 
@@ -50,6 +50,15 @@ function updateHandlers()
         'gotpointercapture', 'lostpointercapture'],
         targetElem, mouseEventHandler,
         $('enablePointerEvents').checked);
+
+    setHandlerState(
+        ['keydown', 'keyup', 'keypress'],
+        targetElem, keyEventHandler,
+        $('enableKeyEvents').checked);
+    setHandlerState(
+        ['focus', 'blur'],
+        targetElem, logEvent,
+        $('enableKeyEvents').checked);
 
     setHandlerState(
         ['gesturestart', 'gesturechange', 'gestureend'],
@@ -88,6 +97,9 @@ function round(val)
 
 function logEvent(event, msg)
 {
+  if (!msg)
+    msg = '';
+
   if (event.shiftKey) msg += ' shift';
   if (event.altKey) msg += ' alt';
   if (event.ctrlKey) msg += ' ctrl';
@@ -110,7 +122,7 @@ function logEvent(event, msg)
   lastEvent = event.type;
   logElem.innerHTML = lastLog + event.type +
     (dupCount > 0 ? '[' + dupCount + ']' : '') +
-    ': target=' + event.target.id + ' ' + msg + '\n';
+    ': target=' + event.target.id + msg + '\n';
   logElem.scrollTop = logElem.scrollHeight;
 }
 
@@ -163,6 +175,25 @@ function mouseEventHandler(event)
   if (event.type=='MSPointerDown' && $('pointercapture').checked) {
     event.target.msSetPointerCapture(event.pointerId);
   }	
+}
+
+function keyEventHandler(event)
+{
+  var msg = '';
+  if ('charCode' in event)
+    msg += ' charCode=' + event.charCode;
+  if ('keyCode' in event)
+    msg += ' keyCode=' + event.keyCode;
+  if ('key' in event)
+    msg += ' key=' + event.key;
+  if ('code' in event)
+    msg += ' code=' + event.code;
+  if ('location' in event)
+    msg += ' location=' + event.location;
+  if (event.isComposing)
+    msg += ' isComposing';
+  
+  logEvent(event, msg);
 }
 
 // True if a gesture is occuring that should cause clicks to be swallowed
@@ -320,6 +351,7 @@ document.addEventListener('dragstart', function(e) {
 $('enableMouseEvents').addEventListener('click', updateHandlers, false);
 $('enableScrollEvents').addEventListener('click', updateHandlers, false);
 $('enableTouchEvents').addEventListener('click', updateHandlers, false);
+$('enableKeyEvents').addEventListener('click', updateHandlers, false);
 $('enableGestureEvents').addEventListener('click', updateHandlers, false);
 $('enablePointerEvents').addEventListener('click', updateHandlers, false);
 $('enableDragEvents').addEventListener('click', updateHandlers, false);
