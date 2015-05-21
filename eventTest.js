@@ -188,8 +188,14 @@ function keyEventHandler(event)
     msg += ' key=' + event.key;
   if ('code' in event)
     msg += ' code=' + event.code;
-  if ('location' in event)
-    msg += ' location=' + event.location;
+  if ('location' in event) {
+    if (event.location == KeyboardEvent.DOM_KEY_LOCATION_LEFT)
+        msg += ' LOCATION_LEFT';
+    else if (event.location == KeyboardEvent.DOM_KEY_LOCATION_NUMPAD)
+        msg += ' LOCATION_NUMPAD';
+    else if (event.location == KeyboardEvent.DOM_KEY_LOCATION_RIGHT)
+        msg += ' LOCATION_RIGHT';
+  }
   if (event.repeat)
     msg += ' repeat';
   if (event.isComposing)
