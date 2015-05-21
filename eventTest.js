@@ -190,6 +190,8 @@ function keyEventHandler(event)
     msg += ' code=' + event.code;
   if ('location' in event)
     msg += ' location=' + event.location;
+  if (event.repeat)
+    msg += ' repeat';
   if (event.isComposing)
     msg += ' isComposing';
   
