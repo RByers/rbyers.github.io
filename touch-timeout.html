@@ -107,7 +107,7 @@ var logString = '';
 var lastTime = 0;
 
 function writeLog(str) {
-  var newTime = lastTime + 1; // 1performance.now();
+  var newTime = Date.now();  // performance.now not supported on mobile safari?
   logString += str + (lastTime ? (' ' + Math.round(newTime - lastTime) + 'ms') : '') + '<br>\n';
   lastTime = newTime;
   // Don't allow layout to contribute to event handling time
