@@ -107,7 +107,7 @@ var logString = '';
 var lastTime;
 
 function writeLog(str) {
-  var newTime = performance.now();
+  var newTime = lastTime + 1; // 1performance.now();
   logString += str + (lastTime ? (' ' + Math.round(newTime - lastTime) + 'ms') : '') + '<br>\n';
   lastTime = newTime;
   // Don't allow layout to contribute to event handling time
