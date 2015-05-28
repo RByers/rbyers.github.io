@@ -163,7 +163,7 @@ function mouseEventHandler(event)
       ', pressure=' + round(event.pressure) + ', tiltX=' + round(event.tiltX) + ', tiltY=' + round(event.tiltY);
   }
  
-  msg = 'client=' + round(event.clientX) + ',' + round(event.clientY) + 
+  msg = ' client=' + round(event.clientX) + ',' + round(event.clientY) + 
       ' screen=' + round(event.screenX) + ',' + round(event.screenY) +
       ' button=' + event.button + ' buttons=' + event.buttons +
       ' detail=' + event.detail + ' cancelable=' + event.cancelable + msg;
