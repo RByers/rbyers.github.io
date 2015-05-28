@@ -251,7 +251,7 @@ function makeTouchList(touches, verbose)
     } else {
       touchStr += id + tgt + '(c=' + round(touches[i].clientX) + ',' + round(touches[i].clientY) +
         ' s=' + round(touches[i].screenX) + ',' + round(touches[i].screenY);
-      var force = getProp(touches[i], 'force'));
+      var force = getProp(touches[i], 'force');
       if (force !== undefined) {
         touchStr += ' f' + round(force);
       }
