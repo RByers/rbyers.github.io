@@ -220,7 +220,7 @@ function getProp(touch, propName)
 {
   if (propName in touch)
     return touch[propName];
-  var prefixedName = 'webkit' + propName.substr(0,1).toUpperCase() . propName.substr(1);
+  var prefixedName = 'webkit' + propName.substr(0,1).toUpperCase() + propName.substr(1);
   if (prefixedName in touch)
     return touch[prefixedName];
   return undefined;
