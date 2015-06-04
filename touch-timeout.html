@@ -104,9 +104,12 @@
 var log = document.getElementById('log');
 
 var logString = '';
+var lastTime = 0;
 
 function writeLog(str) {
-  logString += str + '<br>\n';
+  var newTime = Date.now();  // performance.now not supported on mobile safari?
+  logString += str + (lastTime ? (' ' + Math.round(newTime - lastTime) + 'ms') : '') + '<br>\n';
+  lastTime = newTime;
   // Don't allow layout to contribute to event handling time
   window.setTimeout(function() {
     log.innerHTML = logString;

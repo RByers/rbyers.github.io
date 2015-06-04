@@ -163,7 +163,7 @@ function mouseEventHandler(event)
       ', pressure=' + round(event.pressure) + ', tiltX=' + round(event.tiltX) + ', tiltY=' + round(event.tiltY);
   }
  
-  msg = 'client=' + round(event.clientX) + ',' + round(event.clientY) + 
+  msg = ' client=' + round(event.clientX) + ',' + round(event.clientY) + 
       ' screen=' + round(event.screenX) + ',' + round(event.screenY) +
       ' button=' + event.button + ' buttons=' + event.buttons +
       ' detail=' + event.detail + ' cancelable=' + event.cancelable + msg;
@@ -216,6 +216,16 @@ var DRAG_DISTANCE=3;
 var touchMap = {};
 var nextId = 1;
 
+function getProp(touch, propName)
+{
+  if (propName in touch)
+    return touch[propName];
+  var prefixedName = 'webkit' + propName.substr(0,1).toUpperCase() + propName.substr(1);
+  if (prefixedName in touch)
+    return touch[prefixedName];
+  return undefined;
+}
+
 function makeTouchList(touches, verbose)
 {
   var touchStr = '';
@@ -241,16 +251,19 @@ function makeTouchList(touches, verbose)
     } else {
       touchStr += id + tgt + '(c=' + round(touches[i].clientX) + ',' + round(touches[i].clientY) +
         ' s=' + round(touches[i].screenX) + ',' + round(touches[i].screenY);
-      if ('webkitForce' in touches[i]) {
-        touchStr += ' f' + round(touches[i].webkitForce);
+      var force = getProp(touches[i], 'force');
+      if (force !== undefined) {
+        touchStr += ' f' + round(force);
       }
 
-      if (touches[i].webkitRadiusX || touches[i].webkitRadiusY) {
-        touchStr += ' ' + round(touches[i].webkitRadiusX) + 'x' +
-            round(touches[i].webkitRadiusY);
+      var radiusX = getProp(touches[i], 'radiusX');
+      var radiusY = getProp(touches[i], 'radiusY');
+      if (radiusX !== undefined || radiusY !== undefined) {
+        touchStr += ' ' + round(radiusX) + 'x' + round(radiusY);
       }
-      if ('webkitRotationAngle' in touches[i]) {
-        touchStr += ' ' + round(touches[i].webkitRotationAngle) + '&deg;'
+      var rot = getProp(touches[i], 'rotationAngle');
+      if (rot !== undefined) {
+        touchStr += ' ' + round(rot) + '&deg;'
       }
       touchStr += ')';
     }
