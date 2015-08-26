@@ -12,11 +12,6 @@
   border: 1px solid black;
 }
 </style>
-<script>
-  window.onerror = function(error) {
-    alert(error);
-};
-</script>
 <script src="//rbyers.github.io/InputDevice/inputdevicecapabilities-polyfill.js"></script>
 </head>
 <body>
@@ -27,11 +22,17 @@
 var frames;
 var recording = false;
 
+function now() {
+  if ('performance' in window)
+    return performance.now();
+  return Date.now();
+}
+
 function onstart(e) {
   if (recording)
     return;
   e.preventDefault();
-  frames = [{eventtimes:[performance.now()]}];
+  frames = [{eventtimes:[now()]}];
   recording = true;
   requestAnimationFrame(onframe);
 }
@@ -40,7 +41,7 @@ function onmove(e) {
   if (!recording || !frames.length)
     return;
   e.preventDefault();
-  frames[frames.length - 1].eventtimes.push(performance.now());  
+  frames[frames.length - 1].eventtimes.push(now());  
 }
 
 function round(x) {
@@ -52,7 +53,7 @@ function onend(e) {
     return;
   e.preventDefault();
   recording = false;
-  frames[frames.length - 1].eventtimes.push(performance.now());
+  frames[frames.length - 1].eventtimes.push(now());
 }
 
 function showOutput() {
@@ -73,7 +74,7 @@ function showOutput() {
 }
 
 function onframe(timestamp) {
-  frames[frames.length - 1].time = performance.now();
+  frames[frames.length - 1].time = now();
   if (!recording) {
     showOutput();
     return;
