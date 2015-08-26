@@ -47,7 +47,6 @@ function onend(e) {
   e.preventDefault();
   recording = false;
   frames[frames.length - 1].eventtimes.push(performance.now());
-  requestAnimationFrame(showOutput);  
 }
 
 function showOutput() {
@@ -69,8 +68,10 @@ function showOutput() {
 
 function onframe(timestamp) {
   frames[frames.length - 1].time = performance.now();
-  if (!recording)
+  if (!recording) {
+    showOutput();
     return;
+  }
   frames.push({eventtimes: []});
   requestAnimationFrame(onframe);
 }
