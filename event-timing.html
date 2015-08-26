@@ -12,12 +12,13 @@
   border: 1px solid black;
 }
 </style>
+<script src="//rbyers.github.io/InputDevice/inputdevicecapabilities-polyfill.js"></script>
 </head>
 <body>
   <div id=target>Start touch/mouse drag here</div>
   <div>Results will show the time between each requestAnimationFrame, and the time between each event and the following requestAnimationFrame.</div>
   <div id=log></div>
-<script id="jsbin-javascript">
+<script>
 var frames;
 var recording = false;
 
@@ -76,9 +77,18 @@ function onframe(timestamp) {
   requestAnimationFrame(onframe);
 }
 
-target.addEventListener('mousedown', onstart);
-window.addEventListener('mousemove', onmove);
-document.addEventListener('mouseup', onend);
+// Don't get confused by mouse events derived from touch.
+function addMouseListener(target, type, handler) {
+  target.addEventListener(type, function(e) {
+    if (e.sourceCapabilities.firesTouchEvents)
+      return;
+    handler(e);
+  });
+}
+
+addMouseListener(target, 'mousedown', onstart);
+addMouseListener(window, 'mousemove', onmove);
+addMouseListener(document, 'mouseup', onend);
 
 target.addEventListener('touchstart', onstart);
 target.addEventListener('touchmove', onmove);
