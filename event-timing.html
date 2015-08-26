@@ -46,6 +46,7 @@ function onend(e) {
     return;
   e.preventDefault();
   recording = false;
+  frames[frames.length - 1].eventtimes.push(performance.now());
   requestAnimationFrame(showOutput);  
 }
 
