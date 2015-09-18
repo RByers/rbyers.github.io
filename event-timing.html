@@ -96,13 +96,20 @@ function addMouseListener(target, type, handler) {
   });
 }
 
-addMouseListener(target, 'mousedown', onstart);
-addMouseListener(window, 'mousemove', onmove);
-addMouseListener(document, 'mouseup', onend);
+if (window.PointerEvent) {
+  target.addEventListener('pointerdown', onstart);
+  document.addEventListener('pointermove', onmove);
+  document.addEventListener('pointerup', onend);
+  document.addEventListener('pointercancel', onend);
+} else {
+  addMouseListener(target, 'mousedown', onstart);
+  addMouseListener(window, 'mousemove', onmove);
+  addMouseListener(document, 'mouseup', onend);
 
-target.addEventListener('touchstart', onstart);
-target.addEventListener('touchmove', onmove);
-target.addEventListener('touchend', onend);
+  target.addEventListener('touchstart', onstart);
+  target.addEventListener('touchmove', onmove);
+  target.addEventListener('touchend', onend);
+}
 </script>
 </body>
 </html>
