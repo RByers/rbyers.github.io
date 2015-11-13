@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name=viewport content="initial-scale=1">
+    <link rel="stylesheet" href="scroll-latency.css"></link>
+  </head>
+  <body>
+    <div id='console'>
+      <input type='checkbox' id='pjank'>Periodic jank:
+      <input type='number' id='ptime' value='200' />ms
+      <br/>
+      <input type='checkbox' id='hjank'>Handler jank: 
+      <input type='number' id='htime' value='200' />ms
+      <br/>
+      <input type='checkbox' id='pd'/>preventDefault
+      <br/>
+      <div id='spinner'>Running</div>
+      <div id=log>
+      </div>
+    </div>
+    <div id=content>
+      <h2>Scroll jank due to touch/wheel handlers demo</h2>
+      Scroll the page, observing the latency associated with each event.<br>
+      The 'running' animation represents the responsiveness of the JavaScript thread.
+      Jank can be added to this thread as a regular repeating pattern ("periodic jank"),
+      and/or directly inside of each touch/wheel handlers ("handler jank").<br>
+      When working properly this demo will be able to capture both types of jank.<br>
+      At the moment, Chrome requires the 'enable experimental web platform features' flag
+      in order to reliably capture the periodic jank.<br>
+      Note that Safari appears to have a bug where event latency appears
+      negative (timestamps are ~100ms in the future relative to Date.now()),
+      but the relative latency difference can still be observed.
+    </div>
+    <script src="scroll-latency.js"></script>
+  </body>
+</html>
+
