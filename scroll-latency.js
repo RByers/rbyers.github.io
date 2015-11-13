@@ -96,6 +96,11 @@ function doFrame() {
 doFrame();
 
 ['touchstart', 'touchmove', 'touchend', 'wheel'].forEach(function(type) {
+    // Note that in a production environment you wouldn't want to add handlers
+    // to the document unless some already existed, as that would cause a new
+    // performance problem.
+    // See https://github.com/RByers/EventListenerOptions/blob/gh-pages/explainer.md
    $('content').addEventListener(type, handler);
+   
    $('content').addEventListener(type, jankHandler);
 });
