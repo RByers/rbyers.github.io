@@ -20,13 +20,16 @@
     </div>
     <div id=content>
       <h2>Scroll jank due to touch/wheel handlers demo</h2>
+      <a href="https://github.com/RByers/rbyers.github.io/blob/master/scroll-latency.js">View on GitHub</a><br>
+      <h3>Instructions</h3>
       Scroll the page, observing the latency associated with each event.<br>
       The 'running' animation represents the responsiveness of the JavaScript thread.
       Jank can be added to this thread as a regular repeating pattern ("periodic jank"),
       and/or directly inside of each touch/wheel handlers ("handler jank").<br>
       When working properly this demo will be able to capture both types of jank.<br>
       At the moment, Chrome requires the 'enable experimental web platform features' flag
-      in order to reliably capture the periodic jank.<br>
+      in order to reliably capture the periodic jank (see <a href="https://groups.google.com/a/chromium.org/forum/#!topic/blink-dev/hfkkQiuMgkQ">
+        High resolution time for Event.timeStamp</a>).<br>
       Note that Safari appears to have a bug where event latency appears
       negative (timestamps are ~100ms in the future relative to Date.now()),
       but the relative latency difference can still be observed.
