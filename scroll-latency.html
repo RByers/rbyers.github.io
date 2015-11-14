@@ -30,8 +30,8 @@
       At the moment, Chrome requires the 'enable experimental web platform features' flag
       in order to reliably capture the periodic jank (see <a href="https://groups.google.com/a/chromium.org/forum/#!topic/blink-dev/hfkkQiuMgkQ">
         High resolution time for Event.timeStamp</a>).<br>
-      Safari 9+ appears to work well (though earlier versions have a bug where event latency appears
-      negative).
+      Safari 9+ appears to work well (though only at millisecond precision and <a href="https://lists.webkit.org/pipermail/webkit-dev/2013-June/025027.html">
+      with possible issues with NTP skew</a>).
     </div>
     <script src="scroll-latency.js"></script>
   </body>
