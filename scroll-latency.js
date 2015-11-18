@@ -96,11 +96,11 @@ function doFrame() {
 doFrame();
 
 ['touchstart', 'touchmove', 'touchend', 'wheel'].forEach(function(type) {
-    // Note that in a production environment you wouldn't want to add handlers
-    // to the document unless some already existed, as that would cause a new
-    // performance problem.
+    // Note that today if this is the only touch/wheel listener on the page
+    // it can hurt scroll performance.  We use the EventListenerOptions polyfill
+    // here to make it clear we really want passive listeners to avoid this problem.
     // See https://github.com/RByers/EventListenerOptions/blob/gh-pages/explainer.md
-   $('content').addEventListener(type, handler);
+   $('content').addEventListener(type, handler, {passive: true});
    
    $('content').addEventListener(type, jankHandler);
 });
