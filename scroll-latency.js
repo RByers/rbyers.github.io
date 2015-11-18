@@ -45,9 +45,6 @@ function round(val) {
 function handler(e) {
   checkTimebase(e.timeStamp);
 
-  if ($('pd').checked)
-    e.preventDefault();
-
   // Only cancelable events block scrolling, and are the 
   // only ones that contribute to scroll latency.
   if (e.cancelable) {
@@ -72,7 +69,10 @@ function jank(amt) {
 
 function jankHandler(e) {
   if ($('hjank').checked)
-    jank(Number($('htime').value));  
+    jank(Number($('htime').value));
+    
+  if ($('pd').checked)
+    e.preventDefault();
 }
 
 var transformAttr = 'transform' in document.body.style ? 'transform' : 'webkitTransform';
