@@ -106,7 +106,7 @@ function logEvent(event, msg)
   if (event.metaKey) msg += ' meta';
 
   if (lastTime) {
-    msg += ' ' + (event.timeStamp - lastTime) + 'ms';
+    msg += ' ' + Math.round(event.timeStamp - lastTime) + 'ms';
   }
   lastTime = event.timeStamp;
 
@@ -311,7 +311,7 @@ function touchEventHandler(event)
               ' dist=(' + distX + ',' + distY + ')' +
               ' max-dist=' + Math.round(touchData.maxDist) +
               ' max-manhattan-dist=' + touchData.maxMDist + 
-              ' dur=' + (event.timeStamp - touchData.startTime)/1000);
+              ' dur=' + (Math.round(event.timeStamp - touchData.startTime))/1000);
             delete activeTouchData[touch.identifier];
           }
         }
