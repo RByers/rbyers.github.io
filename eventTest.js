@@ -429,3 +429,5 @@ updateHandlers();
 setAlternateTimer();
 setTouchAction();
 setOverflowScrollTouch();
+
+targetElem.focus();
