@@ -72,7 +72,7 @@ function handler(event) {
   var msg = event.type;
   if (event.cancelable)
     msg += ' cancelable';
-  if (lastTime)
+  if (lastTime && event.timeStamp)
     msg += ' ' + (event.timeStamp - lastTime) + 'ms';
   log(msg);
   lastTime = event.timeStamp;
