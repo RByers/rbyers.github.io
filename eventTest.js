@@ -105,7 +105,7 @@ function logEvent(event, msg)
   if (event.ctrlKey) msg += ' ctrl';
   if (event.metaKey) msg += ' meta';
 
-  if (lastTime) {
+  if (lastTime && event.timeStamp) {
     msg += ' ' + Math.round(event.timeStamp - lastTime) + 'ms';
   }
   lastTime = event.timeStamp;
