@@ -27,9 +27,8 @@
       Jank can be added to this thread as a regular repeating pattern ("periodic jank"),
       and/or directly inside of each touch/wheel handlers ("handler jank").<br>
       When working properly this demo will be able to capture both types of jank.<br>
-      At the moment, Chrome requires the 'enable experimental web platform features' flag
-      in order to reliably capture the periodic jank (see <a href="https://groups.google.com/a/chromium.org/forum/#!topic/blink-dev/hfkkQiuMgkQ">
-        High resolution time for Event.timeStamp</a>).<br>
+      At the moment, Chrome 49 is required to reliably capture the periodic jank (see <a href="https://www.chromestatus.com/features/5523910145605632">
+        High resolution time stamp for events</a>).<br>
       Safari 9+ appears to work well (though only at millisecond precision and <a href="https://lists.webkit.org/pipermail/webkit-dev/2013-June/025027.html">
       with possible issues with NTP skew</a>).
     </div>
