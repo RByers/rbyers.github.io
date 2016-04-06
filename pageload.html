@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Page Load Responsiveness test</title>
+<style>
+body, html {
+  margin: 0;
+  height: 100%;
+  background: lightblue;
+  overflow: hidden;
+}
+#header {
+  padding: 8px;
+}
+#stime {
+  width: 30px;
+}
+#container {
+  position: absolute;
+  width: 100%;
+  top: 200px;
+  bottom: 1px;
+}
+iframe {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: 0;
+}
+</style>
+</head>
+<body>
+  <div id=header>
+    <b>Page Load Responsiveness test</b><br>
+    Url: <input id=url><input type=submit value=Go id=go><br>    
+    Stop: on load <input type=checkbox id=sload checked> or after <input id=stime> seconds.<br>
+    Duration: <span id=dur></span><br>
+    Frame duration: 
+     <span id=resp><br>    
+  </div>
+  <div id=container>
+    <iframe id=frame></iframe>
+  </div>
+<script id="jsbin-javascript">
+var started;
+var lastFrame;
+var frames = [];
+var $ = document.getElementById.bind(document);
+$('url').value = "http://" + location.hash.substr(1);
+function frame() {
+  if (!started)
+    return;
+  var now = performance.now();
+  frames.push(now - lastFrame);  
+  lastFrame = now;
+  var max = Number($('stime').value);
+  if (max && now - started > max * 1000)
+    done();
+  else
+    requestAnimationFrame(frame);
+}
+$('go').addEventListener('click', function() {
+  $('dur').textContent = '';
+  $('resp').textContent = '';
+  started = performance.now();
+  lastFrame = started;
+  frames = [];
+  $('frame').src = '';
+  $('frame').src = $('url').value;
+  requestAnimationFrame(frame);
+});
+$('frame').addEventListener('load', function() {
+  if (started && $('sload').checked) {
+    done();
+  }  
+});
+function done() {
+  var dur = performance.now() - started;
+  $('dur').textContent = Math.round(dur) + "ms " + frames.length + " frames";    
+  started = undefined;
+  
+  frames.sort(function(a,b) {
+    return a-b;
+  });
+  var per = [50,95,99,100];
+  var msg = '';
+  for( var i = 0; i < per.length; i++) {
+    var p = per[i];
+    var fi = Math.floor(p * frames.length / 100);
+    fi = Math.min(fi,frames.length-1);
+    var v = frames[fi];
+    msg += Math.round(v) + "ms@" + p + "th ";
+  }
+  $('resp').textContent = msg;  
+}
+</script>
+
+</body>  
+</html>
