@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,user-scalable=no">
+  <meta name="viewport" content="initial-scale=1">
   <title>Page Load Responsiveness test</title>
 <style>
 body, html {
@@ -98,8 +98,10 @@ function done() {
   $('resp').textContent = msg;  
 }
 
-if (location.hash)
+if (location.hash) {
   $('go').click();
+  document.domain = location.hash.substr(1);  
+}
 </script>
 
 </body>  
