@@ -7,13 +7,13 @@
   <body>
     <div id='console'>
       <input type='checkbox' id='pjank'>Periodic jank:
-      <input type='number' id='ptime' value='200' />ms
-      <br/>
+      <input type='number' id='ptime' value='200'>ms
+      <br>
       <input type='checkbox' id='hjank'>Handler jank: 
-      <input type='number' id='htime' value='200' />ms
-      <br/>
-      <input type='checkbox' id='pd'/>preventDefault
-      <br/>
+      <input type='number' id='htime' value='200'>ms
+      <br>
+      <input type='checkbox' id='passive'>passive listener<br>
+      <input type='checkbox' id='pd'>preventDefault<br>
       <div id='spinner'>Running</div>
       <div id=log>
       </div>
@@ -22,11 +22,15 @@
       <h2>Scroll jank due to touch/wheel handlers demo</h2>
       <a href="https://github.com/RByers/rbyers.github.io/blob/master/scroll-latency.js">View on GitHub</a><br>
       <h3>Instructions</h3>
+      The log shows the touch/wheel events which block scrolling (have cancelable=true).<br>
       Scroll the page, observing the latency associated with each event.<br>
       The 'running' animation represents the responsiveness of the JavaScript thread.
       Jank can be added to this thread as a regular repeating pattern ("periodic jank"),
       and/or directly inside of each touch/wheel handlers ("handler jank").<br>
-      When working properly this demo will be able to capture both types of jank.<br>
+      In Chrome 51+, the touch/wheel listeners can be marked as
+      [passive](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md)
+      to keep them from being able to block scroll.
+      When working properly this demo will be able to measure both types of jank.<br>
       At the moment, Chrome 49 is required to reliably capture the periodic jank (see <a href="https://www.chromestatus.com/features/5523910145605632">
         High resolution time stamp for events</a>).<br>
       Safari 9+ appears to work well (though only at millisecond precision and <a href="https://lists.webkit.org/pipermail/webkit-dev/2013-June/025027.html">
