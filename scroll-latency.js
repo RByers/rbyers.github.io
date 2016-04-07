@@ -42,7 +42,7 @@ function round(val) {
   return Math.round(val * scale) / scale;
 }
 
-function handler(e) {
+function monitoringHandler(e) {
   checkTimebase(e.timeStamp);
 
   // Only cancelable events block scrolling, and are the 
@@ -95,12 +95,27 @@ function doFrame() {
 }
 doFrame();
 
-['touchstart', 'touchmove', 'touchend', 'wheel'].forEach(function(type) {
-    // Note that today if this is the only touch/wheel listener on the page
-    // it can hurt scroll performance.  We use the EventListenerOptions polyfill
-    // here to make it clear we really want passive listeners to avoid this problem.
-    // See https://github.com/RByers/EventListenerOptions/blob/gh-pages/explainer.md
-   $('content').addEventListener(type, handler, {passive: true});
-   
-   $('content').addEventListener(type, jankHandler);
+var supportsPassive = false;
+try {
+  addEventListener("test", null, { get passive() { supportsPassive = true; } });
+} catch(e) {}
+$('passive').disabled = !supportsPassive;
+
+var evts = ['touchstart', 'touchmove', 'touchend', 'wheel'];
+evts.forEach(function(type) {
+    // This handler may introduce / trigger some scroll jank 
+    $('content').addEventListener(type, jankHandler);
+    
+    // This handler is demonstrating how to (passively) monitor scroll latency.
+    $('content').addEventListener(type, monitoringHandler, supportsPassive ? {passive:true} : false);
 });
+
+if (supportsPassive) {
+    var jankHandlerPassive = false;
+    $('passive').addEventListener('click', function() {
+    evts.forEach(function(type) {
+        $('content').removeEventListener(type, jankHandler, {passive:jankHandlerPassive});
+        jankHandlerPassive = $('passive').checked;
+        $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
+    });
+}
