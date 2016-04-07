@@ -113,9 +113,10 @@ evts.forEach(function(type) {
 if (supportsPassive) {
     var jankHandlerPassive = false;
     $('passive').addEventListener('click', function() {
-    evts.forEach(function(type) {
-        $('content').removeEventListener(type, jankHandler, {passive:jankHandlerPassive});
-        jankHandlerPassive = $('passive').checked;
-        $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
+        evts.forEach(function(type) {
+            $('content').removeEventListener(type, jankHandler, {passive:jankHandlerPassive});
+            jankHandlerPassive = $('passive').checked;
+            $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
+        });
     });
 }
