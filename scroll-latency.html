@@ -29,7 +29,9 @@
       and/or directly inside of each touch/wheel handlers ("handler jank").<br>
       In Chrome 51+, the touch/wheel listeners can be marked as
       <a href="https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md">passive</a>
-      to keep them from being able to block the scroll.<br>
+      to keep them from being able to block the scroll (though there is currently
+      <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=601661">a bug</a> which causes the latency-reporting
+      here to think the events are still blocking scroll.<br>
       When working properly (eg. <a href="https://www.chromestatus.com/features/5523910145605632">Chrome 49+</a>)
       this demo will be able to measure both types of jank.<br>
       Safari 9+ appears to work well (though only at millisecond precision and <a href="https://lists.webkit.org/pipermail/webkit-dev/2013-June/025027.html">
