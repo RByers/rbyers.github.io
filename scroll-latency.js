@@ -113,9 +113,10 @@ evts.forEach(function(type) {
 if (supportsPassive) {
     var jankHandlerPassive = false;
     $('passive').addEventListener('click', function() {
+        var oldPassive = jankHandlerPassive;
+        jankHandlerPassive = $('passive').checked;
         evts.forEach(function(type) {
-            $('content').removeEventListener(type, jankHandler, {passive:jankHandlerPassive});
-            jankHandlerPassive = $('passive').checked;
+            $('content').removeEventListener(type, jankHandler, {passive:oldPassive});
             $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
         });
     });
