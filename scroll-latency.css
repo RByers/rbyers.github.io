@@ -20,7 +20,7 @@ html, body {
     background-color: lightblue;
     box-sizing: border-box;
     /* Ensure the fixed position element doesn't break threaded scrolling */
-    will-change: contents;
+    will-change: transform;
 }
 
 #log {
