@@ -30,9 +30,8 @@
       In Chrome 51+, the touch/wheel listeners can be marked as
       <a href="https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md">passive</a>
       to keep them from being able to block the scroll.<br>
-      When working properly this demo will be able to measure both types of jank.<br>
-      At the moment, Chrome 49 is required to reliably capture the periodic jank (see <a href="https://www.chromestatus.com/features/5523910145605632">
-        High resolution time stamp for events</a>).<br>
+      When working properly (eg. <a href="https://www.chromestatus.com/features/5523910145605632">Chrome 49+</a>)
+      this demo will be able to measure both types of jank.<br>
       Safari 9+ appears to work well (though only at millisecond precision and <a href="https://lists.webkit.org/pipermail/webkit-dev/2013-June/025027.html">
       with possible issues with NTP skew</a>).
     </div>
