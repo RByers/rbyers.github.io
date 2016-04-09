@@ -6,20 +6,25 @@
   </head>
   <body>
     <div id='console'>
-      <input type='checkbox' id='pjank'>Periodic jank:
+      Periodic jank:
+      <input type='checkbox' id='pjank'>
       <input type='number' id='ptime' value='200'>ms
       <br>
-      <input type='checkbox' id='hjank'>Handler jank: 
+      Handler jank:
+      <input type='checkbox' id='hjank'>
       <input type='number' id='htime' value='200'>ms
       <br>
-      Touch listener type
+      Touch listener:
       <select id='ltype'>
         <option selected>touchstart</option>
         <option>touchmove</option>
         <option>touchend</option>
       </select>
-      <input type='checkbox' id='passive'>passive listener<br>
-      <input type='checkbox' id='pd'>preventDefault<br>
+      <input type='checkbox' id='passive'>passive
+      <br>
+      preventDefault
+      <input type='checkbox' id='pd'>
+      <br>
       <div id='spinner'>Running</div>
       <div id=log>
       </div>
