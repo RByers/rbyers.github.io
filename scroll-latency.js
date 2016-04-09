@@ -101,21 +101,29 @@ try {
 } catch(e) {}
 $('passive').disabled = !supportsPassive;
 
-var evts = ['touchstart', 'touchmove', 'touchend', 'wheel'];
-evts.forEach(function(type) {
-    // This handler may introduce / trigger some scroll jank 
-    $('content').addEventListener(type, jankHandler);
-    
+['touchstart', 'touchmove', 'touchend', 'wheel'].forEach(function(type) {
     // This handler is demonstrating how to (passively) monitor scroll latency.
     $('content').addEventListener(type, monitoringHandler, supportsPassive ? {passive:true} : false);
 });
 
+var jankHandlerPassive = false;
+
+var touchListenerType = $('ltype').value;
+[touchListenerType, 'wheel'].forEach(function(type) {
+    // This handler may introduce / trigger some scroll jank 
+    $('content').addEventListener(type, jankHandler);
+});
+$('ltype').addEventListener('change', function(e) {
+    $('content').removeEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
+    touchListenerType = $('ltype').value;
+    $('content').addEventListener(type, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
+});
+
 if (supportsPassive) {
-    var jankHandlerPassive = false;
     $('passive').addEventListener('click', function() {
         var oldPassive = jankHandlerPassive;
         jankHandlerPassive = $('passive').checked;
-        evts.forEach(function(type) {
+        [touchListenerType, 'wheel'].forEach(function(type) {
             $('content').removeEventListener(type, jankHandler, {passive:oldPassive});
             $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
         });
