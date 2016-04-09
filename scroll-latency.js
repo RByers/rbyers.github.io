@@ -116,7 +116,7 @@ var touchListenerType = $('ltype').value;
 $('ltype').addEventListener('change', function(e) {
     $('content').removeEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
     touchListenerType = $('ltype').value;
-    $('content').addEventListener(type, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
+    $('content').addEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
 });
 
 if (supportsPassive) {
