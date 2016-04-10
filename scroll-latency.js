@@ -2,40 +2,35 @@ function $(id) { return document.getElementById(id); }
 
 var logElem = $('log');
 function log(msg) {
-    logElem.appendChild(document.createTextNode(msg));
-    logElem.appendChild(document.createElement('br'));
-    logElem.scrollTop = logElem.scrollHeight;
-}
-
-function timeNear(a, b) {
-  const d = 1000 * 60 * 5;
-  return a > b - d && a < b + d;
+  logElem.appendChild(document.createTextNode(msg));
+  logElem.appendChild(document.createElement('br'));
+  logElem.scrollTop = logElem.scrollHeight;
 }
 
 // Browsers (and the DOM spec) are in the process of moving the
 // event timestamp from being relative to Date.now() to being
 // relative to performance.now().
 
-var timebase;
-function checkTimebase(timeStamp)
-{
-    var newTimebase;
-    if ('performance' in window && timeNear(timeStamp, performance.now()))
-      newTimebase = "performance";
-    else if (timeNear(timeStamp, Date.now()))
-      newTimebase = "Date";
-    else {
-        log("ERROR: Unknown timebase for timeStamp: " + timeStamp);
-        return;
-    }
+// Detect timebase used for Event.timestamp
+var timebase = (function detectTimebase(testTimeStamp) {
+  function timeNear(a, b) {
+    const d = 1000 * 60 * 5;
+    return a > b - d && a < b + d;
+  }
 
-    if (!timebase) {
-      timebase = newTimebase;
-      log("Using timebase " + timebase + ".now()");
-    }
-    else if (timebase != newTimebase)
-      log("ERROR: Inconsistent timebase \"" + timebase + "\" for timeStamp: " + timeStamp);
-}
+  var timebase;
+  if ('performance' in window && timeNear(testTimeStamp, performance.now()))
+    timebase = "performance";
+  else if (timeNear(testTimeStamp, Date.now()))
+    timebase = "Date";
+  else {
+    log("ERROR: Unknown timebase for timeStamp: " + testTimeStamp);
+    return;
+  }
+
+  log("Using timebase " + timebase + ".now()");
+  return timebase;
+}(new Event('test').timeStamp));
 
 function round(val) {
   const scale = 1000;
@@ -43,19 +38,17 @@ function round(val) {
 }
 
 function monitoringHandler(e) {
-  checkTimebase(e.timeStamp);
-
   // Only cancelable events block scrolling, and are the 
   // only ones that contribute to scroll latency.
   if (e.cancelable) {
     // Wait until after all event handlers have run (to capture
     // jank caused by slow handlers invoked after this one).
     requestAnimationFrame(function() {
-        // Compute the difference between the current time and the
-        // timestamp associated with the event.
-        var latency = window[timebase].now() - e.timeStamp;
-        log(e.type + ': ' + round(latency) + "ms" + 
-        (e.defaultPrevented ? ' defaultPrevented' : ''));
+      // Compute the difference between the current time and the
+      // timestamp associated with the event.
+      var latency = window[timebase].now() - e.timeStamp;
+      log(e.type + ': ' + round(latency) + "ms" + 
+      (e.defaultPrevented ? ' defaultPrevented' : ''));
     });
   }
 }
@@ -102,30 +95,30 @@ try {
 $('passive').disabled = !supportsPassive;
 
 ['touchstart', 'touchmove', 'touchend', 'wheel'].forEach(function(type) {
-    // This handler is demonstrating how to (passively) monitor scroll latency.
-    $('content').addEventListener(type, monitoringHandler, supportsPassive ? {passive:true} : false);
+  // This handler is demonstrating how to (passively) monitor scroll latency.
+  $('content').addEventListener(type, monitoringHandler, supportsPassive ? {passive:true} : false);
 });
 
 var jankHandlerPassive = false;
 
 var touchListenerType = $('ltype').value;
 [touchListenerType, 'wheel'].forEach(function(type) {
-    // This handler may introduce / trigger some scroll jank 
-    $('content').addEventListener(type, jankHandler);
+  // This handler may introduce / trigger some scroll jank 
+  $('content').addEventListener(type, jankHandler);
 });
 $('ltype').addEventListener('change', function(e) {
-    $('content').removeEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
-    touchListenerType = $('ltype').value;
-    $('content').addEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
+  $('content').removeEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
+  touchListenerType = $('ltype').value;
+  $('content').addEventListener(touchListenerType, jankHandler, supportsPassive ? {passive:jankHandlerPassive} : false);
 });
 
 if (supportsPassive) {
-    $('passive').addEventListener('click', function() {
-        var oldPassive = jankHandlerPassive;
-        jankHandlerPassive = $('passive').checked;
-        [touchListenerType, 'wheel'].forEach(function(type) {
-            $('content').removeEventListener(type, jankHandler, {passive:oldPassive});
-            $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
-        });
+  $('passive').addEventListener('click', function() {
+    var oldPassive = jankHandlerPassive;
+    jankHandlerPassive = $('passive').checked;
+    [touchListenerType, 'wheel'].forEach(function(type) {
+      $('content').removeEventListener(type, jankHandler, {passive:oldPassive});
+      $('content').addEventListener(type, jankHandler, {passive:jankHandlerPassive});
     });
+  });
 }
