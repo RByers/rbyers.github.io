@@ -79,6 +79,8 @@ function updateHandlers()
 
 var lastLog = log.innerHTML;
 var lastEvent;
+var lastMouseX;
+var lastMouseY;
 var dupCount = 0;
 
 function log(msg)
@@ -113,13 +115,20 @@ function logEvent(event, msg)
   // prevent too much scrolling - overwrite the last line unless this is a new
   // event type or not a move event
   if ($('coalesce').checked && event.type == lastEvent && 
-      (event.type=='mousemove' || event.type=='touchmove' || event.type=='MSPointerMove' || event.type=='scroll')) {
+      (event.type=='mousemove' || event.type=='touchmove' || event.type=='pointermove' || event.type=='scroll')) {
+    dupCount++;
+  } else if(event.type == lastEvent && (event.type=='mousemove' || event.type=='pointermove') &&
+      event.clientX == lastMouseX && event.clientY == lastMouseY) {
+    // This event is probably due only to the scrolling of the log, coalesce it regardless of
+    // the coalescing setting to prevent endless scrolling.
     dupCount++;
   } else {
     lastLog = logElem.innerHTML;
     dupCount = 0;
   }
   lastEvent = event.type;
+  lastMouseX = event.type=="mousemove" ? event.clientX : undefined;
+  lastMouseY = event.type=="mousemove" ? event.clientY : undefined;
   logElem.innerHTML = lastLog + event.type +
     (dupCount > 0 ? '[' + dupCount + ']' : '') +
     ': target=' + event.target.id + msg + '\n';
