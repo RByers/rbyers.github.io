@@ -2,9 +2,10 @@ function $(id) { return document.getElementById(id); }
 
 var logElem = $('log');
 function log(msg) {
-  logElem.appendChild(document.createTextNode(msg));
+  var node = document.createTextNode(msg);
+  logElem.appendChild(node);
   logElem.appendChild(document.createElement('br'));
-  logElem.scrollTop = logElem.scrollHeight;
+  node.scrollIntoView();
 }
 
 // Browsers (and the DOM spec) are in the process of moving the
