@@ -83,10 +83,23 @@ var lastMouseX;
 var lastMouseY;
 var dupCount = 0;
 
+// Try to avoid layout thrashing in setting the scroll position
+var scrollLogPending = false;
+function scrollLogToBottom()
+{
+  if (!scrollLogPending) {
+    scrollLogPending = true;
+    requestAnimationFrame(function() {
+      logElem.scrollTop = 1000000;
+      scrollLogPending = false;
+    });
+  }
+}
+
 function log(msg)
 {
   logElem.innerHTML += msg + '\n';
-  logElem.scrollTop = logElem.scrollHeight;
+  scrollLogToBottom();
 }
 
 var lastTime = undefined;
@@ -132,7 +145,7 @@ function logEvent(event, msg)
   logElem.innerHTML = lastLog + event.type +
     (dupCount > 0 ? '[' + dupCount + ']' : '') +
     ': target=' + event.target.id + msg + '\n';
-  logElem.scrollTop = logElem.scrollHeight;
+  scrollLogToBottom();
 }
 
 function callPreventDefault(event)
