@@ -31,6 +31,7 @@ body
   bottom:0;
   right: 100px;
   left:0;
+  font-family: monospace;
   -webkit-user-drag:element;
   -ms-touch-action: inherit;
   touch-action: inherit;
