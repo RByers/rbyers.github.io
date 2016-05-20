@@ -77,7 +77,6 @@ function updateHandlers()
 
 }
 
-var lastLog = log.innerHTML;
 var lastEvent;
 var lastMouseX;
 var lastMouseY;
@@ -98,7 +97,9 @@ function scrollLogToBottom()
 
 function log(msg)
 {
-  logElem.innerHTML += msg + '\n';
+  var line = document.createElement('div');
+  line.appendChild(document.createTextNode(msg));
+  logElem.appendChild(line);
   scrollLogToBottom();
 }
 
@@ -136,16 +137,19 @@ function logEvent(event, msg)
     // the coalescing setting to prevent endless scrolling.
     dupCount++;
   } else {
-    lastLog = logElem.innerHTML;
     dupCount = 0;
   }
   lastEvent = event.type;
   lastMouseX = event.type=="mousemove" ? event.clientX : undefined;
   lastMouseY = event.type=="mousemove" ? event.clientY : undefined;
-  logElem.innerHTML = lastLog + event.type +
+  var line = event.type +
     (dupCount > 0 ? '[' + dupCount + ']' : '') +
-    ': target=' + event.target.id + msg + '\n';
-  scrollLogToBottom();
+    ': target=' + event.target.id + msg; 
+  if (dupCount) {
+    logElem.lastChild.textContent = line;    
+  } else {
+    log(line);
+  }
 }
 
 function callPreventDefault(event)
