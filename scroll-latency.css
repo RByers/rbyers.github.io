@@ -35,6 +35,10 @@ html, body {
     box-sizing: padding-box;
 }
 
+.grey {
+    color: grey;
+}
+
 input[type=number] {
   width: 50px;
 }

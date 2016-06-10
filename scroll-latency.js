@@ -1,15 +1,17 @@
 function $(id) { return document.getElementById(id); }
 
 var logElem = $('log');
-function log(msg) {
-  logElem.appendChild(document.createTextNode(msg));
-  logElem.appendChild(document.createElement('br'));
+function log(msg, cls) {
+  var line = document.createElement('div');
+  if (cls)
+    line.className = cls;
+  line.appendChild(document.createTextNode(msg));
+  logElem.appendChild(line);
   logElem.scrollTop = logElem.scrollHeight;
 }
 
-// Browsers (and the DOM spec) are in the process of moving the
-// event timestamp from being relative to Date.now() to being
-// relative to performance.now().
+// Chrome has changed event timestamp from being relative to
+// Date.now() to being relative to performance.now().
 
 // Detect timebase used for Event.timestamp
 var timebase = (function detectTimebase(testTimeStamp) {
@@ -50,6 +52,8 @@ function monitoringHandler(e) {
       log(e.type + ': ' + round(latency) + "ms" + 
       (e.defaultPrevented ? ' defaultPrevented' : ''));
     });
+  } else if($('snb').checked) {
+    log(e.type + ': non-blocking', 'grey');
   }
 }
 
