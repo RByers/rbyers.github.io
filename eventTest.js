@@ -367,12 +367,12 @@ function writeConfigState() {
   var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
   for(var i = 0; i < checkboxes.length; i++)
     eventConfig[checkboxes[i].id] = checkboxes[i].checked;
-  localStorage.eventConfig = JSON.stringify(eventConfig);
+  localStorage.eventConfig2 = JSON.stringify(eventConfig);
 }
 
 function readConfigState() {
-  if (localStorage.eventConfig) {
-    var eventConfig = JSON.parse(localStorage.eventConfig);
+  if (localStorage.eventConfig2) {
+    var eventConfig = JSON.parse(localStorage.eventConfig2);
     var checkboxes = document.querySelectorAll('#config input[type=checkbox]');
     for(var i = 0; i < checkboxes.length; i++)
       if (checkboxes[i].id in eventConfig)
