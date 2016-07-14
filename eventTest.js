@@ -42,10 +42,7 @@ function updateHandlers()
         $('enableTouchEvents').checked);
     
     setHandlerState(
-        ['MSPointerDown', 'MSPointerMove', 'MSPointerUp', 'MSPointerOver',
-        'MSPointerOut', 'MSPointerCancel', 'MSPointerHover', 
-        'MSGotPointerCapture', 'MSLostPointerCapture',
-        'pointerdown', 'pointermove', 'pointerup', 'pointerover', 'pointerout',
+        ['pointerdown', 'pointermove', 'pointerup', 'pointerover', 'pointerout',
         'pointerenter', 'pointerleave', 'pointercancel',
         'gotpointercapture', 'lostpointercapture'],
         targetElem, mouseEventHandler,
@@ -198,8 +195,8 @@ function mouseEventHandler(event)
 
   callPreventDefault(event);
 
-  if (event.type=='MSPointerDown' && $('pointercapture').checked) {
-    event.target.msSetPointerCapture(event.pointerId);
+  if (event.type=='pointerdown' && $('pointercapture').checked) {
+    event.target.setPointerCapture(event.pointerId);
   }	
 }
 
