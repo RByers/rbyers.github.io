@@ -19,7 +19,7 @@ function updateHandlers()
     }
 
     setHandlerState(
-        ['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup',
+        ['click', 'dblclick', 'auxclick', 'contextmenu', 'mousedown', 'mouseup',
         'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
         'mousewheel', 'wheel'], 
         targetElem, mouseEventHandler,
