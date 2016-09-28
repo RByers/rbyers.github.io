@@ -58,7 +58,7 @@ body {
     Red shows the client co-ordinates (position:fixed)<br>
     Blue shows the page co-ordinates (position:absolute)<br>
     Purple shows the client co-ordinate adjusted by the scroll position to be relative to the page (position:absolute)<br> 
-    These three should work reliably virtually everywhere<br>
+    These three should work reliably virtually everywhere (except that position:fixed behaves strangely in Safari under pinch zoom)<br>
     <br>
     Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it to position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>    <ul>
       <li>When embedded in an iframe, the frame's offset from the window</li>
