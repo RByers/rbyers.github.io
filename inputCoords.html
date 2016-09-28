@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Input co-ordinate space test</title>
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#content {
+  margin-top: 100px;
+}
+
+#client {
+  position: fixed;
+  background-color: red;
+  width: 22px;
+  height: 22px;
+}
+
+#page {
+  position: absolute;
+  background-color: blue;
+  width: 16px;
+  height: 16px;
+}
+
+#screen {
+  position: fixed;
+  background-color: green;
+  width: 10px;
+  height: 10px;
+}
+</style>
+</head>
+<body>
+  <div id=client></div>
+  <div id=page></div>
+  <div id=screen></div>
+  <div id=content>
+    Red is shows the client co-ordinates (position:fixed)<br>
+    Blue shows the page co-ordinates (position:absolute)<br>
+    Green attempts to guess at the screen co-ordinates but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to the page include:<br>
+    <ul>
+      <li>When embedded in an iframe, the frame's offset from the window</il>
+      <li>Pinch zoom / browser zoom scale</li>
+      <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.)</li>
+      <li>Mobile (but not desktop) Safari uses device pixels instead of CSS pixels (fails to divide by the divicePixelRatio)</li>
+    </ul>
+  </div>
+<script>
+var cbox = document.getElementById('client');
+var pbox = document.getElementById('page');
+var sbox = document.getElementById('screen');
+
+for (var box of [cbox, pbox, sbox]) {
+    box.size = box.getBoundingClientRect().width;
+}
+
+var trackingTouch;
+
+function handler(e) {
+  var coords = e;
+  if ('TouchEvent' in window && e instanceof TouchEvent) {
+    if (e.type == 'touchstart' && e.changedTouches.length == e.touches.length) {
+      // Track only the first finger
+      trackingTouch = e.touches[0].identifier;
+      coords = e.touches[0];
+    } else if (e.changedTouches[0].identifier == trackingTouch) {
+      coords = e.changedTouches[0];
+    } else {
+      return;
+    }
+  }
+  
+  cbox.style.left = (coords.clientX - cbox.size/2) + 'px';
+  cbox.style.top = (coords.clientY - cbox.size/2) + 'px';
+  pbox.style.left = (coords.pageX - pbox.size/2) + 'px';
+  pbox.style.top = (coords.pageY - pbox.size/2) + 'px';
+  // This is a heuristic, there's no reliable way to convert screen co-ordinates
+  if ('screenX' in window) {
+    var topHeight = window.outerHeight - window.innerHeight;
+    var borderSize = (window.outerWidth - window.innerWidth) / 2;
+    sbox.style.left = (coords.screenX - window.screenX - borderSize - sbox.size/2) + 'px';
+    sbox.style.top = (coords.screenY - window.screenY - topHeight + borderSize - sbox.size/2) + 'px';
+  }
+  
+  if (e.type == 'touchend')
+    e.preventDefault();    // don't want mouse events for touch
+}
+
+for (var evt of ['touchstart', 'touchmove', 'touchend', 'mousedown', 'mousemove', 'mouseup'])
+  document.addEventListener(evt, handler);
+</script>
+</body>
+</html>
