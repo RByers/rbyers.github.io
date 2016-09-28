@@ -60,9 +60,8 @@ body {
     Purple shows the client co-ordinate adjusted by the scroll position to be relative to the page (position:absolute)<br> 
     These three should work reliably virtually everywhere<br>
     <br>
-    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>
-    <ul>
-      <li>When embedded in an iframe, the frame's offset from the window</il>
+    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it to position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>    <ul>
+      <li>When embedded in an iframe, the frame's offset from the window</li>
       <li>Pinch zoom / browser zoom scale</li>
       <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.) and changes there to</li>
       <li>Any reserved space at the bottom of the window (eg. developer tools)</li>
