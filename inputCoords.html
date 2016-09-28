@@ -5,11 +5,15 @@
   <meta name="viewport" content="width=device-width">
   <title>Input co-ordinate space test</title>
 <style>
-html, body {
+html {
+  margin: 0;
+  height: 5000px;
+}
+
+body {
   margin: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
 }
 
 #content {
@@ -19,6 +23,13 @@ html, body {
 #client {
   position: fixed;
   background-color: red;
+  width: 28px;
+  height: 28px;
+}
+
+#clientscroll {
+  position: absolute;
+  background-color: purple;
   width: 22px;
   height: 22px;
 }
@@ -40,25 +51,31 @@ html, body {
 </head>
 <body>
   <div id=client></div>
+  <div id=clientscroll></div>
   <div id=page></div>
   <div id=screen></div>
   <div id=content>
-    Red is shows the client co-ordinates (position:fixed)<br>
+    Red shows the client co-ordinates (position:fixed)<br>
     Blue shows the page co-ordinates (position:absolute)<br>
-    Green attempts to guess at the screen co-ordinates but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to the page include:<br>
+    Purple shows the client co-ordinate adjusted by the scroll position to be relative to the page (position:absolute)<br> 
+    These three should work reliably virtually everywhere<br>
+    <br>
+    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>
     <ul>
       <li>When embedded in an iframe, the frame's offset from the window</il>
       <li>Pinch zoom / browser zoom scale</li>
-      <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.)</li>
+      <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.) and changes there to</li>
+      <li>Any reserved space at the bottom of the window (eg. developer tools)</li>
       <li>Mobile (but not desktop) Safari uses device pixels instead of CSS pixels (fails to divide by the divicePixelRatio)</li>
     </ul>
   </div>
 <script>
 var cbox = document.getElementById('client');
+var csbox = document.getElementById('clientscroll');
 var pbox = document.getElementById('page');
 var sbox = document.getElementById('screen');
 
-for (var box of [cbox, pbox, sbox]) {
+for (var box of [cbox, pbox, csbox, sbox]) {
     box.size = box.getBoundingClientRect().width;
 }
 
@@ -80,6 +97,8 @@ function handler(e) {
   
   cbox.style.left = (coords.clientX - cbox.size/2) + 'px';
   cbox.style.top = (coords.clientY - cbox.size/2) + 'px';
+  csbox.style.left = (coords.clientX - csbox.size/2) + window.scrollX + 'px';
+  csbox.style.top = (coords.clientY - csbox.size/2) + window.scrollY + 'px';
   pbox.style.left = (coords.pageX - pbox.size/2) + 'px';
   pbox.style.top = (coords.pageY - pbox.size/2) + 'px';
   // This is a heuristic, there's no reliable way to convert screen co-ordinates
