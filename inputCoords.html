@@ -62,12 +62,12 @@ body {
       <li>Visual coordinates: (0,0) represents the top-left of what the user sees - the <a href="https://dl.dropboxusercontent.com/u/4186806/viewport/index.html">visual viewport</a></li>
       <li>Screen coordinates: (0,0) represents the top-left of the user's physical screen</li>
     </ol>
-    Red shows the client coordinates using position:fixed<br>
-    Blue shows the page coordinates using position:absolute<br>
-    Purple takes the client coordinates adjusted by the layout viewport position within the page using position:absolute<br> 
+    <span style="color:red;">Red shows the client coordinates using position:fixed</span><br>
+    <span style="color:blue;">Blue shows the page coordinates using position:absolute</span><br>
+    <span style="color:purple;">Purple takes the client coordinates, adjusts them by the layout viewport position (documentElement.getBoundingClientRect) and shows the result relative to the page using position:absolute</span><br> 
     These three should work reliably virtually everywhere (except that position:fixed behaves strangely in Safari under pinch zoom)<br>
     <br>
-    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it to position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>    <ul>
+    <span style="color:green;">Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it to position:fixed values.</span> Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>    <ul>
       <li>When embedded in an iframe, the frame's offset from the window</li>
       <li>Pinch zoom / browser zoom scale</li>
       <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.) and changes there to</li>
