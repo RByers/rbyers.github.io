@@ -55,6 +55,7 @@ body {
   <div id=page></div>
   <div id=screen></div>
   <div id=content>
+<<<<<<< HEAD
     There are four main coordinate systems exposed via JavaScript (all in units of "CSS pixels"):
     <ol>
       <li>Page coordinates: (0,0) represents the top-left of the document.</li>
@@ -65,11 +66,10 @@ body {
     Red shows the client coordinates using position:fixed<br>
     Blue shows the page coordinates using position:absolute<br>
     Purple shows the client coordinate adjusted by the layout viewport position within the page using position:absolute<br> 
-    These three should work reliably virtually everywhere<br>
+    These three should work reliably virtually everywhere (except that position:fixed behaves strangely in Safari under pinch zoom)<br>
     <br>
-    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>
-    <ul>
-      <li>When embedded in an iframe, the frame's offset from the window</il>
+    Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it to position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>    <ul>
+      <li>When embedded in an iframe, the frame's offset from the window</li>
       <li>Pinch zoom / browser zoom scale</li>
       <li>On mobile, the offset of the context in the screen (top controls, OS heading, etc.) and changes there to</li>
       <li>Any reserved space at the bottom of the window (eg. developer tools)</li>
