@@ -55,9 +55,16 @@ body {
   <div id=page></div>
   <div id=screen></div>
   <div id=content>
-    Red shows the client co-ordinates (position:fixed)<br>
-    Blue shows the page co-ordinates (position:absolute)<br>
-    Purple shows the client co-ordinate adjusted by the scroll position to be relative to the page (position:absolute)<br> 
+    There are four main coordinate systems exposed via JavaScript (all in units of "CSS pixels"):
+    <ol>
+      <li>Page coordinates: (0,0) represents the top-left of the document.</li>
+      <li>Client coordinates: (0,0) represents the top-left of the view the browser is laid out into, the "layout viewport".</li>
+      <li>Visual coordinates: (0,0) represents the top-left of what the user sees - the <a href="https://dl.dropboxusercontent.com/u/4186806/viewport/index.html">visual viewport</a></li>
+      <li>Screen coordinates: (0,0) represents the top-left of the user's physical screen</li>
+    </ol>
+    Red shows the client coordinates using position:fixed<br>
+    Blue shows the page coordinates using position:absolute<br>
+    Purple shows the client coordinate adjusted by the layout viewport position within the page using position:absolute<br> 
     These three should work reliably virtually everywhere<br>
     <br>
     Green attempts to map the screen co-ordinates onto the page but relies on heuristics to try to convert it position:fixed values. Known sources of error mapping screen co-ordinates to client co-ordinates include:<br>
@@ -97,8 +104,10 @@ function handler(e) {
   
   cbox.style.left = (coords.clientX - cbox.size/2) + 'px';
   cbox.style.top = (coords.clientY - cbox.size/2) + 'px';
-  csbox.style.left = (coords.clientX - csbox.size/2) + window.scrollX + 'px';
-  csbox.style.top = (coords.clientY - csbox.size/2) + window.scrollY + 'px';
+  // Get the page location relative to the layout viewport
+  var pageViewport = document.documentElement.getBoundingClientRect();
+  csbox.style.left = (coords.clientX - csbox.size/2) + pageViewport.left + 'px';
+  csbox.style.top = (coords.clientY - csbox.size/2) + pageViewport.top + 'px';
   pbox.style.left = (coords.pageX - pbox.size/2) + 'px';
   pbox.style.top = (coords.pageY - pbox.size/2) + 'px';
   // This is a heuristic, there's no reliable way to convert screen co-ordinates
@@ -109,7 +118,7 @@ function handler(e) {
     sbox.style.top = (coords.screenY - window.screenY - topHeight + borderSize - sbox.size/2) + 'px';
   }
   
-  if (e.type == 'touchend')
+  if (e.type == 'touchend' && e.cancelable)
     e.preventDefault();    // don't want mouse events for touch
 }
 
