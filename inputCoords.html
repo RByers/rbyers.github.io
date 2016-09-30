@@ -25,6 +25,7 @@ body {
   background-color: red;
   width: 28px;
   height: 28px;
+  pointer-events: none;
 }
 
 #clientscroll {
@@ -32,6 +33,7 @@ body {
   background-color: purple;
   width: 22px;
   height: 22px;
+  pointer-events: none;
 }
 
 #page {
@@ -39,6 +41,7 @@ body {
   background-color: blue;
   width: 16px;
   height: 16px;
+  pointer-events: none;
 }
 
 #screen {
@@ -46,6 +49,7 @@ body {
   background-color: green;
   width: 10px;
   height: 10px;
+  pointer-events: none;
 }
 </style>
 </head>
@@ -58,7 +62,7 @@ body {
     There are four main coordinate systems exposed via JavaScript (all in units of "CSS pixels"):
     <ol>
       <li>Page coordinates: (0,0) represents the top-left of the document.</li>
-      <li>Client coordinates: (0,0) represents the top-left of the view the browser is laid out into, the "layout viewport".</li>
+      <li>Client coordinates: (0,0) represents the top-left of the view the page is laid out into, the "layout viewport".</li>
       <li>Visual coordinates: (0,0) represents the top-left of what the user sees - the <a href="https://dl.dropboxusercontent.com/u/4186806/viewport/index.html">visual viewport</a></li>
       <li>Screen coordinates: (0,0) represents the top-left of the user's physical screen</li>
     </ol>
@@ -116,9 +120,6 @@ function handler(e) {
     sbox.style.left = (coords.screenX - window.screenX - borderSize - sbox.size/2) + 'px';
     sbox.style.top = (coords.screenY - window.screenY - topHeight + borderSize - sbox.size/2) + 'px';
   }
-  
-  if (e.type == 'touchend' && e.cancelable)
-    e.preventDefault();    // don't want mouse events for touch
 }
 
 for (var evt of ['touchstart', 'touchmove', 'touchend', 'mousedown', 'mousemove', 'mouseup'])
