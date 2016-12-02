@@ -8,19 +8,11 @@
         overflow: hidden;
         height: 100%;
         touch-action: none;
-      } 
+      }
     </style>
     <script src=paint.js></script>
   </head>
-  <body onload="InitializeCanvas();">
-    <canvas id="canvas"
-       ontouchstart="TouchHandler(event)"
-       ontouchmove="TouchHandler(event)"
-       ontouchend="TouchHandler(event)"
-       onmousedown="MouseHandler(event)"
-       onmousemove="MouseHandler(event)"
-       onmouseup="MouseHandler(event)">
-    </canvas><br/>
+  <body onload="InitializeApp();">
+    <canvas id="canvas"></canvas><br/>
   </body>
 </html>
-
