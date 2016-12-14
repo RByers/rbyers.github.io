@@ -19,12 +19,16 @@ function updateHandlers()
     }
 
     setHandlerState(
-        ['click', 'dblclick', 'auxclick', 'contextmenu', 'mousedown', 'mouseup',
-        'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
+        ['mousedown', 'mouseup', 'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
         'mousewheel', 'wheel'], 
         targetElem, mouseEventHandler,
         $('enableMouseEvents').checked);
 
+    setHandlerState(
+        ['click', 'dblclick', 'auxclick', 'contextmenu'],
+        targetElem, mouseEventHandler,
+        $('enableMouseEvents').checked || $('enablePointerEvents').checked);
+  
     setHandlerState(
         ['scroll'],
         targetElem, logEvent,
@@ -180,7 +184,7 @@ function mouseEventHandler(event)
       event.deltaMode == 2 ? "PAGE" : 
       event.deltaMode); 
   }
-  if (event.type.toLowerCase().indexOf("pointer") != -1) {
+  if (window.PointerEvent && event instanceof PointerEvent) {
     msg += ', pointerType=' + event.pointerType + ', pointerId=' +
       event.pointerId + ', width=' + round(event.width) + ', height=' + round(event.height) + 
       ', pressure=' + round(event.pressure) + ', tiltX=' + round(event.tiltX) + ', tiltY=' + round(event.tiltY);
