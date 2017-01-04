@@ -190,6 +190,10 @@ function mouseEventHandler(event)
       ', pressure=' + round(event.pressure) + ', tiltX=' + round(event.tiltX) + ', tiltY=' + round(event.tiltY);
   }
  
+  if (!$('simple').checked && 'movementX' in event) {
+    msg += ', movementX=' + event.movementX + ', movementY=' + event.movementY;
+  }
+  
   msg = ' client=' + round(event.clientX) + ',' + round(event.clientY) + 
       ' screen=' + round(event.screenX) + ',' + round(event.screenY) +
       ' button=' + event.button + ' buttons=' + event.buttons +
