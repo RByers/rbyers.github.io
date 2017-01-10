@@ -27,6 +27,7 @@ body
 {
   position:absolute;
   overflow:scroll;
+  white-space: nowrap;
   top:0;
   bottom:0;
   right: 100px;
