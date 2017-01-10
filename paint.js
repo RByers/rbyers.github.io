@@ -90,7 +90,7 @@ function PointerHandler(event) {
     if (event.type == "pointerdown" && event.button === 0)
         mousePressed = true;
 
-    if (mousePressed && (event.type == "pointerup" || (event.buttons & 1))) {
+    if (mousePressed || event.type == "pointerup" || (event.buttons & 1)) {
         var fakeTouch = {
             identifier: event.pointerId,
             pageX : event.pageX,
