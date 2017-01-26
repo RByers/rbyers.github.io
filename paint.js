@@ -7,6 +7,7 @@ var drawTouchMajor = true;
 var foundRotationAngle = false;
 var scale = 1;
 var mousePressed = false;
+var drawCoalesced = false;
 
 function InitializeApp() {
     InitializeCanvas();
@@ -55,6 +56,11 @@ function InitializeApp() {
             drawTouchMajor = !drawTouchMajor;
             break;
 
+        // c
+        case 67:
+            drawCoalesced = !drawCoalesced;
+            break;
+
         // enter
         case 13:
             if (document.documentElement.webkitRequestFullscreen) {
@@ -101,8 +107,21 @@ function PointerHandler(event) {
         };
         var eventType = event.type == "pointerdown" ? "touchstart" :
             event.type == "pointerup" ? "touchend" : "touchmove";
-        drawTouch(fakeTouch, eventType);
         event.preventDefault();
+        drawTouch(fakeTouch, eventType, false);
+
+        if (drawCoalesced && event.getCoalescedEvents) {
+            var points = event.getCoalescedEvents();
+            for(let coalesced of points) {
+                fakeTouch.pageX = coalesced.pageX;
+                fakeTouch.pageY = coalesced.pageY + 50;
+                fakeTouch.radiusX = coalesced.width;
+                fakeTouch.radiuxY = coalesced.height;
+                fakeTouch.force = coalesced.pressure;
+
+                drawTouch(fakeTouch, eventType, true);
+            }
+        }
     }
 
     if (event.type == "pointerup")
@@ -121,7 +140,7 @@ function MouseHandler(event) {
         };
         var eventType = event.type == "mousedown" ? "touchstart" :
             event.type == "mouseup" ? "touchend" : "touchmove";
-        drawTouch(fakeTouch, eventType);
+        drawTouch(fakeTouch, eventType, false);
         event.preventDefault();
     }
 
@@ -132,10 +151,10 @@ function MouseHandler(event) {
 function TouchHandler(event) {
     event.preventDefault();
     for (var i = 0; i < event.changedTouches.length; i++)
-        drawTouch(event.changedTouches[i], event.type);
+        drawTouch(event.changedTouches[i], event.type, false);
 }
 
-function drawTouch(touch, eventType) {
+function drawTouch(touch, eventType, coalesced) {
     var context = document.getElementById("canvas").getContext("2d");
 
     // Map the identifier to a small count (no-op on Chrome, but
@@ -179,6 +198,8 @@ function drawTouch(touch, eventType) {
         var opacity = pointMode ? 1 : 0.1;
 
         var hue = (touchMap[touch.identifier] * 30) % 256;
+        if (coalesced)
+            hue += 10;
         var lum = 40;
         if (enableForce && touch.force)
             lum = Math.round(touch.force / 0.4 * 50 + 20);
