@@ -2,6 +2,7 @@ var radiusSupported = false;
 var nextCount = 0;
 var touchMap = {};
 var pointMode = (window.location.hash == "#points");
+var pointerEventDisabledMode = (window.location.hash == "#nopointer");
 var enableForce = false;
 var drawTouchMajor = true;
 var foundRotationAngle = false;
@@ -12,7 +13,7 @@ function InitializeApp() {
     InitializeCanvas();
 
     var elem = document.getElementById("canvas");
-    if (window.PointerEvent) {
+    if (window.PointerEvent && !pointerEventDisabledMode) {
         console.log("Adding PointerEvent listeners");
         ["pointerdown", "pointermove", "pointerup"].forEach(function(e) {
             elem.addEventListener(e, PointerHandler);
