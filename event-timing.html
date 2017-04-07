@@ -35,11 +35,21 @@ function now() {
   return Date.now();
 }
 
+function getCoalescedEventTimes(e) {
+  var result = [];
+  if (e instanceof window.PointerEvent && e.getCoalescedEvents) {
+    e.getCoalescedEvents().forEach(e => {
+      result.push(e.timeStamp);
+    });
+  }
+  return result;
+}
+
 function onstart(e) {
   if (recording)
     return;
   e.preventDefault();
-  frames = [{eventtimes:[now()]}];
+  frames = [{eventtimes:[now()], coalescedeventtimes: [getCoalescedEventTimes(e)]}];
   recording = true;
   requestAnimationFrame(onframe);
 }
@@ -49,6 +59,7 @@ function onmove(e) {
     return;
   e.preventDefault();
   frames[frames.length - 1].eventtimes.push(now());  
+  frames[frames.length - 1].coalescedeventtimes.push(getCoalescedEventTimes(e)); 
 }
 
 function round(x) {
@@ -61,6 +72,7 @@ function onend(e) {
   e.preventDefault();
   recording = false;
   frames[frames.length - 1].eventtimes.push(now());
+  frames[frames.length - 1].coalescedeventtimes.push(getCoalescedEventTimes(e));
 }
 
 function showOutput() {
@@ -71,9 +83,19 @@ function showOutput() {
       str += " " + round(frames[i].time - frames[i-1].time) + "ms";
     str += ": events";
     var et = frames[i].eventtimes;
+    var cet = frames[i].coalescedeventtimes;
     for (var j = 0; j < et.length; j++) {
       var t = frames[i].time - et[j];
       str += " " + round(t) + "ms";
+      if (cet[j].length > 0) {
+        str += '(<i>';
+        for (var h = 0; h < cet[j].length; h++) {
+          if (h > 0)
+            str += ", ";
+          str += round(frames[i].time - cet[j][h]) + "ms";
+        }
+        str += '</i>)';
+      }
     }
     str += "<br/>";
   }
@@ -86,7 +108,7 @@ function onframe(timestamp) {
     showOutput();
     return;
   }
-  frames.push({eventtimes: []});
+  frames.push({eventtimes: [], coalescedeventtimes: []});
   requestAnimationFrame(onframe);
 }
 
