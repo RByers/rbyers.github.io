@@ -21,7 +21,9 @@
     For maximum smoothness, movement events (those other than first/last) should be delivered exactly once per frame, just before rAF.  Today this is done by <a href="https://www.youtube.com/watch?v=Q8m9sHdyXnE">
     Android Jelly Bean and later</a> and <a href="https://developer.apple.com/videos/wwdc/2015/?id=233">iOS 9</a>.  We're
     <a href="https://docs.google.com/document/d/1L2JTgYMksmXgujKxxhyV45xL8jNhbCh60NQHoueKyS4/edit#heading=h.30fbj1j9p434">
-    considering doing this in Chrome itself</a> when not supported by the underlying OS / hardware.
+    planning on doing this in Chrome itself</a> when not supported by the underlying OS / hardware.  If present, the times
+    in paranthesis represent the timestamps of events from
+    <a href="https://w3c.github.io/pointerevents/extension.html#dom-pointerevent-getcoalescedevents">getCoalescedEvents</a>.
   </div>
   <div id=target>Start touch/mouse drag here</div>
   <div id=log></div>
@@ -92,7 +94,7 @@ function showOutput() {
         for (var h = 0; h < cet[j].length; h++) {
           if (h > 0)
             str += ", ";
-          str += round(frames[i].time - cet[j][h]) + "ms";
+          str += round(frames[i].time - cet[j][h]);
         }
         str += '</i>)';
       }
