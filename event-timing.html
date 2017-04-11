@@ -13,7 +13,7 @@
   touch-action: none;
 }
 </style>
-<script src="//rbyers.github.io/InputDevice/inputdevicecapabilities-polyfill.js"></script>
+<script src="https://wicg.github.io/InputDeviceCapabilities/inputdevicecapabilities-polyfill.js"></script>
 </head>
 <body>
   <div>
@@ -39,7 +39,7 @@ function now() {
 
 function getCoalescedEventTimes(e) {
   var result = [];
-  if (e instanceof window.PointerEvent && e.getCoalescedEvents) {
+  if (window.PointerEvent && e instanceof window.PointerEvent && e.getCoalescedEvents) {
     e.getCoalescedEvents().forEach(e => {
       result.push(e.timeStamp);
     });
