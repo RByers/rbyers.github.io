@@ -56,7 +56,6 @@ function startDraw()
 {
   startTime = performance.now();
   eventCount = 0;
-  coalescedEventCount = 0;
   frameCounter = 0;
   canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
   window.requestAnimationFrame(onFrame);
@@ -72,13 +71,12 @@ function endDraw()
 
 function addCoalescedPoint(x, y)
 {
-  eventCount++;
   coalescedPoints.push({x:x, y:y});
 }
 
 function addPoint(x, y)
 {
-  coalescedEventCount++;
+  eventCount++;
   points.push({x:x, y:y});
 }
 
@@ -88,7 +86,7 @@ window.onload = function() {
     var primaryButtonDown = false;
 
     canvas.addEventListener('pointerdown', function(e) {
-      if (e.button == 0) {
+      if (e.button == 0 && e.isPrimary) {
         primaryButtonDown = true;
         startDraw();
         addPoint(e.pageX, e.pageY);
@@ -96,7 +94,7 @@ window.onload = function() {
       }
     });
     canvas.addEventListener('pointermove', function(e) {
-      if (primaryButtonDown) {
+      if (primaryButtonDown && e.isPrimary) {
         if (e.getCoalescedEvents) {
           e.getCoalescedEvents().forEach(function(ce) {
             addCoalescedPoint(ce.pageX, ce.pageY);
@@ -107,7 +105,7 @@ window.onload = function() {
       }
     });
     canvas.addEventListener('pointerup', function(e) {
-      if (e.button == 0) {
+      if (e.button == 0 && e.isPrimary) {
         endDraw();
         primaryButtonDown = false;
         e.preventDefault();
