@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta name="viewport" content="width=device-width">
+  </head>
+  <script>
+function update() {
+  window.setTimeout(function() {
+    document.getElementById('iw').textContent =
+      window.innerWidth;
+    requestAnimationFrame(update);
+  }, 300);
+}
+requestAnimationFrame(update);
+  </script>
+  <body>
+    innerWidth: <span id=iw></span>  
+  </body>
+</html>
