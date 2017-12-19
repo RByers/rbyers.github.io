@@ -102,8 +102,8 @@ function PointerHandler(event) {
             identifier: event.pointerId,
             pageX : event.pageX,
             pageY : event.pageY,
-            radiusX : event.width,
-            radiusY : event.height,
+            radiusX : event.width / 2,
+            radiusY : event.height / 2 ,
             force : event.pressure,
         };
         var eventType = event.type == "pointerdown" ? "touchstart" :
@@ -116,8 +116,8 @@ function PointerHandler(event) {
             for(let coalesced of points) {
                 fakeTouch.pageX = coalesced.pageX;
                 fakeTouch.pageY = coalesced.pageY + 50;
-                fakeTouch.radiusX = coalesced.width;
-                fakeTouch.radiuxY = coalesced.height;
+                fakeTouch.radiusX = coalesced.width / 2;
+                fakeTouch.radiusY = coalesced.height / 2;
                 fakeTouch.force = coalesced.pressure;
 
                 drawTouch(fakeTouch, eventType, true);
