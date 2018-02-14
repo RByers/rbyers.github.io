@@ -1,23 +1,25 @@
-debugger;
-
-// checkerboard.js
 class CheckerboardPainter {
+  // inputProperties returns a list of CSS properties that this paint function gets access to
+  static get inputProperties() { return ['--checkerboard-spacing', '--checkerboard-size']; }
+
   paint(ctx, geom, properties) {
+    // Paint worklet uses CSS Typed OM to model the input values.
+    // As of now, they are mostly wrappers around strings,
+    // but will be augmented to hold more accessible data over time.
     console.log(properties);
-    // Use `ctx` as if it was a normal canvas
+    console.log(properties.get('--checkerboard-size'));
+    const size = parseInt(properties.get('--checkerboard-size').toString());
+    const spacing = parseInt(properties.get('--checkerboard-spacing').toString());
     const colors = ['red', 'green', 'blue'];
-    const size = 32;
     for(let y = 0; y < geom.height/size; y++) {
       for(let x = 0; x < geom.width/size; x++) {
-        const color = colors[(x + y) % colors.length];
+        ctx.fillStyle = colors[(x + y) % colors.length];
         ctx.beginPath();
-        ctx.fillStyle = color;
-        ctx.rect(x * size, y * size, size, size);
+        ctx.rect(x*(size + spacing), y*(size + spacing), size, size);
         ctx.fill();
       }
     }
   }
 }
 
-// Register our class under a specific name
 registerPaint('checkerboard', CheckerboardPainter);

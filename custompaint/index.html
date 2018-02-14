@@ -1,6 +1,9 @@
 <!doctype html>
 <style>
   textarea {
+    /* The paint worklet subscribes to changes of these custom properties. */
+    --checkerboard-spacing: 10;
+    --checkerboard-size: 32;
     background-image: paint(checkerboard);
   }
 </style>
