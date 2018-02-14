@@ -8,6 +8,7 @@ class CheckerboardPainter {
     // but will be augmented to hold more accessible data over time.
     console.log(properties);
     console.log(properties.get('--checkerboard-size'));
+    console.log(properties.get('--checkerboard-size')[0]);
     const size = parseInt(properties.get('--checkerboard-size').toString());
     const spacing = parseInt(properties.get('--checkerboard-spacing').toString());
     const colors = ['red', 'green', 'blue'];
