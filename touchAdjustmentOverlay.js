@@ -129,7 +129,7 @@ var dotRadius = 3;
     ctx.stroke();
 
     var msg = e.type + ': ' + Math.round(touch.clientX) + ', ' + Math.round(touch.clientY) + 
-      ' (' + nodeName(document.elementFromPoint(touch.clientX, touch.clientY)) +') radius=' + 
+      ' (' + nodeName(e.target) +') radius=' + 
       Math.round(touch.radiusX || touch.webkitRadiusX) + 'x' + Math.round(touch.radiusY || touch.webkitRadiusY);
     log(msg);
 
