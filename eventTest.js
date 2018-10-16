@@ -294,7 +294,7 @@ function makeTouchList(touches, verbose)
       }
       var rot = getProp(touches[i], 'rotationAngle');
       if (rot !== undefined) {
-        touchStr += ' ' + round(rot) + '&deg;'
+        touchStr += ' ' + round(rot) + '°'
       }
       touchStr += ')';
     }
