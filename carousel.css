@@ -1,6 +1,6 @@
 html, body {
     margin: 0;
-    height: 100vh;  /* enable scrolling away the URL bar on mobile */
+    height: 5000px;  /* enable scrolling away the URL bar on mobile */
     background: black;
 }
 
