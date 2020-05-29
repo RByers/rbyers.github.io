@@ -37,3 +37,18 @@ img:first-child {
 img:last-child {
     padding-right: calc( (100vw - var(--img-width)) / 2);
 }
+
+#features {
+    position: absolute;
+    bottom: 10px;
+    width: 100vw;
+    font-size: small;
+    color: #303030;
+}
+
+@supports not (scroll-snap-type: x mandatory) {
+    #feature-snap {
+        color: red;
+        text-decoration: line-through;
+    }
+}
