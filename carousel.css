@@ -1,6 +1,6 @@
 html, body {
     margin: 0;
-    height: 5000px;  /* enable scrolling away the URL bar on mobile */
+    height: 110vh;  /* enable scrolling away the URL bar on mobile */
     background: black;
 }
 
@@ -16,7 +16,7 @@ html, body {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
     display: flex;
@@ -40,7 +40,7 @@ img:last-child {
 }
 
 #features {
-    position: absolute;
+    position: fixed;
     bottom: 10px;
     width: 100vw;
     font-size: small;
