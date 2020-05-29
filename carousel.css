@@ -17,10 +17,7 @@ html, body {
     width: 100%;
     height: 100%;
     overflow-x: scroll;
-}
-
-#container {
-    height: 100%;
+    scroll-snap-type: x mandatory;
     display: flex;
     align-items: center;
 }
@@ -29,6 +26,14 @@ img {
     flex: 1;
     width: var(--img-width); 
     height: var(--img-height);
-    padding-left: var(--img-padding);
-    padding-right: var(--img-padding);
+    padding: 0 var(--img-padding);
+    scroll-snap-align: center;
+}
+
+img:first-child {
+    padding-left: calc( (100vw - var(--img-width)) / 2);
+}
+
+img:last-child {
+    padding-right: calc( (100vw - var(--img-width)) / 2);
 }
