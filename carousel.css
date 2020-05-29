@@ -1,0 +1,34 @@
+html, body {
+    margin: 0;
+    background: black;
+}
+
+:root {
+  /* Configuration */
+  --img-width: 50vw;
+  --img-height: calc(var(--img-width) * 3/4);
+  --img-padding: 5vw;
+}
+
+#scroller {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: scroll;
+}
+
+#container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+img {
+    flex: 1;
+    width: var(--img-width); 
+    height: var(--img-height);
+    padding-left: var(--img-padding);
+    padding-right: var(--img-padding);
+}
