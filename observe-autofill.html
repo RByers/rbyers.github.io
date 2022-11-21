@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Autofill observation test</title>
+	<style>
+		input#name {
+			margin-top: 7em;
+		}
+		#pseudos {
+			margin-top: -7em;
+			color: lightgrey;
+			padding-bottom: 4em;
+		}
+		input:autofill + #pseudos > #autofill {
+			color: red;
+		}
+		input:-webkit-autofill + #pseudos > #webkit-autofill {
+			color: red;
+		}
+		input:-internal-autofill-previewed + #pseudos > #internal-autofill-previewed {
+			color: red;
+		}
+		input:-internal-autofill-selected + #pseudos > #internal-autofill-selected {
+			color: red;
+		}
+		#overrides input:-webkit-autofill {
+			background-color: pink !important;
+			border: 1px solid red;
+		}
+		#overrides input:autofill {
+			background-color: pink !important;
+			border: 1px solid red;
+		}
+	</style>
+</head>
+<body>
+<form>
+	<input autocomplete=name id=name>
+	<div id="pseudos">
+		<div class=pseudo id=autofill>:autofill</div>
+		<div class=pseudo id=webkit-autofill>:-webkit-autofill</div>
+		<div class=pseudo id=internal-autofill-previewed>:-internal-autofill-previewed</div>
+		<div class=pseudo id=internal-autofill-selected>:-internal-autofill-selected</div>
+	</div>
+</form>
+<form id="overrides">
+	Overrides:<br>
+	<input type="text" autocomplete=name name="name" id=name2><br>
+	<input type="text" autocomplete="email" name="email" id="email"><br> 
+	<input type="password" name="password" autocomplete="password"><br>
+</form>
+</body>
+</html>
+
