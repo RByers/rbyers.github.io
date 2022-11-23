@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Popup window test</title>
+        <style>
+            a {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Popup window tests</h1>
+        <a href="https://www.google.com/">&lta&gt</a>
+        <a href="https://www.google.com/" target="_blank">&lta target=_blank&gt</a>
+        <a href="https://www.google.com/" wof="">window.open(...,"target=_blank")</a>
+        <a href="https://www.google.com/" wof="popup">window.open(...,"target=_blank","popup")</a>
+        <a href="https://www.google.com/" wof="popup,width=300,height=200">window.open(...,"target=_blank","popup,width=300,height=200")</a>
+        <a href="https://www.google.com/" wof="popup,left=100,top=100,width=300,height=200">window.open(...,"target=_blank","popup,left=100,top=100,width=300,height=200")</a>
+        <script type="text/javascript">
+        
+        document.querySelectorAll("a[wof]").forEach(elem =>{
+            elem.addEventListener('click', evt => {
+                window.open(elem.href, "_blank",elem.getAttribute("wof"));
+                evt.preventDefault();
+            });
+        });
+        </script>
+
+    </body>
+</html>
