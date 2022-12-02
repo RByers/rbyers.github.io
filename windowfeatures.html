@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Window Features</title>
+        <style>
+        </style>
+    </head>
+    <body>
+        <div id=props>
+        </div>
+
+<script type="text/javascript">
+    const props = [
+        'window.locationbar.visible',
+        'window.menubar.visible',
+        'window.personalbar.visible',
+        'window.scrollbars.visible',
+        'window.statusbar.visible',
+        'window.toolbar.visible',
+        'window.screenLeft',
+        'window.screenTop',
+        'window.outerWidth',
+        'window.outerHeight'];
+    const propsEl = document.getElementById('props');
+    props.forEach(p => {
+        let v = null;
+        try {
+            v = eval(p);
+        } catch(e) {
+            v = e;
+        }
+        let div = document.createElement("div");
+        div.innerText = p + ": " + v; 
+        propsEl.appendChild(div);
+    });
+
+</script>
+
+    </body>
+</html>
