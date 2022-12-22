@@ -8,24 +8,61 @@
                 display: block;
                 padding: 10px;
             }
+            #log {
+                border: 1px solid black;
+                width: 100%;
+                margin-top: 50px;
+                min-height: 100px;
+            }
         </style>
     </head>
     <body>
         <h1>Popup window tests</h1>
         <a href="windowfeatures.html">&lta&gt</a>
         <a href="windowfeatures.html" target="_blank">&lta target=_blank&gt</a>
-        <a href="windowfeatures.html" wof="">window.open(...,"target=_blank")</a>
-        <a href="windowfeatures.html" wof="popup">window.open(...,"target=_blank","popup")</a>
-        <a href="windowfeatures.html" wof="popup,width=300,height=200">window.open(...,"target=_blank","popup,width=300,height=200")</a>
+        <a href="windowfeatures.html" wof="">window.open(...,"_blank")</a>
+        <a href="windowfeatures.html" wof="popup">window.open(...,"_blank","popup")</a>
+        <a href="windowfeatures.html" wof="popup,width=300,height=200">window.open(...,"_blank","popup,width=300,height=200")</a>
         <a href="windowfeatures.html" wof="popup,left=100,top=100,width=300,height=200">window.open(...,"target=_blank","popup,left=100,top=100,width=300,height=200")</a>
+        <a href="https://google.com/" wof="popup">window.open("google.com","_blank","popup")</a>
+
+        <input type="checkbox" id="autoclose"><label for="autoclose">Auto-close after 5s</label><br>
+
+        <pre id="log"></pre>
         <script type="text/javascript">
         
+        function log(msg) {
+            var l = document.querySelector("#log");
+            l.textContent += msg + "\n";
+        }
         document.querySelectorAll("a[wof]").forEach(elem =>{
             elem.addEventListener('click', evt => {
-                window.open(elem.href, "_blank",elem.getAttribute("wof"));
+                var w = window.open(elem.href, "_blank",elem.getAttribute("wof"));
+                log("Opened " + elem.href);
+                if (document.getElementById('autoclose').checked) {
+                    window.setTimeout(() => {
+                        var t;
+                        try {
+                            t = w.document.title;
+                        } catch  (e) {
+                            t = e;
+                        }
+                        log("Closing " + elem.href + ", title=" + t);
+                        try {
+                            w.close();
+                        } catch(e) {
+                            log("Error closing: " + e);
+                        }
+                    }, 5000);
+                }
+
                 evt.preventDefault();
             });
         });
+        window.addEventListener("message", (e) => {
+            log("Message: " + e.data);
+            e.source.postMessage("Got it!","*");
+        }, false);
         </script>
 
     </body>

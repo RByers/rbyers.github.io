@@ -4,11 +4,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Window Features</title>
         <style>
+            #log {
+                border: 1px solid black;
+                margin-top: 100px;
+                width: 100%;
+                min-height: 100px;
+            }
         </style>
     </head>
     <body>
         <div id=props>
         </div>
+        <pre id="log"></pre>
 
 <script type="text/javascript">
     const props = [
@@ -35,6 +42,10 @@
         propsEl.appendChild(div);
     });
 
+    window.addEventListener("message",(e) => {
+        document.getElementById("log").textContent += "Message: " + e.data + "\n";
+    }, false);
+    window.opener.postMessage("Thanks opener!", "*");
 </script>
 
     </body>
