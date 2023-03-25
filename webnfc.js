@@ -49,7 +49,8 @@ document.getElementById('scan').addEventListener("click", async () => {
                     log(`    Text: ${text} (${record.lang})`);              
                     break;
                 case "url":
-                    const url = new TextDecoder(record.encoding).decode(record.data);
+                    log("    IsUrl");
+                    const url = new TextDecoder().decode(record.data);
                     log("    Url: " + url);
                     if (url == myUrl) matchedUrl = true;
                     break;
