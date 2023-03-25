@@ -7,13 +7,14 @@ log("WebNFC available: " + ("NDEFReader" in window));
 
 const myUrl = "https://rbyers.github.io/webnfc.html";
 
-const abortController = new AbortController();
+let abortController = null;
 abortController.signal.onabort = event => {
     log("Abort");
 };
 
 document.getElementById("abort").onclick = event => {
-  abortController.abort();
+    if (abortController)
+        abortController.abort();
 };
 
 document.getElementById('init').addEventListener("click", async () => {
@@ -32,8 +33,9 @@ document.getElementById('init').addEventListener("click", async () => {
 
 document.getElementById('scan').addEventListener("click", async () => {
   log("Scan started");
-  let start = new Date();
   try {
+    let start = new Date();
+    abortController = new AbortController();
     const ndef = new NDEFReader();
     await ndef.scan({ signal: abortController.signal });
 
@@ -44,7 +46,8 @@ document.getElementById('scan').addEventListener("click", async () => {
     ndef.addEventListener("reading", async ({ message, serialNumber }) => {
         try {
             let readTime = new Date();
-            log(`Found card, ${readTime - start}ms. serial Number: ${serialNumber}`);
+            log(`Found card, ${readTime - start}ms.`);
+            log(`  Serial Number: ${serialNumber}`);
             let text = "";
             let matchedUrl = false;
             for (const record of message.records) {
