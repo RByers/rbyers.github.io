@@ -13,8 +13,10 @@ abortController.signal.onabort = event => {
 };
 
 document.getElementById("abort").onclick = event => {
-    if (abortController)
+    if (abortController) {
         abortController.abort();
+        abortController = null;
+    }
 };
 
 document.getElementById('init').addEventListener("click", async () => {
