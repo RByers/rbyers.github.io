@@ -45,15 +45,16 @@ document.getElementById('scan').addEventListener("click", async () => {
                 log("    Encoding: " + record.encoding);
                 switch (record.recordType) {
                 case "text":
-                    text = new TextDecoder(record.encoding).decode(record.data);
+                    text = new TextDecoder().decode(record.data);
                     log(`    Text: ${text} (${record.lang})`);              
                     break;
                 case "url":
-                    log("    IsUrl");
                     const url = new TextDecoder().decode(record.data);
                     log("    Url: " + url);
                     if (url == myUrl) matchedUrl = true;
                     break;
+                default:
+                    log("    Unknown record type");
                 }
             }
             if (matchedUrl) {
