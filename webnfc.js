@@ -7,6 +7,15 @@ log("WebNFC available: " + ("NDEFReader" in window));
 
 const myUrl = "https://rbyers.github.io/webnfc.html";
 
+const abortController = new AbortController();
+abortController.signal.onabort = event => {
+    log("Abort");
+};
+
+document.getElementById("abort").onclick = event => {
+  abortController.abort();
+};
+
 document.getElementById('init').addEventListener("click", async () => {
     log("Initializing card");
     let start = new Date();
@@ -26,7 +35,7 @@ document.getElementById('scan').addEventListener("click", async () => {
   let start = new Date();
   try {
     const ndef = new NDEFReader();
-    await ndef.scan();
+    await ndef.scan({ signal: abortController.signal });
 
     ndef.addEventListener("readingerror", () => {
       log("NFC tag read error");
@@ -34,8 +43,8 @@ document.getElementById('scan').addEventListener("click", async () => {
 
     ndef.addEventListener("reading", async ({ message, serialNumber }) => {
         try {
-            log("Found card, serial Number: " + serialNumber);
             let readTime = new Date();
+            log(`Found card, ${readTime - start}ms. serial Number: ${serialNumber}`);
             let text = "";
             let matchedUrl = false;
             for (const record of message.records) {
@@ -61,11 +70,10 @@ document.getElementById('scan').addEventListener("click", async () => {
                 let count = parseInt(text);
                 count++;
                 log("    Updating count to: " + count);
-                await ndef.write({records: [
+                await ndef.write({ signal: abortController.signal, records: [
                     {recordType: "url", data: myUrl},
                     {recordType: "text", data: count.toString()}]});
-                log("  Update complete, duration: " + (new Date() - start) + 
-                    "ms (read: " + (readTime - start) + "ms, write: " + (new Date() - readTime) + "ms)");
+                log(`  Update complete, duration: ${new Date() - readTime}ms`);
             }
         } catch (error) {
             log("Error: " + error);
