@@ -8,9 +8,6 @@ log("WebNFC available: " + ("NDEFReader" in window));
 const mimeType = "application/x-rbyerstest";
 
 let abortController = null;
-abortController.signal.onabort = event => {
-    log("Abort");
-};
 
 document.getElementById("abort").onclick = event => {
     if (abortController) {
@@ -38,6 +35,9 @@ document.getElementById('scan').addEventListener("click", async () => {
   try {
     let start = new Date();
     abortController = new AbortController();
+    abortController.signal.onabort = event => {
+        log("Abort");
+    };    
     const ndef = new NDEFReader();
     await ndef.scan({ signal: abortController.signal });
 
