@@ -5,7 +5,7 @@ function log(msg) {
 
 log("WebNFC available: " + ("NDEFReader" in window));
 
-const myUrl = "https://rbyers.github.io/webnfc.html";
+const mimeType = "application/x-rbyerstest";
 
 let abortController = null;
 abortController.signal.onabort = event => {
@@ -25,8 +25,8 @@ document.getElementById('init').addEventListener("click", async () => {
     try {
         const ndef = new NDEFReader();
         await ndef.write({records: [
-            {recordType: "url", data: myUrl},
-            {recordType: "text", data: "0"}]});
+            {recordType: "mime", mediaType: mimeType, data: "0"}
+        ]});
         log("Card initialized, duration: " + (new Date() - start) + "ms");
       } catch (error) {
         log("Error: " + error);
@@ -50,8 +50,6 @@ document.getElementById('scan').addEventListener("click", async () => {
             let readTime = new Date();
             log(`Found card, ${readTime - start}ms.`);
             log(`  Serial Number: ${serialNumber}`);
-            let text = "";
-            let matchedUrl = false;
             for (const record of message.records) {
                 log("  Record type: " + record.recordType);
                 log("    MIME type: " + record.mediaType);
@@ -59,26 +57,30 @@ document.getElementById('scan').addEventListener("click", async () => {
                 log("    Encoding: " + record.encoding);
                 switch (record.recordType) {
                 case "text":
-                    text = new TextDecoder().decode(record.data);
+                    const text = new TextDecoder().decode(record.data);
                     log(`    Text: ${text} (${record.lang})`);              
                     break;
                 case "url":
                     const url = new TextDecoder().decode(record.data);
                     log("    Url: " + url);
-                    if (url == myUrl) matchedUrl = true;
+                    break;
+                case "mime":
+                    if (record.mediaType == mimeType) {
+                        const text = new TextDecoder().decode(record.data);
+                        let count = parseInt(text);
+                        count++;
+                        log("    Updating count to: " + count);
+                        await ndef.write({ signal: abortController.signal, records: [
+                            {recordType: "mime", mediaType: mimeType, data: "0"}
+                        ]});
+                        log(`  Update complete, duration: ${new Date() - readTime}ms`);
+                    }
                     break;
                 default:
                     log("    Unknown record type");
                 }
             }
             if (matchedUrl) {
-                let count = parseInt(text);
-                count++;
-                log("    Updating count to: " + count);
-                await ndef.write({ signal: abortController.signal, records: [
-                    {recordType: "url", data: myUrl},
-                    {recordType: "text", data: count.toString()}]});
-                log(`  Update complete, duration: ${new Date() - readTime}ms`);
             }
         } catch (error) {
             log("Error: " + error);
