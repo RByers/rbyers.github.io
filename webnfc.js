@@ -21,8 +21,9 @@ document.getElementById('init').addEventListener("click", async () => {
     let start = new Date();
     try {
         const ndef = new NDEFReader();
+        const encoder = new TextEncoder();
         await ndef.write({records: [
-            {recordType: "mime", mediaType: mimeType, data: "0"}
+            {recordType: "mime", mediaType: mimeType, data: encoder.encode("0")}
         ]});
         log("Card initialized, duration: " + (new Date() - start) + "ms");
       } catch (error) {
@@ -70,8 +71,9 @@ document.getElementById('scan').addEventListener("click", async () => {
                         let count = parseInt(text);
                         count++;
                         log("    Updating count to: " + count);
+                        const encoder = new TextEncoder();
                         await ndef.write({ signal: abortController.signal, records: [
-                            {recordType: "mime", mediaType: mimeType, data: "0"}
+                            {recordType: "mime", mediaType: mimeType, data: encoder.encode(count)}
                         ]});
                         log(`  Update complete, duration: ${new Date() - readTime}ms`);
                     }
@@ -79,8 +81,6 @@ document.getElementById('scan').addEventListener("click", async () => {
                 default:
                     log("    Unknown record type");
                 }
-            }
-            if (matchedUrl) {
             }
         } catch (error) {
             log("Error: " + error);
