@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Error generator</title>
+    </head>
+    <h1>Error-generating test page</h1>
+    <a href="?exception">Generate unhandled exception</a><br>
+    <a href="?error">Generate console error</a><br>
+    <a href="?warn">Generate console warning</a><br>
+    <a href="?log">Genereate console log</a><br>
+    <hr>
+    Output:<br>
+    <pre id="output"></pre>
+    <script type="application/javascript">
+        function log(str) {
+            document.getElementById("output").textContent += str + "\n";
+        }
+        switch(window.location.search)
+        {
+            case "?exception":
+                log("Throwing exception");
+                throw new Error("my exception");
+                break;
+            case "?error":
+                console.error("Console error");
+                log("Generated console error");
+                break;
+            case "?warn":
+                console.warn("Console warning");
+                log("Generated console warning");
+                break;
+            case "?log":
+                console.log("Console log");
+                log("Generating console log");
+                break;
+        }
+    </script>
+</html>
