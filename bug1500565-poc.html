@@ -1,0 +1,47 @@
+<script>
+  async function query() {
+    navigator.credentials.get({
+      identity: {
+        providers: [{
+          holder: {
+            selector: {
+              format: ["mdoc"],
+              doctype: "org.iso.18013.5.1.mDL",
+              fields: [
+                "org.iso.18013.5.1.family_name"
+              ]
+            },
+            params: {
+              nonce: "123123",
+              readerPublicKey: '123123',
+              moreParametersAsNeededHere: true
+            },
+          },
+        }],
+      },
+    });
+    window.parent.deallocate();
+  }
+
+  var iframe;
+  function test() {
+    allocate();
+  }
+
+  function allocate() {
+    var iframe = document.createElement("iframe");
+    iframe.src = window.location + "#child";
+    document.body.appendChild(iframe);
+    g_iframe = iframe;
+  }
+
+  function deallocate() {
+    document.body.removeChild(g_iframe);
+  }
+
+  if (window.location.hash == "#child") {
+    query();
+  } else {
+    setInterval(test, 700);
+  }
+</script>
