@@ -1,14 +1,14 @@
 var radiusSupported = false;
 var nextCount = 0;
 var touchMap = {};
-var pointMode = (window.location.hash == "#points");
+var pointMode = (window.location.hash == "#points" || window.location.hash == "#cpoints");
 var pointerEventDisabledMode = (window.location.hash == "#nopointer");
 var enableForce = false;
 var drawTouchMajor = true;
 var foundRotationAngle = false;
 var scale = 1;
 var mousePressed = false;
-var drawCoalesced = false;
+var drawCoalesced = (window.location.hash == "#cpoints");
 
 function InitializeApp() {
     InitializeCanvas();
