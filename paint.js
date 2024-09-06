@@ -78,16 +78,16 @@ function InitializeCanvas() {
     var elem = document.getElementById("canvas");
 
     var newscale = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    var newwidth = window.screen.width * newscale;
-    var newheight = window.screen.height * newscale;
+    var newwidth = window.innerWidth * newscale;
+    var newheight = window.innerHeight * newscale;
 
     if (elem.width != newwidth || elem.height != newheight || scale != newscale) {
         // resizing a canvas clears it, so do it only when it's dimensions have changed.
         scale = newscale;
         elem.width = newwidth;
         elem.height = newheight;
-        elem.style.width = window.screen.width + "px";
-        elem.style.height = window.screen.height + "px";
+        elem.style.width = window.innerWidth + "px";
+        elem.style.height = window.innerHeight + "px";
     }
 }
 
