@@ -2,7 +2,7 @@ async function generate() {
 
     const prefix = ""
     const session = await ai.languageModel.create({
-        temperature: 0.1,
+        temperature: 0,
         topK: 3,
         initialPrompts: [
             { role: "system", content: "Given a product description, provide a category name " +
@@ -27,6 +27,8 @@ async function generate() {
     const tbody = document.getElementById('productTable').getElementsByTagName('tbody')[0];
     tbody.innerHTML = ''; 
     
+    // Keep track of categories to avoid synonyms or very similar categories.
+    // Pre-seed with some of the common ones
     let categories = new Set(["Clothing", "Food", "Home", "Health", "Crafts", "Toys", "Pets", "Electronics", "Office Supplies",
          "Books", "Tools", "Beauty", "Jewelry", "Furniture", "Appliances"]);
 
@@ -85,7 +87,7 @@ document.getElementById('downloadCsv').addEventListener('click', function() {
 
 document.addEventListener('DOMContentLoaded', async function() {
     const st = document.getElementById(("status"));
-    if (!'ai' in window || !'languageModel' in ai) {
+    if (!('ai' in window) || !('languageModel' in ai)) {
         st.textContent = "Unavailable";
         return;
     }
