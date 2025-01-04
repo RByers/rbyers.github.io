@@ -5,12 +5,15 @@
 </head>
 <body>
     <div class="container">
-        <div>Prompt API Status: <span id=status></span></div>
+        <div class="header">Prompt API Status: <span id=status></span></div>
         <label for="products">Products:</label>
         <textarea id="products" name="products" rows="10" cols="50"></textarea>
-        <button id="generate">Generate</button>
-        <button id="downloadCsv">Download CSV</button>
-        <table id="productTable">
+        <div class="controls">
+            <button id="generate">Generate</button>
+            <span id="progress"></span>
+            <button id="downloadCsv" class="right">Download CSV</button>
+        </div>
+         <table id="productTable">
             <thead>
                 <tr>
                     <th>Product</th>

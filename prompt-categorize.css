@@ -2,6 +2,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.header {
+    margin-bottom: 20px;
+}
+
 .container {
     width: 80%;
     margin: 0 auto;
@@ -11,6 +15,7 @@ body {
 label {
     display: block;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 textarea {
@@ -18,9 +23,24 @@ textarea {
     margin-bottom: 20px;
 }
 
-button {
-    display: block;
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
+}
+
+button {
+    margin-right: 10px;
+}
+
+#progress {
+    margin-left: 10px;
+    font-size: small;
+}
+
+.right {
+    margin-left: auto;
 }
 
 table {

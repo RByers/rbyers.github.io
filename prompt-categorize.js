@@ -11,14 +11,23 @@ async function generate() {
                 "Product: LINDT LINDOR Peppermint Cookie Milk Chocolate Truffles, 150g Gram Bag, Limited Edition, Individually Wrapped Chocolate, Christmas Chocolate" },
             { role: "assistant", content: "Food" },
             { role: "user", content: "Categories: Clothing, Food, Home, Health, Crafts, Toys\n" +
-                "Product: Pentel EnerGize Retractable Mechanical Pencil, 0.7mm Medium Point, Lead Refill Tube with 12 Refills, and Eraser Refills, PL77LEBP2, 2 Pack" },
-            { role: "assistant", content: "Office Supplies" },
+                "HiiARug Christmas Wreath 22 Inch Articial Christmas Wreaths for Front Door Xmas Wreath with Red Berries Pine Cones Winter Wreath for Outdoor Indoor Fireplace Window Wall Decor" },
+            { role: "assistant", content: "Christmas" },
             { role: "user", content: "Categories: Clothing, Food, Health, Crafts, Toys\n" +
                 "Product: Advanced Frobulator, FB551133, blue, 2 Pack" },
-            { role: "assistant", content: "Unknown" }, 
+            { role: "assistant", content: "Other" }, 
             { role: "user", content: "Categories: Food, Home, Health, Crafts, Toys\n" +
                 "Product: Webber Naturals Omega-3 900 mg Triple Strength, 120 Clear Enteric No Fishy Aftertaste Softgels, Supports Cardiovascular Health and Brain Function" },
             { role: "assistant", content: "Health" },
+            { role: "user", content: "Categories:\n" +
+                "Product: Heathrow Scientific 50-Well Hinged Storage Box, Assorted Colors Pack 5" },
+            { role: "assistant", content: "Science" },
+            { role: "user", content: "Categories: Food, Home, Health, Crafts, Toys\n" +
+                "Product: Silicone Clear Earring Backs 1200 Pieces Bullet Earring Clutch by Yalis" },
+            { role: "assistant", content: "Jewlery" },
+            { role: "user", content: "Categories: Food, Home, Health, Crafts, Toys\n" +
+                "Product: Hybsk 300pcs 2 inch Bright Gold Foil Certificate Sealing Labels with Serrated Edge Awards Legal Embossing Stickers (Bright Gold)" },
+            { role: "assistant", content: "Office Supplies" },
         ]
         //systemPrompt: "Given a product description, provide a short category name. If it's unclear use 'Unknown'.",
         });
@@ -30,10 +39,14 @@ async function generate() {
     // Keep track of categories to avoid synonyms or very similar categories.
     // Pre-seed with some of the common ones
     let categories = new Set(["Clothing", "Food", "Home", "Health", "Crafts", "Toys", "Pets", "Electronics", "Office Supplies",
-         "Books", "Tools", "Beauty", "Jewelry", "Furniture", "Appliances"]);
+         "Christmas", "Books", "Tools", "Beauty", "Jewelry", "Science", "Other"]);
 
+    const progress = document.getElementById('progress');
+    let count = 0;
     for(let product of products) {
+        count++;
         if (product.trim() !== '') {
+            progress.textContent = "Running: " + count + " of " + products.length;
             const row = tbody.insertRow();
             const cell1 = row.insertCell(0);
             const cell2 = row.insertCell(1);
@@ -53,11 +66,13 @@ async function generate() {
                 }
             } catch (error) {
                 result = 'Error: ' + error.message;
+                console.log("Prompt error", error);
             }
             freshSession.destroy();
             cell2.textContent = result;
         }
     }
+    progress.textContent = "Done: " + count + " products";
 }
 
 document.getElementById('generate').addEventListener('click', () => {generate()});
