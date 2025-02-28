@@ -1,0 +1,47 @@
+
+<!-- Run a local HTTP server using `python3 -m http.server` -->
+<!-- Refresh multiple times, eventually the script requests stall -->
+<script>
+	const scripts = [
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_19.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_24.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_41.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_108.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_43.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_521.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_36.part.js',
+		'https://www.gstatic.com/acx/xbid/shard_manager/acx_xbid_shard_manager_auto_20250227-0015_RC000/app_experimental_constraints/app_experimental_constraints.dart.js_137.part.js'
+        ];
+
+        async function loadScript(i) {
+		const url = scripts[i];
+		const script = document.createElement('script');
+		script.src = url;
+		document.body.append(script);
+
+		const promise = new Promise((resolve, reject) => {
+			script.onload = function() { resolve(); }
+			script.onerror = function() { resolve(); }
+		});
+		return promise;
+        }
+
+	setTimeout(function() {
+		(async function() {
+			for (let i = 0; i < 7; i++) {
+				await loadScript(i);
+				document.write('script ' + i + ' loaded<br>');
+			}
+
+			window.location.href = 'https://dl.google.com/update2/installers/ChromeSetup.exe';
+
+			for (let i = 5; i < scripts.length; i++) {
+				await loadScript(i);
+				document.write('script ' + i + ' loaded<br>');
+			}
+		})();
+	}, 100);
+</script>
+<body>
+</body>
