@@ -1,0 +1,10 @@
+<!doctype html><html><head><title>Your Cart</title></head><body>
+<h1>Your Cart</h1>
+<div id="line"></div>
+<div>Subtotal: <span id="sub"></span></div>
+<a href="/checkout.html" id="co" role="button">Checkout</a>
+<script>
+ var i=localStorage.getItem('item')||'(empty)',p=localStorage.getItem('price')||'0.00';
+ line.textContent=i+' x1  $'+p; sub.textContent='$'+p;
+</script>
+</body></html>

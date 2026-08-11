@@ -1,0 +1,40 @@
+<!doctype html><html><head><title>Checkout</title></head><body>
+<h1>Checkout</h1>
+<p>Order summary &middot; Subtotal $3.50 &middot; Shipping address</p>
+
+<section class="express"><h2>Express checkout</h2>
+  <div id="wallets">
+    <!-- Apple Pay: rendered only when the API exists, exactly like real stores -->
+    <div id="ap-slot"></div>
+    <!-- Google Pay: custom element -->
+    <google-pay-button id="gp" role="button" aria-label="Buy with Google Pay" style="display:inline-block;width:160px;height:40px;background:#000;color:#fff">Google Pay</google-pay-button>
+    <!-- PayPal: cross-document iframe (visible) -->
+    <iframe src="/fake-paypal-button.html" title="PayPal" style="width:200px;height:44px;border:0"></iframe>
+    <!-- PayPal SDK plumbing: present but invisible, must NOT be counted -->
+    <iframe src="/fake-paypal-button.html" title="paypal zoid hidden" style="width:0;height:0;border:0;position:absolute"></iframe>
+    <!-- Amazon Pay: in the DOM but display:none -- must NOT be counted -->
+    <div id="amazonpay" style="display:none"><button aria-label="Amazon Pay">Amazon Pay</button></div>
+    <!-- Shop Pay inside a shadow root -->
+    <div id="shop-host"></div>
+  </div>
+</section>
+
+<h2>Payment method</h2>
+<ul>
+  <li><label><input type="radio" name="pm" checked> Credit card</label></li>
+  <li><label><input type="radio" name="pm"> <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="Klarna"> Klarna &mdash; pay in 4</label></li>
+</ul>
+<p class="promo">Affirm: pay as low as $12/mo. <a href="#">Learn more</a></p>
+<p class="prose">This mug is ideal for travel.</p>
+<button id="place">Place order</button>
+<script>
+  if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+    var b = document.createElement('apple-pay-button');
+    b.setAttribute('buttonstyle','black'); b.setAttribute('aria-label','Apple Pay');
+    b.style.cssText='display:inline-block;width:160px;height:40px;background:#000';
+    document.getElementById('ap-slot').appendChild(b);
+  }
+  var sr = document.getElementById('shop-host').attachShadow({mode:'open'});
+  sr.innerHTML = '<button class="shop-pay-button" style="width:160px;height:40px;background:#5a31f4;color:#fff">Shop Pay</button>';
+</script>
+</body></html>
