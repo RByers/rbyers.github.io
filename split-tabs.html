@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive test page for the Split Tabs Web API (window.open split, splitposition, splitsize, and declarative windowfeatures).">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self';">
+  <title>Split Tabs API Test Page</title>
+  <link rel="stylesheet" href="split-tabs.css">
+</head>
+<body>
+  <header class="page-header">
+    <div class="header-main">
+      <h1>Split Tabs API Test</h1>
+      <p class="subtitle">
+        Test harness for <a href="https://github.com/mfreed7/split-tabs" target="_blank" rel="noopener noreferrer">mfreed7/split-tabs</a>
+        (<code>split</code>, <code>splitposition</code>, <code>splitsize</code>)
+      </p>
+    </div>
+    <div class="viewport-badge" id="viewport-info" title="Current window viewport and outer dimensions">
+      Viewport: <span id="viewport-size">--</span>
+    </div>
+  </header>
+
+  <main class="main-grid">
+    <!-- Left Column: Configuration Form & Opener Controls -->
+    <div class="column">
+      <!-- Window Opener Section -->
+      <section class="card opener-card" id="opener-section" aria-labelledby="opener-heading">
+        <div class="card-header">
+          <h2 id="opener-heading"><code>window.opener</code> Connection</h2>
+          <span id="opener-status-badge" class="badge badge-neutral">Checking...</span>
+        </div>
+        <p id="opener-details" class="helper-text">Checking if this window was opened by another window...</p>
+
+        <form id="opener-message-form" class="inline-message-form" hidden>
+          <div class="input-row">
+            <label for="opener-message-input" class="sr-only">Message to window.opener</label>
+            <input type="text" id="opener-message-input" placeholder="Message to send to window.opener..." value="Hello from split tab!" required>
+            <button type="submit" id="send-opener-btn" class="btn btn-primary">Send to Opener</button>
+          </div>
+          <div class="opener-actions-row">
+            <button type="button" id="ping-opener-btn" class="btn btn-secondary btn-sm">Send Viewport Size</button>
+            <button type="button" id="close-self-btn" class="btn btn-danger btn-sm">Close This Window (<code>window.close()</code>)</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Open Split Tab Configuration Form -->
+      <section class="card" aria-labelledby="config-heading">
+        <div class="card-header">
+          <h2 id="config-heading">Configure &amp; Open Split Tab</h2>
+        </div>
+
+        <form id="split-config-form">
+          <!-- URL -->
+          <div class="form-group">
+            <label for="url-input">URL</label>
+            <input type="text" id="url-input" name="url" required placeholder="https://...">
+            <div class="preset-row" aria-label="URL presets">
+              <span class="preset-label">Presets:</span>
+              <button type="button" class="btn-chip" data-url-preset="self">This Page (Demo Sync)</button>
+              <button type="button" class="btn-chip" data-url-preset="windowfeatures.html">windowfeatures.html</button>
+              <button type="button" class="btn-chip" data-url-preset="https://example.com">example.com</button>
+            </div>
+          </div>
+
+          <!-- Split Position & Size Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="split-position-select">Split Position (<code>splitposition</code>)</label>
+              <select id="split-position-select" name="splitposition">
+                <option value="">(Default / omit)</option>
+                <option value="right" selected>right</option>
+                <option value="left">left</option>
+                <option value="top">top</option>
+                <option value="bottom">bottom</option>
+                <option value="inline-end">inline-end (logical test)</option>
+                <option value="inline-start">inline-start (logical test)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <div class="label-with-toggle">
+                <label for="split-size-number">Split Size % (<code>splitsize</code>)</label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="use-split-size" checked>
+                  Specify
+                </label>
+              </div>
+              <div class="size-control-group" id="size-control-container">
+                <input type="range" id="split-size-range" min="1" max="99" value="50" aria-label="Split size slider">
+                <input type="number" id="split-size-number" name="splitsize" min="1" max="100" value="50" class="number-input">
+                <span class="unit-label">%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target & Feature Flags -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="target-input">Target</label>
+              <select id="target-input" name="target">
+                <option value="_blank" selected>_blank (default)</option>
+                <option value="_self">_self</option>
+                <option value="_parent">_parent</option>
+                <option value="_top">_top</option>
+                <option value="custom_pane">Named: "custom_pane"</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <span class="group-label">Feature Flags</span>
+              <div class="checkbox-grid">
+                <label class="checkbox-label" title="Request opening in a split tab">
+                  <input type="checkbox" id="flag-split" checked>
+                  <code>split</code>
+                </label>
+                <label class="checkbox-label" title="Prevents legacy browsers from falling back to a detached popup window">
+                  <input type="checkbox" id="flag-popup0">
+                  <code>popup=0</code>
+                </label>
+                <label class="checkbox-label" title="Test mutual exclusivity between split and popup">
+                  <input type="checkbox" id="flag-popup">
+                  <code>popup</code>
+                </label>
+                <label class="checkbox-label" title="Omit window.opener reference">
+                  <input type="checkbox" id="flag-noopener">
+                  <code>noopener</code>
+                </label>
+                <label class="checkbox-label" title="Omit Referer header and imply noopener">
+                  <input type="checkbox" id="flag-noreferrer">
+                  <code>noreferrer</code>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extra / Custom windowFeatures -->
+          <div class="form-group">
+            <label for="extra-features-input">Additional <code>windowFeatures</code> (optional)</label>
+            <input type="text" id="extra-features-input" placeholder="e.g. width=500,height=600">
+          </div>
+
+          <!-- Generated Code Preview -->
+          <div class="code-preview-box">
+            <div class="code-preview-header">
+              <span>Generated Call</span>
+            </div>
+            <code id="generated-call-preview">window.open(...)</code>
+          </div>
+
+          <!-- Submit / Declarative Actions -->
+          <div class="form-actions">
+            <button type="submit" id="open-window-btn" class="btn btn-primary btn-lg">
+              Open via <code>window.open()</code>
+            </button>
+          </div>
+
+          <!-- Declarative Anchor Test -->
+          <div class="declarative-box">
+            <div class="declarative-header">
+              <span>Declarative HTML Form (<code>&lt;a windowfeatures="..."&gt;</code>)</span>
+              <label class="checkbox-inline" title="Add rel=&quot;opener&quot; so target=&quot;_blank&quot; preserves window.opener">
+                <input type="checkbox" id="declarative-rel-opener" checked>
+                <code>rel="opener"</code>
+              </label>
+            </div>
+            <div class="declarative-content">
+              <a id="declarative-link" href="split-tabs.html" target="_blank" rel="opener" class="declarative-anchor">
+                Click to open via &lt;a windowfeatures="..."&gt;
+              </a>
+              <code id="declarative-code-preview" class="declarative-markup"></code>
+            </div>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- Right Column: Opened Windows List & Incoming Messages -->
+    <div class="column">
+      <!-- Opened Windows Section -->
+      <section class="card" aria-labelledby="windows-heading">
+        <div class="card-header">
+          <div class="header-title-group">
+            <h2 id="windows-heading">Opened Windows</h2>
+            <span id="windows-count-badge" class="badge badge-count">0</span>
+          </div>
+          <div class="header-actions">
+            <button type="button" id="close-all-windows-btn" class="btn btn-secondary btn-sm" disabled>Close All</button>
+          </div>
+        </div>
+
+        <!-- Broadcast Form when windows exist -->
+        <form id="broadcast-form" class="broadcast-bar" hidden>
+          <label for="broadcast-input" class="sr-only">Broadcast message to all opened windows</label>
+          <input type="text" id="broadcast-input" placeholder="Broadcast message to all opened windows..." required>
+          <button type="submit" class="btn btn-secondary btn-sm">Broadcast to All</button>
+        </form>
+
+        <div id="opened-windows-list" class="windows-list" role="region" aria-live="polite">
+          <p class="empty-state" id="no-windows-msg">
+            No windows opened yet. Use the form on the left to open a split tab.
+          </p>
+        </div>
+      </section>
+
+      <!-- Incoming Message Events Section -->
+      <section class="card" aria-labelledby="messages-heading">
+        <div class="card-header">
+          <div class="header-title-group">
+            <h2 id="messages-heading">Incoming <code>message</code> Events</h2>
+            <span id="messages-count-badge" class="badge badge-count">0</span>
+          </div>
+          <button type="button" id="clear-messages-btn" class="btn btn-secondary btn-sm">Clear Log</button>
+        </div>
+
+        <div id="incoming-messages-list" class="messages-log" role="log" aria-live="polite">
+          <p class="empty-state" id="no-messages-msg">
+            No incoming message events received yet.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="split-tabs.js"></script>
+</body>
+</html>
